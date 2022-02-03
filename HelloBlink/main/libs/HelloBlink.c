@@ -1,5 +1,6 @@
 #include<avr/io.h>
 #include<util/delay.h>
+#include<Digital.h>
 /**
  * Blink on PORTB1 (PB1) or D9
  */
@@ -7,8 +8,6 @@
 #define PORTB1_OFF 0b00000000
 #define LOW 0x00
 #define HIGH 0xFF
-
-void digitalWrite(volatile uint8_t&, unsigned char PIN, unsigned char POWER);
 
 int main(void) {
  PORTB=0x00;
