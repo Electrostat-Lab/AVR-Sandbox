@@ -34,5 +34,4 @@ void digitalWrite(volatile uint8_t& PORT, unsigned char PIN, const int& POWER) {
   } else {
       powerPin(PORT, PIN);
   }
-//   PORT = PIN & POWER;
 }
