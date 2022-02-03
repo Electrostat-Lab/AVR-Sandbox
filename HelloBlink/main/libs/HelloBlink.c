@@ -1,7 +1,8 @@
 /**
+ * Blinks an LED at D9 or PB1.
+ * 
  * @file HelloBlink.c
- * @author your name (you@domain.com)
- * @brief Blinks an LED.
+ * @author pavl_g.
  * @version 0.1
  * @date 2022-02-03
  * 
