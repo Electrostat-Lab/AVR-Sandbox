@@ -1,3 +1,13 @@
+/**
+ * @file Digital.c
+ * @author pavl_g.
+ * @brief Digitally triggers a bit in a register.
+ * @version 0.1
+ * @date 2022-02-03
+ * 
+ * @copyright Copyright (c) 2022
+ * 
+ */
 #include<Digital.h>
 
 /**
