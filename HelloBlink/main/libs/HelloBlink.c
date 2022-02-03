@@ -13,7 +13,7 @@
 #include<Digital.h>
 
 int main(void) {
- resetPort(PORTB);
+  resetPin(PORTB, PIN_1);
  for(;;) {
     digitalWrite(PORTB, PIN_1, HIGH);
     _delay_ms(1000);
