@@ -1,7 +1,20 @@
-echo "Ccoffee Script starts"
-echo "---------------------------------------------"
+source variables.sh
 export LC_ALL=C
-source code.sh
+function compile() {
+	# attrs : dir to compile & sharedLib name
+        nativeSources=`find ${project}'/main' -name '*.c' -o -name '*.cxx' -o -name '*.cpp' -o -name '*.h' -o -name '*.c++'`
+
+	sudo ${AVR_HOME}'/bin/avr-g++' \
+	-mmcu=${CHIP} ${nativeSources} \
+	-I${AVR_HOME}'/avr/include'	\
+	-o ${output}
+	return $?
+}
+
+function convertToHex() {
+  	 ${AVR_HOME}'/bin/avr-objcopy' -O ihex ${output} ${output}'.hex'
+	 return $?
+}
 
 echo -e "${WHITE_C} --MajorTask@Compile : Compiling the project"
 
@@ -23,14 +36,3 @@ else
 	echo -e "${GREEN_C} --MajorTask@Hexing : Hex file created successfully."
 fi
 echo -e ${RESET_Cs}
-
-echo -e "${WHITE_C} --MajorTask@UploadingCode : Uploading Hex file"
-if [[ ! `upload` -eq 0 ]]; then
-	echo -e "${RED_C} --MajorTask@UploadingCode : Failed to upload hex file, exits with errno700."
-	exit 700
-else 
-	echo -e "${GREEN_C} --MajorTask@UploadingCode : Hex file uploaded successfully."
-fi
-echo -e ${RESET_Cs}
-echo "---------------------------------------------"
-echo "Ccoffee Script finishes"

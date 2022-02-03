@@ -24,3 +24,4 @@ PROGRAMMER='arduino'
 # Common Variables contain colors
 source ${rootProject}'/CommonVariables.sh'
 source ${rootProject}'/AVR__HOME.sh'
+output=${project}'/output/'${clibName}
