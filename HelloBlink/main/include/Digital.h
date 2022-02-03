@@ -59,8 +59,8 @@
 	 * memory compared to the port whenever the port is active
 	 * the pin has its state as constant.
 	 * 
-	 * @param PORT 
-	 * @param PIN 
+	 * @param PORT a port representing the holder of the pin.
+	 * @param PIN the pin to trigger representing a bit in the register.
 	 */
 	void powerPin(volatile uint8_t& PORT, const uint8_t& PIN);
 #endif
