@@ -4,8 +4,6 @@
 #* @author pavl_g.
 #*#
 
-# AVR Home
-
 # Bash colors using ANSI
 # favored the 24-bit (3 colors * 8-bit for each one<255>) color system
 # Colors
