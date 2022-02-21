@@ -1,22 +1,6 @@
 #include<avr/io.h>
 #include<util/delay.h>
-
-#  define UDR     UDR0
-#  define UCSRA   UCSR0A
-#  define UCSRB   UCSR0B
-#  define FE      FE0
-#  define TXEN    TXEN0
-#  define RXEN    RXEN0
-#  define RXCIE   RXCIE0
-#  define UDRE    UDRE0
-#  define U2X     U2X0
-#  define UBRRL   UBRR0L
-
-/**
- * Blink on PORTB1 (PB1) or D9
- */
-#define LOW 0
-#define HIGH 1
+#include<string.h>
 
 const char* word = "hello\n";
 int i = 0;
@@ -28,15 +12,15 @@ void usart_init(void) {
 }
 
 void usart_send(unsigned char character) {
-	while (! (UCSR0A & (1 << UDRE)));
+	while (! (UCSR0A & (1 << UDRE0)));
 	UDR0 = character;
 }
 
 int main(void) {
- usart_init();
- while (i < 6) {
-	 usart_send(word[i++]);	
- }
+	 usart_init();
+	 while (i < strlen(word)) {
+		 usart_send(word[i++]);	
+	 }
  return 0;
 }
 
