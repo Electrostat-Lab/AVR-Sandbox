@@ -11,4 +11,4 @@ The testcases directrly access the `atmega328p`'s registers ports and their indi
 
 ## Contents:
 - [AVR-C-Lib-Docs](https://software-hardware-codesign.github.io/AVR-Sandbox/docs/avr-libc/avr-libc-user-manual/index.html)
-- [Lib-Liberty](https://software-hardware-codesign.github.io/AVR-Sandbox/docs/libliberty/libliberty.html)
+- [Lib-Iberty](https://software-hardware-codesign.github.io/AVR-Sandbox/docs/ibliberty/ibliberty.html)
