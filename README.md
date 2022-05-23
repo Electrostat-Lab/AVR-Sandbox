@@ -7,4 +7,4 @@ The testcases directrly access the `atmega328p`'s registers ports and their indi
 
 ## Atmega328p arduino-nano ports :
 
-<img src="https://github.com/Scrappers-glitch/AVR-Sandbox/blob/master/Pinout-NANO_latest.png">
+<img src="[https://github.com/Scrappers-glitch/AVR-Sandbox/blob/master/Pinout-NANO_latest.png](https://github.com/Software-Hardware-Codesign/AVR-Sandbox/blob/master/Pinout-NANO_latest.png)">
