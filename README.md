@@ -7,8 +7,8 @@ The testcases directrly access the `atmega328p`'s registers ports and their indi
 
 ## Atmega328p arduino-nano ports :
 
-<img src="https://software-hardware-codesign.github.io/AVR-Sandbox/Pinout-NANO_latest.png">
+[Arduino-nano-pins](https://software-hardware-codesign.github.io/AVR-Sandbox/Pinout-NANO_latest.png)
 
 ## Contents:
 - [AVR-C-Lib-Docs](https://software-hardware-codesign.github.io/AVR-Sandbox/docs/avr-libc/avr-libc-user-manual/index.html)
-- [Lib-Iberty](https://software-hardware-codesign.github.io/AVR-Sandbox/docs/ibliberty/ibliberty.html)
+- [Lib-Iberty](https://software-hardware-codesign.github.io/AVR-Sandbox/docs/libiberty/libiberty.html)
