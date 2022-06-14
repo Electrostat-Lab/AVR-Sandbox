@@ -1,7 +1,7 @@
 /**
  * @file HelloTimerInterrupt.c
  * @author pavl_g
- * @brief An simple example demonstrating the usage of a timer vector Interrupt Service Routine.
+ * @brief A simple example demonstrating the usage of a timer vector Interrupt Service Routine.
  * @version 0.1
  * @date 2022-06-14
  * 
@@ -16,6 +16,7 @@
 void blink(volatile uint8_t&, const uint8_t&);
 
 ISR(TIMER0_OVF_vect) {
+   TCNT0 = 0x00; // reset the counter
    blink(PORTB, PIN_5);
 }
 
@@ -23,14 +24,15 @@ int main(void) {
    
    resetPort(PORTB);
 
-   TCNT0 = -32; // timer value for 4 micro-second
+   TCNT0 = 0xFF; // reset timer value
    TCCR0B = 0x01; // normal mode
 
    TIMSK0 = (1 << TOIE0); // enable Timer0 overflow interrupt
          
    sei(); // set enable interrupt -- exiting the current block and entering the next interrupt
 
-   while (1);
+   while (1); // keep the program busy !
+
  return 0;
 }
 
