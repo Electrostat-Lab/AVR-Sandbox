@@ -58,6 +58,17 @@ int main(void) {
 
     // 4) the signed int data types are for anticipated negative values.
 
+    // 5) Bitwise operators: Shifting bits and logical operators.
+    // left shifting: BINARY << SHIFT_TIMES = BINARY * Math.pow(2, SHIFT_TIMES)
+    uint8_t x = (1 << 0b00000001) /*0b00000010*/ | (1/*0b0001*/ << 0b00000011/*3*/) /*0b00001000*/; /*0b01010*/ /* 10 */
+    uint8_t y = (0b00000001 << 1) /*0b00000010*/ | (0b00000011 << 1)                /*0b00000110*/; /*0b00000110*/ /* 6 */
+    
+    // right shifting: BINARY >> SHIFT_TIMES  = BINARY * Math.pow(2, -SHIFT_TIMES)
+    uint8_t testRightShifting = (0b00001000 >> 3); /* 0b0001 = 1*/
+    uint8_t testLeftShifting = (0b00001000 << 3); /* 0b0001000000 = 64*/
+
+    // TIPs to minimize errors: the BINARY value should be your lvalue.
+
     while(1); // block the program !
 
     return 0;
