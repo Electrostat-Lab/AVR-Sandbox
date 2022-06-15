@@ -1,12 +1,11 @@
 /**
  * @file AvrDataTypes.c
  * @author pavl_g
- * @brief An example demonstrates the different available integer types and their usages.
+ * @brief An example demonstrates the different available integer types, their usages and bitwise operations.
  * @version 0.1
  * @date 2022-06-15
- * 
- * @copyright Copyright (c) 2022
- * 
+ * @copyright Copyright (c) Scrappers 2022
+ * @note for more refer to the associated docs and attachments on the folder ./AvrDataTypes/Resources
  */
 #include<avr/io.h>
 #include<stdint.h>
@@ -68,6 +67,30 @@ int main(void) {
     uint8_t testLeftShifting = (0b00001000 << 3); /* 0b0001000000 = 64*/
 
     // TIPs to minimize errors: the BINARY value should be your lvalue.
+
+    // 6) Bitwise logical operations:
+    
+    /* -- Principal logical gates -- */
+    // (|): Bitwise logical OR, designated by the (+) sign in boolean algebra.
+    // (&): Bitwise logical AND, designated by the (.) sign in boolean algebra.
+    // (~): Bitwise logical NOT, designated by the dash or the bar (A`) sign in boolean algebra.
+
+    /* -- Combinatoric logic gates -- */
+    // (^): Bitwise exclusive OR (XOR), produces Q = 1, if only and only one of the inputs is 1, otherwise produces Q = 0
+    // Note: Q = A ^ B is the same as Q = (~(A) & B) | (A & ~B)
+    // ~(&): Bitwise logical NAND
+    // ~(|): Bitwise logical NOR
+    // ~(^): Bitwise logical NXOR, produces Q = 1, if only and only the two inputs are the same (whether they are zero or one), otherwise produces Q = 0 
+    // Note: Q = ~(A ^ B) is the same as Q = ~((~(A) & B) | (A & ~B))
+    uint8_t inputA = 0b00000011;
+    uint8_t inputB = 0b11000000;
+    const uint8_t OR_AB = inputA | inputB; /* 0b11000011, usage: concatenates the binary commands into a single command */ 
+    const uint8_t AND_AB = inputA & inputB; /* 0b00000000, usage: compares the binary commands and find if they both are equal to HIGH (1) */
+    const uint8_t XOR_AB = inputA ^ inputB; /* 0b11000011 ,usage: compares the binary commands and find if they are both equal (Q = 0) or not (Q = 1)*/
+    const uint8_t NAND_AB = ~AND_AB; /* 0b11111111, usage: */
+    const uint8_t NOR_AB = ~OR_AB; /* 0b00111100, usage: finds all the non-involved bits in the OR */
+    const uint8_t NXOR_AB = ~XOR_AB; /* 0b00111100, usage: tests whether the 2 inputs are the same (Q = 1) or not (Q = 0).*/
+
 
     while(1); // block the program !
 
