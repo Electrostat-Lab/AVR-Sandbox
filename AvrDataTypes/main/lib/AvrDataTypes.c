@@ -9,6 +9,8 @@
  */
 #include<avr/io.h>
 #include<stdint.h>
+#include<stdlib.h>
+#include<string.h>
 
 void usart_init(void) {
 	UCSR0B = 0b00001000; // TXEN_BIT = 1, enables the transmitter buffer register.
@@ -16,9 +18,25 @@ void usart_init(void) {
 	UBRR0 = 0x10; // 0x10 (16) for BR = 57600 // 0x33 (51) for 9600
 }
 
-void usart_send(unsigned char character) {
+void usart_send(uint8_t character) {
 	while (! (UCSR0A & (1 << UDRE0)));
 	UDR0 = character;
+}
+
+/**
+ * @brief Prints integer data in new line to the serial.
+ * 
+ * @param data 8-bit integer data, with max 256 (in dec) or 0b11111111 (in bin)
+ */
+void println(uint8_t data) {
+    char strBuffer[256];
+    // convert input to string
+    itoa(data, strBuffer, 2);
+    strcat(strBuffer, "\n");
+    int i = 0;
+    while (i < strlen(strBuffer)) {
+        usart_send(strBuffer[i++]);
+    }
 }
 
 int main(void) {
@@ -29,7 +47,7 @@ int main(void) {
     volatile uint8_t PORTX = 0b00000000;
     volatile uint8_t PORTY = 0b11001100;
     
-    usart_send(PORTY);
+    println(PORTY);
     // const: means marked as a constant value with respect to its domain.
     // first pin
     const uint8_t PIN_0 = 1 << PORTX;
@@ -52,7 +70,7 @@ int main(void) {
     volatile char position = 0;
     volatile uint32_t combined_reg = (++position) << PORTX;
     combined_reg = (++position) << PORTY;
-    usart_send(combined_reg);
+    println(combined_reg);
     // now we have a 16-bit filled space, there is still another free 16-bits !
 
     // 4) the signed int data types are for anticipated negative values.
@@ -85,12 +103,17 @@ int main(void) {
     uint8_t inputA = 0b00000011;
     uint8_t inputB = 0b11000000;
     const uint8_t OR_AB = inputA | inputB; /* 0b11000011, usage: concatenates the binary commands into a single command */ 
+    println(OR_AB);
     const uint8_t AND_AB = inputA & inputB; /* 0b00000000, usage: compares the binary commands and find if they both are equal to HIGH (1) */
-    const uint8_t XOR_AB = inputA ^ inputB; /* 0b11000011 ,usage: compares the binary commands and find if they are both equal (Q = 0) or not (Q = 1)*/
+    println(AND_AB);
+    const uint8_t XOR_AB = inputA ^ inputB; /* 0b11000011, usage: compares the binary commands and find if they are both equal (Q = 0) or not (Q = 1)*/
+    println(XOR_AB);
     const uint8_t NAND_AB = ~AND_AB; /* 0b11111111, usage: */
+    println(NAND_AB);
     const uint8_t NOR_AB = ~OR_AB; /* 0b00111100, usage: finds all the non-involved bits in the OR */
+    println(NOR_AB);
     const uint8_t NXOR_AB = ~XOR_AB; /* 0b00111100, usage: tests whether the 2 inputs are the same (Q = 1) or not (Q = 0).*/
-
+    println(NXOR_AB);
 
     while(1); // block the program !
 
