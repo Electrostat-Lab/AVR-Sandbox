@@ -5,19 +5,28 @@
  * @version 0.1
  * @date 2022-06-15
  * @copyright Copyright (c) Scrappers 2022
- * @note for more refer to the associated docs and attachments on the folder ./AvrDataTypes/Resources
+ * @note for more refer to the associated docs and attachments on the folder ./AvrDataTypes/resources
  */
 #include<avr/io.h>
 #include<stdint.h>
 #include<stdlib.h>
 #include<string.h>
 
+/**
+ * @brief Initializes the UART protocol.
+ * 
+ */
 void usart_init(void) {
 	UCSR0B = 0b00001000; // TXEN_BIT = 1, enables the transmitter buffer register.
 	UCSR0C = 0b10000110; // enables the UCSZ0, UCSZ1 and URSEL
 	UBRR0 = 0x10; // 0x10 (16) for BR = 57600 // 0x33 (51) for 9600
 }
 
+/**
+ * @brief Sends a character to UART UDR0 register.
+ * 
+ * @param character a char to send (unsigned char) of 8-bits
+ */
 void usart_send(uint8_t character) {
 	while (! (UCSR0A & (1 << UDRE0)));
 	UDR0 = character;
@@ -28,18 +37,71 @@ void usart_send(uint8_t character) {
  * 
  * @param data 8-bit integer data, with max 256 (in dec) or 0b11111111 (in bin)
  */
-void println(uint8_t data) {
-    char strBuffer[256];
+void println(uint8_t data, uint8_t radix) {
+    char* strBuffer = (char*) calloc(1, sizeof(data));
     // convert input to string
-    itoa(data, strBuffer, 2);
+    itoa(data, strBuffer, radix);
     strcat(strBuffer, "\n");
     int i = 0;
     while (i < strlen(strBuffer)) {
         usart_send(strBuffer[i++]);
     }
+    free(strBuffer);
+}
+
+/**
+ * @brief Prints string data in new line to the serial.
+ * 
+ * @param data char array string
+ */
+void sprintln(char* data) {
+    // print the str
+    strcat(data, "\n");
+    int i = 0;
+    while (i < strlen(data)) {
+        usart_send(data[i++]);
+    }
+}
+
+/**
+ * @brief Cuts a string data from [start] to [end] indices and print a new buffer.
+ * 
+ * @param str the string to cut
+ * @param start the start index
+ * @param end the end index
+ * @return char* a new buffer
+ */
+char* substring(char* str, uint8_t start, uint8_t end) {
+    char* buffer = (char*) calloc(1, sizeof(str));
+    int i = 0;
+    int bufferIndex = 0;
+    while (i < strlen(str)) {
+        if (i < start) {
+            i+=1;
+            continue;
+        }
+        if (i > end) {
+            break;
+        }
+        buffer[bufferIndex++] = str[i++];
+    }
+    return buffer;
+}
+
+volatile typeof(uint8_t) PORT[] = {0, 1, 2, 3, 4, 5, 6, 7};
+
+/**
+ * @brief Gets the Length of array [PORT*] from its size.
+ * 
+ * @param PORT[] change the PORT array and re-run this to get the length of the new PORT array
+ * @return size_t 
+ */
+size_t getLength() {
+        return sizeof(PORT) / sizeof(typeof(*PORT));
 }
 
 int main(void) {
+    
     usart_init();
 
     // 1) the unsigned 8 bit int: used for registers and bit data
@@ -47,7 +109,7 @@ int main(void) {
     volatile uint8_t PORTX = 0b00000000;
     volatile uint8_t PORTY = 0b11001100;
     
-    println(PORTY);
+    println(PORTY, 2);
     // const: means marked as a constant value with respect to its domain.
     // first pin
     const uint8_t PIN_0 = 1 << PORTX;
@@ -57,6 +119,26 @@ int main(void) {
     const uint8_t PIN_2 = 3 << PORTX;
     // the unsigned 8 bit int is the same as the unsigned char, so its the same as 
     volatile unsigned char portB = PORTB;
+
+    println(PORTB, 2);
+    PORTB = 1 << PB5; // is the same as (0b0000001 << 5) and 0b00100000
+    println(PORTB, 2); // 0b00100000
+
+    const uint8_t register8 = 0b00000001;
+
+    // toggle all bits on register uint PORTB
+    for (int i = 0; i < getLength(); i++) {
+        PORTB |= (register8 << PORT[i]);
+    }
+    println(PORTB, 2);
+
+    // toggle all bits on register uint PORTC
+    println(PORTC, 2); // 0
+     for (int i = 0; i < getLength(); i++) {
+        PORTC |= (register8 << PORT[i]);
+    }
+    println(PORTC, 2);
+
 
     // 2) the unsigned 16 bit int: used for 2 parts registers (2 8-bits registers), for example: some
     // adc and timer registers
@@ -70,7 +152,7 @@ int main(void) {
     volatile char position = 0;
     volatile uint32_t combined_reg = (++position) << PORTX;
     combined_reg = (++position) << PORTY;
-    println(combined_reg);
+    println(combined_reg, 2);
     // now we have a 16-bit filled space, there is still another free 16-bits !
 
     // 4) the signed int data types are for anticipated negative values.
@@ -103,19 +185,52 @@ int main(void) {
     uint8_t inputA = 0b00000011;
     uint8_t inputB = 0b11000000;
     const uint8_t OR_AB = inputA | inputB; /* 0b11000011, usage: concatenates the binary commands into a single command */ 
-    println(OR_AB);
+    println(OR_AB, 2);
     const uint8_t AND_AB = inputA & inputB; /* 0b00000000, usage: compares the binary commands and find if they both are equal to HIGH (1) */
-    println(AND_AB);
+    println(AND_AB, 2);
     const uint8_t XOR_AB = inputA ^ inputB; /* 0b11000011, usage: compares the binary commands and find if they are both equal (Q = 0) or not (Q = 1)*/
-    println(XOR_AB);
+    println(XOR_AB, 2);
     const uint8_t NAND_AB = ~AND_AB; /* 0b11111111, usage: */
-    println(NAND_AB);
+    println(NAND_AB, 2);
     const uint8_t NOR_AB = ~OR_AB; /* 0b00111100, usage: finds all the non-involved bits in the OR */
-    println(NOR_AB);
+    println(NOR_AB, 2);
     const uint8_t NXOR_AB = ~XOR_AB; /* 0b00111100, usage: tests whether the 2 inputs are the same (Q = 1) or not (Q = 0).*/
-    println(NXOR_AB);
+    println(NXOR_AB, 2);
 
-    while(1); // block the program !
+    // 7) Strings: strings are represented in the form of character arrays or pointer
+    char* name = (char*) calloc(1, sizeof(char*));
+    char* id = (char*) calloc(1, sizeof(char*));
+
+    name = (char*) "Jack";
+    sprintln(name);
+
+    id = (char*) "125";
+    sprintln(id);
+
+    // concat strings
+    const char* lastName = " Richard";
+    
+    strcat(name, lastName);
+    sprintln(name);
+    
+    // release the resources
+    free(name);
+    free(id);
+    free((void*) lastName);
+
+    // compare 2 strings 
+    uint8_t result = strcmp(name, id);
+    println(result, 10);
+
+    // find the length (number of chars) of a string
+    uint8_t len = strlen(name);
+    println(len, 10);
+
+    // find the size of the string in bytes
+    uint8_t memorySize = sizeof(name);
+    println(memorySize, 10);
+
+    exit(0); // exit the program !
 
     return 0;
 }
