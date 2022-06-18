@@ -141,7 +141,8 @@ int main(void) {
     // volatile: means marked and present on the volatile memory, which is true in case of registers data
     volatile uint8_t PORTX = 0b00000000;
     volatile uint8_t PORTY = 0b11001100;
-    
+
+    sprintln((char*) "Imaginery PORTY:");
     println(PORTY, 2);
     // const: means marked as a constant value with respect to its domain.
     // first pin
@@ -152,24 +153,34 @@ int main(void) {
     const uint8_t PIN_2 = 3 << PORTX;
     // the unsigned 8 bit int is the same as the unsigned char, so its the same as 
     volatile unsigned char portB = PORTB;
-
+    
+    sprintln((char*) "PORTB before setting LED PIN5:");
     println(PORTB, 2);
+
     PORTB = 1 << PB5; // is the same as (0b0000001 << 5) and 0b00100000
+
+    sprintln((char*) "PORTB after setting LED PIN5:");
     println(PORTB, 2); // 0b00100000
 
     Register::Register8* reg8 = (Register::Register8*) calloc(1, sizeof(Register::Register8));
     
-    // toggle all bits on register uint PORTB
+    // toggle all bits on register uint PORTB to LOW
     for (int i = 0; i < reg8->getLength(); i++) {
         reg8->digitalWrite(PORTB, Register::PORT[i], Register::LOW);
     }
+    sprintln((char*) "PORTB turned all LEDs to LOW:");
     println(PORTB, 2);
 
-    // toggle all bits on register uint PORTC
+
+    sprintln((char*) "PORTC initially:");
     println(PORTC, 2); // 0
-     for (int i = 0; i < reg8->getLength(); i++) {
-        reg8->digitalWrite(PORTC, Register::PORT[i], Register::LOW);
+
+    // toggle all bits on register uint PORTC to HIGH
+    for (int i = 0; i < reg8->getLength(); i++) {
+        reg8->digitalWrite(PORTC, Register::PORT[i], Register::HIGH);
     }
+
+    sprintln((char*) "PORTC turned all LEDs to HIGH:");
     println(PORTC, 2);
 
     sprintln((char*) "PORTB PB5: ");
@@ -247,7 +258,7 @@ int main(void) {
     // concat strings
     const char* lastName = " Richard";
     
-	sprintln((char*) "Test String concat:");
+    sprintln((char*) "Test String concat:");
     strcat(name, lastName);
     sprintln(name);
     
@@ -257,7 +268,7 @@ int main(void) {
     free((void*) lastName);
 
     // compare 2 strings 
-	sprintln((char*) "Test String compare:");
+    sprintln((char*) "Test String compare:");
     uint8_t result = strcmp(name, id);
     println(result, 10);
 	
@@ -271,7 +282,7 @@ int main(void) {
     println(memorySize, 10);
 
     // ctype: charachter type utilities
-	sprintln((char*) "Charachter operations:");
+    sprintln((char*) "Charachter operations:");
     println(isupper('C'), 10);
     println(islower('C'), 10);
     println(tolower('C'), 10);
