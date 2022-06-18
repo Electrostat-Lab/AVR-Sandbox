@@ -1,10 +1,15 @@
 #ifndef REG
 #define REG
 
+#define __STDC_CONSTANT_MACROS
+
 #include<avr/io.h>
 #include<stdint.h>
 #include<stdlib.h>
 #include<string.h>
+
+#define HIGH UINT8_C(0b01)
+#define LOW UINT8_C(0b00)
 
 /**
  * @brief Converts a register to an array logic of bits using utility methods.
@@ -12,8 +17,6 @@
 namespace Register {
 
     const static uint8_t PORT[] = {0, 1, 2, 3, 4, 5, 6, 7};
-    const static uint8_t HIGH = 0b01;
-    const static uint8_t LOW = 0b00;
 
     struct Register8 {
 

@@ -1,4 +1,3 @@
-
 /**
  * @file AvrDataTypes.c
  * @author pavl_g
@@ -8,6 +7,8 @@
  * @copyright Copyright (c) Scrappers 2022
  * @note for more refer to the associated docs and attachments on the folder ./AvrDataTypes/resources
  */
+#define __STDC_CONSTANT_MACROS
+
 #include<avr/io.h>
 #include<stdint.h>
 #include<stdlib.h>
@@ -166,7 +167,7 @@ int main(void) {
     
     // toggle all bits on register uint PORTB to LOW
     for (int i = 0; i < reg8->getLength(); i++) {
-        reg8->digitalWrite(PORTB, Register::PORT[i], Register::LOW);
+        reg8->digitalWrite(PORTB, Register::PORT[i], LOW);
     }
     sprintln((char*) "PORTB turned all LEDs to LOW:");
     println(PORTB, 2);
@@ -177,7 +178,7 @@ int main(void) {
 
     // toggle all bits on register uint PORTC to HIGH
     for (int i = 0; i < reg8->getLength(); i++) {
-        reg8->digitalWrite(PORTC, Register::PORT[i], Register::HIGH);
+        reg8->digitalWrite(PORTC, Register::PORT[i], HIGH);
     }
 
     sprintln((char*) "PORTC turned all LEDs to HIGH:");
