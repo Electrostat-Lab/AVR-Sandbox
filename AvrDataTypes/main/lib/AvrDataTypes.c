@@ -11,10 +11,10 @@
 #include<stdint.h>
 #include<stdlib.h>
 #include<string.h>
+#include<ctype.h>
 
 /**
  * @brief Initializes the UART protocol.
- * 
  */
 void usart_init(void) {
 	UCSR0B = 0b00001000; // TXEN_BIT = 1, enables the transmitter buffer register.
@@ -275,6 +275,13 @@ int main(void) {
     // find the size of the string in bytes
     uint8_t memorySize = sizeof(name);
     println(memorySize, 10);
+
+    // ctype: charachter type utilities
+    println(isupper('C'), 10);
+    println(islower('C'), 10);
+    println(tolower('C'), 10);
+    println(toascii('C'), 10);
+    println(isblank(' '), 10);
 
     exit(0); // exit the program !
 
