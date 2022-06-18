@@ -17,6 +17,18 @@
 // user-defined registers
 #include<Register.h>
 
+#define NEW_LINE_CARRIAGE_R (char*)"\n\r"
+
+// preprocessor functions/methods declarations
+void usart_init(void);
+void usart_send(uint8_t);
+void print(uint8_t, uint8_t);
+void println(uint8_t, uint8_t);
+void sprint(char*);
+void sprintln(char*);
+char* substring(char*, uint8_t, uint8_t);
+int main(void);
+
 /**
  * @brief Initializes the UART protocol.
  */
@@ -37,6 +49,22 @@ void usart_send(uint8_t character) {
 }
 
 /**
+ * @brief Prints integer data to the serial.
+ * 
+ * @param data 8-bit integer data, with max 256 (in dec) or 0b11111111 (in bin)
+ */
+void print(uint8_t data, uint8_t radix) {
+    char* strBuffer = (char*) calloc(1, sizeof(data));
+    // convert input to string
+    itoa(data, strBuffer, radix);
+    int i = 0;
+    while (i < strlen(strBuffer)) {
+        usart_send(strBuffer[i++]);
+    }
+    free(strBuffer);
+}
+
+/**
  * @brief Prints integer data in new line to the serial.
  * 
  * @param data 8-bit integer data, with max 256 (in dec) or 0b11111111 (in bin)
@@ -45,12 +73,12 @@ void println(uint8_t data, uint8_t radix) {
     char* strBuffer = (char*) calloc(1, sizeof(data));
     // convert input to string
     itoa(data, strBuffer, radix);
-    strcat(strBuffer, "\n");
     int i = 0;
     while (i < strlen(strBuffer)) {
         usart_send(strBuffer[i++]);
     }
     free(strBuffer);
+	sprint(NEW_LINE_CARRIAGE_R);
 }
 
 /**
