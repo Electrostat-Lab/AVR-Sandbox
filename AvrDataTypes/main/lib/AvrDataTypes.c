@@ -1,3 +1,4 @@
+
 /**
  * @file AvrDataTypes.c
  * @author pavl_g
@@ -12,6 +13,9 @@
 #include<stdlib.h>
 #include<string.h>
 #include<ctype.h>
+
+// user-defined registers
+#include<Register.h>
 
 /**
  * @brief Initializes the UART protocol.
@@ -50,17 +54,30 @@ void println(uint8_t data, uint8_t radix) {
 }
 
 /**
+ * @brief Prints string data to the serial.
+ * 
+ * @param data char array string
+ */
+void sprint(char* data) {
+    // print the str
+    int i = 0;
+    while (i < strlen(data)) {
+        usart_send(data[i++]);
+    }
+}
+
+/**
  * @brief Prints string data in new line to the serial.
  * 
  * @param data char array string
  */
 void sprintln(char* data) {
     // print the str
-    strcat(data, "\n");
     int i = 0;
     while (i < strlen(data)) {
         usart_send(data[i++]);
     }
+	sprint((char*) "\n");
 }
 
 /**
@@ -87,60 +104,6 @@ char* substring(char* str, uint8_t start, uint8_t end) {
     }
     return buffer;
 }
-
-/**
- * @brief Converts a register to an array logic of bits using utility methods.
- */
-namespace Register {
-
-    const static uint8_t PORT[] = {0, 1, 2, 3, 4, 5, 6, 7};
-    const static uint8_t HIGH = 0b01;
-    const static uint8_t LOW = 0b00;
-
-    struct Register8 {
-
-        /**
-         * @brief Gets the Length of array [PORT*] from its size.
-         * 
-         * @param PORT[] change the PORT array and re-run this to get the length of the new PORT array
-         * @return size_t 
-         */
-        size_t getLength() {
-            return sizeof(PORT) / sizeof(typeof(*PORT));
-        }
-
-        /**
-         * @brief Digitally writes a [STATE] to a [PIN] in a particular [PORT].
-         * 
-         * @param PORT the register
-         * @param PIN the pin
-         * @param STATE the STATE, either [Regiter::HIGH] or [Register::LOW]
-         */
-        void digitalWrite(volatile uint8_t& PORT, const uint8_t& PIN, const uint8_t& STATE) {
-            uint8_t* BIT = (uint8_t*) calloc(1, sizeof(uint8_t*));
-            *BIT = (HIGH << PIN);
-            if (STATE >= HIGH) {
-                PORT |= *BIT;
-            } else {
-                PORT &= ~(*BIT);
-            }
-            free(BIT);
-        }
-
-        /**
-         * @brief Digitally reads a [PIN] in a [PORT].
-         * 
-         * @param PORT the register
-         * @param PIN the pin to read from
-         * @return const uint8_t a new unsigned char decimal number representing the current state or zero
-         */
-        const uint8_t digitalRead(volatile uint8_t& PORT, const uint8_t& PIN) {
-            const uint8_t BIT = HIGH << PIN; /* e.g: 0b00000001 << 5 = 0b00010000 */
-            return PORT & BIT;
-        }
-    };
-};
-
 
 int main(void) {
     
@@ -256,6 +219,7 @@ int main(void) {
     // concat strings
     const char* lastName = " Richard";
     
+	sprintln((char*) "Test String concat:");
     strcat(name, lastName);
     sprintln(name);
     
@@ -265,9 +229,11 @@ int main(void) {
     free((void*) lastName);
 
     // compare 2 strings 
+	sprintln((char*) "Test String compare:");
     uint8_t result = strcmp(name, id);
     println(result, 10);
-
+	
+	sprintln((char*) "Mem size V.S. String len:");
     // find the length (number of chars) of a string
     uint8_t len = strlen(name);
     println(len, 10);
@@ -277,6 +243,7 @@ int main(void) {
     println(memorySize, 10);
 
     // ctype: charachter type utilities
+	sprintln((char*) "Charachter operations:");
     println(isupper('C'), 10);
     println(islower('C'), 10);
     println(tolower('C'), 10);
@@ -287,5 +254,3 @@ int main(void) {
 
     return 0;
 }
-
-
