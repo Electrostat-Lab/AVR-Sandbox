@@ -88,17 +88,59 @@ char* substring(char* str, uint8_t start, uint8_t end) {
     return buffer;
 }
 
-volatile typeof(uint8_t) PORT[] = {0, 1, 2, 3, 4, 5, 6, 7};
-
 /**
- * @brief Gets the Length of array [PORT*] from its size.
- * 
- * @param PORT[] change the PORT array and re-run this to get the length of the new PORT array
- * @return size_t 
+ * @brief Converts a register to an array logic of bits using utility methods.
  */
-size_t getLength() {
-        return sizeof(PORT) / sizeof(typeof(*PORT));
-}
+namespace Register {
+
+    const static uint8_t PORT[] = {0, 1, 2, 3, 4, 5, 6, 7};
+    const static uint8_t HIGH = 0b01;
+    const static uint8_t LOW = 0b00;
+
+    struct Register8 {
+
+        /**
+         * @brief Gets the Length of array [PORT*] from its size.
+         * 
+         * @param PORT[] change the PORT array and re-run this to get the length of the new PORT array
+         * @return size_t 
+         */
+        size_t getLength() {
+            return sizeof(PORT) / sizeof(typeof(*PORT));
+        }
+
+        /**
+         * @brief Digitally writes a [STATE] to a [PIN] in a particular [PORT].
+         * 
+         * @param PORT the register
+         * @param PIN the pin
+         * @param STATE the STATE, either [Regiter::HIGH] or [Register::LOW]
+         */
+        void digitalWrite(volatile uint8_t& PORT, const uint8_t& PIN, const uint8_t& STATE) {
+            uint8_t* BIT = (uint8_t*) calloc(1, sizeof(uint8_t*));
+            *BIT = (HIGH << PIN);
+            if (STATE >= HIGH) {
+                PORT |= *BIT;
+            } else {
+                PORT &= ~(*BIT);
+            }
+            free(BIT);
+        }
+
+        /**
+         * @brief Digitally reads a [PIN] in a [PORT].
+         * 
+         * @param PORT the register
+         * @param PIN the pin to read from
+         * @return const uint8_t a new unsigned char decimal number representing the current state or zero
+         */
+        const uint8_t digitalRead(volatile uint8_t& PORT, const uint8_t& PIN) {
+            const uint8_t BIT = HIGH << PIN; /* e.g: 0b00000001 << 5 = 0b00010000 */
+            return PORT & BIT;
+        }
+    };
+};
+
 
 int main(void) {
     
@@ -124,20 +166,24 @@ int main(void) {
     PORTB = 1 << PB5; // is the same as (0b0000001 << 5) and 0b00100000
     println(PORTB, 2); // 0b00100000
 
-    const uint8_t register8 = 0b00000001;
-
+    Register::Register8* reg8 = (Register::Register8*) calloc(1, sizeof(Register::Register8));
+    
     // toggle all bits on register uint PORTB
-    for (int i = 0; i < getLength(); i++) {
-        PORTB |= (register8 << PORT[i]);
+    for (int i = 0; i < reg8->getLength(); i++) {
+        reg8->digitalWrite(PORTB, Register::PORT[i], Register::LOW);
     }
     println(PORTB, 2);
 
     // toggle all bits on register uint PORTC
     println(PORTC, 2); // 0
-     for (int i = 0; i < getLength(); i++) {
-        PORTC |= (register8 << PORT[i]);
+     for (int i = 0; i < reg8->getLength(); i++) {
+        reg8->digitalWrite(PORTC, Register::PORT[i], Register::LOW);
     }
     println(PORTC, 2);
+
+    sprintln((char*) "PORTB PB5: ");
+    // read PIN5 LED on PORTB
+    println(reg8->digitalRead(PORTB, PB5), 2);
 
 
     // 2) the unsigned 16 bit int: used for 2 parts registers (2 8-bits registers), for example: some
