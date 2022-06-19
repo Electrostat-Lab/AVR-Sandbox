@@ -17,6 +17,7 @@
 
 // user-defined registers
 #include<Register.h>
+#include<SerialCounter.h>
 
 #define NEW_LINE_CARRIAGE_R (char*)"\n\r"
 
@@ -289,6 +290,11 @@ int main(void) {
     println(tolower('C'), 10);
     println(toascii('C'), 10);
     println(isblank(' '), 10);
+
+    // test xmas 
+    sprintln((char*) "Test Xmas LEDs:");
+    SerialCounter::Counter* counter = (SerialCounter::Counter*) calloc(1, sizeof(SerialCounter::Counter*));
+    counter->start(PORTB, 300);
 
     exit(0); // exit the program !
 
