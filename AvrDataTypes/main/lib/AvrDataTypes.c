@@ -72,14 +72,7 @@ void print(uint8_t data, uint8_t radix) {
  * @param data 8-bit integer data, with max 256 (in dec) or 0b11111111 (in bin)
  */
 void println(uint8_t data, uint8_t radix) {
-    char* strBuffer = (char*) calloc(1, sizeof(data));
-    // convert input to string
-    itoa(data, strBuffer, radix);
-    int i = 0;
-    while (i < strlen(strBuffer)) {
-        usart_send(strBuffer[i++]);
-    }
-    free(strBuffer);
+    print(data, radix);
 	sprint(NEW_LINE_CARRIAGE_R);
 }
 
@@ -89,7 +82,6 @@ void println(uint8_t data, uint8_t radix) {
  * @param data char array string
  */
 void sprint(char* data) {
-    // print the str
     int i = 0;
     while (i < strlen(data)) {
         usart_send(data[i++]);
@@ -102,12 +94,8 @@ void sprint(char* data) {
  * @param data char array string
  */
 void sprintln(char* data) {
-    // print the str
-    int i = 0;
-    while (i < strlen(data)) {
-        usart_send(data[i++]);
-    }
-	sprint((char*) "\n");
+    sprint(data);
+	sprint(NEW_LINE_CARRIAGE_R);
 }
 
 /**
