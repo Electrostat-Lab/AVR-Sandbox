@@ -15,7 +15,7 @@
 #include<string.h>
 #include<ctype.h>
 
-// user-defined registers
+// user-defined libs
 #include<Register.h>
 #include<SerialCounter.h>
 
@@ -61,6 +61,7 @@ void usart_send(uint8_t character) {
  * @brief Prints integer data to the serial.
  * 
  * @param data 8-bit integer data, with max 256 (in dec) or 0b11111111 (in bin)
+ * @param radix the data number system base
  */
 void print(uint8_t data, uint8_t radix) {
     char* strBuffer;
@@ -84,6 +85,7 @@ void print(uint8_t data, uint8_t radix) {
  * @brief Prints integer data in new line to the serial.
  * 
  * @param data 8-bit integer data, with max 256 (in dec) or 0b11111111 (in bin)
+ * @param radix the data number system base
  */
 void println(uint8_t data, uint8_t radix) {
     print(data, radix);
