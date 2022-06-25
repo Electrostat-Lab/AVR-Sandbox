@@ -20,6 +20,13 @@
 #include<SerialCounter.h>
 
 #define NEW_LINE_CARRIAGE_R (char*)"\n\r"
+#define DEC_RADIX (uint8_t) 10
+#define CHAR_OF_DEC (size_t) (1 * sizeof(uint8_t) + 1) /* For example: 155 is the same as saying [const char str[] = {'155', NULL};] or [char str[] = {'155', '\0'};]*/
+
+#define BIN_RADIX (uint8_t) 2
+#define CHAR_OF_BIN (size_t) (8 * sizeof(uint8_t) + 1) /* For example: 0b11110000 is the same as saying [const char str[] = {'1', '1' ,'1', '1', '0', '0', '0', '0', '\0'};], 
+																	   i.e. one character for each bit plus one for the string terminator '\0' which is (NULL). */
+
 
 // preprocessor functions/methods declarations
 void usart_init(void);
@@ -56,7 +63,14 @@ void usart_send(uint8_t character) {
  * @param data 8-bit integer data, with max 256 (in dec) or 0b11111111 (in bin)
  */
 void print(uint8_t data, uint8_t radix) {
-    char* strBuffer = (char*) calloc(1, sizeof(data));
+    char* strBuffer;
+	if (radix == BIN_RADIX) {
+		strBuffer =(char*) calloc(1, CHAR_OF_BIN);
+	} else if (radix == DEC_RADIX) {
+		strBuffer =(char*) calloc(1, CHAR_OF_DEC);
+	} else {
+		return;
+	}
     // convert input to string
     itoa(data, strBuffer, radix);
     int i = 0;
