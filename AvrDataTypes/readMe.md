@@ -12,6 +12,7 @@ Topics covered:
 - Some strings utility functions.
 
 1) Different integer datatypes, defined on `stdint.h`: 
+
 | `Data type` | `Equivalent type` | `Size` | `MIN_VALUE` | `MAX_VALUE` |
 |-------------|-------------|-------------|-------------|-------------|
 | uint8_t | unsigned char | 8-bit | 0 | 256 (in decimal), 0b(11111111) (in binary), 0x(FF) (in hex) |
