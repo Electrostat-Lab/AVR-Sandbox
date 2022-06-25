@@ -12,8 +12,8 @@ Topics covered:
 - Some strings utility functions.
 
 1) Different integer datatypes, defined on `stdint.h`: 
-|----|----|----|----|----|
 | `Data type` | `Equivalent type` | `Size` | `MIN_VALUE` | `MAX_VALUE` |
+|-------------|-------------|-------------|-------------|-------------|
 | uint8_t | unsigned char | 8-bit | 0 | 256 (in decimal), 0b(11111111) (in binary), 0x(FF) (in hex) |
 | uint16_t | unsigned int | 16-bit | 0 | 512 (in dec), 0b(11111111)(11111111) (in bin), 0x(FF)(FF) (in hex) |
 | uint32_t | unsigned long int | 32-bit | 0 | 1024 (in dec), 0b(11111111)(11111111)(11111111)(11111111) (in bin), 0x(FF)(FF)(FF)(FF) (in hex)  | 
@@ -107,5 +107,5 @@ void println(uint8_t data, uint8_t radix) {
 }
 ```
 
-
+4) Bitwise operations:
 
