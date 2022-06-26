@@ -10,10 +10,21 @@
 
 #define HIGH UINT8_C(0b01)
 
+/**
+ * @brief Instantiates a counter using a software serial clock.
+ */
 namespace SerialCounter {
-    struct Counter {
-       void start(volatile uint8_t& PORT, const double& DELAY);
-    };
+	/**
+	* @brief Creates a software timer [counter] on a [PORT].
+	*/
+	struct Counter {
+		/**
+		* @brief Starts a software timer [counter] on a [PORT].
+		* @param PORT the port to count on, could be software/virtual port
+		* @param DELAY a delay in ms
+		*/
+		void start(volatile uint8_t& PORT, const double& DELAY);
+	};
 };
 
 #endif
