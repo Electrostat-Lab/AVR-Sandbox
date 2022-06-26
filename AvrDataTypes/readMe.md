@@ -132,6 +132,15 @@ void println(uint8_t data, uint8_t radix) {
 | `>>` | `BINARY_NUMBER >> NUM_OF_SHIFTS` | Right shift | Right shifting bits on (BINARY_NUMBER) by a number of times (NUM_OF_SHIFTS) | `BINARY_NUMBER * pow(2, -NUM_OF_SHIFTS)` | `(0b00111000 >> 3) is the same as (((0b00111000 >> 1) >> 1) >> 1)` | 
 
 - Addition
+
+| Truth table |
+|-------------|
+| `Operation` | `Example` |
+|-------------|-------------|
+| 0 + 0 = 0 | 0b00000000 + 0b00000000 = 0b00000000 |
+| 0 + 1 = 1 | 0b00000000 + 0b00000001 = 0b00000001 |
+| 1 + 1 = 0 and carry 1 | 0b00000001 + 0b00000001 = 0b00000010, 0b00000100 + 0b00000100 = 0b00000100 * 2 = 0b00000100 * pow(2, 1) = 0b00000100 << 1 = 0b00001000 |
+
 - Subtraction
 
 
