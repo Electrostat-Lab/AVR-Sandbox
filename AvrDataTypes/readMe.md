@@ -116,20 +116,20 @@ s
 
 | `Gate` | `Notation` | `Maths Notation` | `Usage` | `Boolean Expression` |
 |-------------|-------------|-------------|-------------|
-| AND | `(...&...)` | Q = A . B | Mulitplying 2 binary digits | Q = A & B |
-| OR | `(...|...)` | Q = A + B | Adding up 2 binary digits | Q = A | B |
-| NOT | `~(...)` | Q = !A | Flipping the binary bits | Q = ~A |
-| XOR (Ex-OR) | `(...^...)` | Q = (!(A) . B) | (A . ~B) | Checking if 2 binary digits' bits aren't the same | (~(A) & B) | (A & ~B) |
-| N-XOR (NOT-Ex-OR) | `~(...^...)` | Q = !((!(A) . B) | (A . ~B)) | Checking if 2 binary digits' bits are the same | ~((~(A) & B) | (A & ~B)) | 
-| N-AND | `~(...&...)` |  Q = !(A . B) | State and circuit control when 2 states are true, the result is false and when the two states are false or one of them is false, the result is true | Q = ~(A & B) |
-| N-OR | `~(...|...)` | Q = !(A + B) | - | Q = ~(A & B)
+| AND | `(...&...)` | `Q = A . B` | Mulitplying 2 binary digits | `Q = A & B` |
+| OR | `(...|...)` | `Q = A + B` | Adding up 2 binary digits | `Q = A | B` |
+| NOT | `~(...)` | `Q = !A` | Flipping the binary bits | `Q = ~A` |
+| XOR (Ex-OR) | `(...^...)` | `Q = (!(A) . B)` | `(A . ~B)` | Checking if 2 binary digits' bits aren't the same | `(~(A) & B) | (A & ~B)` |
+| N-XOR (NOT-Ex-OR) | `~(...^...)` | `Q = !((!(A) . B) | (A . ~B))` | Checking if 2 binary digits' bits are the same | `~((~(A) & B) | (A & ~B))` | 
+| N-AND | `~(...&...)` |  `Q = !(A . B)` | State and circuit control when 2 states are true, the result is false and when the two states are false or one of them is false, the result is true | `Q = ~(A & B)` |
+| N-OR | `~(...|...)` | `Q = !(A + B)` | - | `Q = ~(A & B)`
 
 - Shifting operations
 
 | `Operator` | `Notation` | `Name` | `Usage` | `Equivalent maths equation` | `Example` |
 |-------------|-------------|-------------|-------------|-------------|
-| << | BINARY_NUMBER << NUM_OF_SHIFTS | Left shift | Left shifting bits on (BINARY_NUMBER) by a number of times (NUM_OF_SHIFTS) | BINARY_NUMBER * pow(2, NUM_OF_SHIFTS) | (0b00001110 << 3) is the same as (((0b00001110 << 1) << 1) << 1) | 
-| >> | BINARY_NUMBER >> NUM_OF_SHIFTS | Right shift | Right shifting bits on (BINARY_NUMBER) by a number of times (NUM_OF_SHIFTS) | BINARY_NUMBER * pow(2, -NUM_OF_SHIFTS) | (0b00111000 >> 3) is the same as (((0b00111000 >> 1) >> 1) >> 1) | 
+| `<<` | `BINARY_NUMBER << NUM_OF_SHIFTS` | Left shift | Left shifting bits on (BINARY_NUMBER) by a number of times (NUM_OF_SHIFTS) | `BINARY_NUMBER * pow(2, NUM_OF_SHIFTS)` | `(0b00001110 << 3) is the same as (((0b00001110 << 1) << 1) << 1)` | 
+| `>>` | `BINARY_NUMBER >> NUM_OF_SHIFTS` | Right shift | Right shifting bits on (BINARY_NUMBER) by a number of times (NUM_OF_SHIFTS) | `BINARY_NUMBER * pow(2, -NUM_OF_SHIFTS)` | `(0b00111000 >> 3) is the same as (((0b00111000 >> 1) >> 1) >> 1)` | 
 
 - Addition
 - Subtraction
