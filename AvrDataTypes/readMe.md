@@ -117,12 +117,12 @@ s
 | `Gate` | `Notation` | `Maths Notation` | `Usage` | `Boolean Expression` |
 |-------------|-------------|-------------|-------------|-------------|
 | AND | `(...&...)` | `Q = A . B` | Mulitplying 2 binary digits | `Q = A & B` |
-| OR | (...`|`...) | `Q = A + B` | Adding up 2 binary digits | Q = A `|` B |
+| OR | `(...OR...)` | `Q = A + B` | Adding up 2 binary digits | `Q = A OR B` |
 | NOT | `~(...)` | `Q = !A` | Flipping the binary bits | `Q = ~A` |
-| XOR (Ex-OR) | (...`^`...) | `Q = (!(A) . B)` | `(A . ~B)` | Checking if 2 binary digits' bits aren't the same | (~(A) `&` B) `|` (A `&` ~B) |
-| N-XOR (NOT-Ex-OR) | ~(...`^`...) | Q = !((!(A) . B) `|` (A . ~B)) | Checking if 2 binary digits' bits are the same | ~((~(A) `&` B) `|` (A `&` ~B)) | 
-| N-AND | ~(...`&`...) |  `Q = !(A . B)` | State and circuit control when 2 states are true, the result is false and when the two states are false or one of them is false, the result is true | `Q = ~(A & B)` |
-| N-OR | ~(...**|**...) | `Q = !(A + B)` | - | Q = ~(A `|` B)
+| XOR (Ex-OR) | `(...^...)` | `Q = (!(A) . B)` | `(A . ~B)` | Checking if 2 binary digits' bits aren't the same | `(~(A) & B) OR (A & ~B)` |
+| N-XOR (NOT-Ex-OR) | `~(...^...)` | `Q = !((!(A) . B) OR (A . ~B))` | Checking if 2 binary digits' bits are the same | `~((~(A) & B) OR (A & ~B))` | 
+| N-AND | `~(...&...)` |  `Q = !(A . B)` | State and circuit control when 2 states are true, the result is false and when the two states are false or one of them is false, the result is true | `Q = ~(A & B)` |
+| N-OR | `~(...OR...)` | `Q = !(A + B)` | - | `Q = ~(A & B)`
 
 - Shifting operations
 
