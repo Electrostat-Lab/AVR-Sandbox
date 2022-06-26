@@ -11,7 +11,7 @@ Topics covered:
 - Allocating and deallocating pointers (buffers) before use.
 - Some strings utility functions.
 
-----------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------
 
 1) Different integer datatypes, defined on `stdint.h`: 
 
@@ -62,7 +62,7 @@ void sprint(char* data) {
  * @param data char array string
  */
 void sprintln(char* data) {
-    sprint(data);
+	sprint(data);
 	sprint(NEW_LINE_CARRIAGE_R);
 }
 ```
@@ -79,7 +79,7 @@ void sprintln(char* data) {
  * @param radix the data number system base
  */
 void print(uint8_t data, uint8_t radix) {
-    char* strBuffer;
+	char* strBuffer;
 	if (radix == BIN_RADIX) {
 		strBuffer =(char*) calloc(1, CHAR_OF_BIN);
 	} else if (radix == DEC_RADIX) {
@@ -87,13 +87,13 @@ void print(uint8_t data, uint8_t radix) {
 	} else {
 		return;
 	}
-    // convert input to string
-    itoa(data, strBuffer, radix);
-    int i = 0;
-    while (i < strlen(strBuffer)) {
-        usart_send(strBuffer[i++]);
-    }
-    free(strBuffer);
+	// convert input to string
+	itoa(data, strBuffer, radix);
+	int i = 0;
+	while (i < strlen(strBuffer)) {
+		usart_send(strBuffer[i++]);
+	}
+	free(strBuffer);
 }
 ```
 - Printing integers in a new line: (just add `sprint(NEW_LINE_CARRIAGE_R)`)
@@ -106,12 +106,12 @@ void print(uint8_t data, uint8_t radix) {
  */
 void println(uint8_t data, uint8_t radix) {
     print(data, radix);
-	sprint(NEW_LINE_CARRIAGE_R);
+    sprint(NEW_LINE_CARRIAGE_R);
 }
 ```
 
 4) Bitwise operations:
-s
+
 - Logical operations:
 
 | `Gate` | `Notation` | `Maths Notation` | `Usage` | `Boolean Expression` |
@@ -119,7 +119,7 @@ s
 | AND | `(...&...)` | `Q = A . B` | Mulitplying 2 binary digits | `Q = A & B` |
 | OR | `(...OR...)` | `Q = A + B` | Adding up 2 binary digits | `Q = A OR B` |
 | NOT | `~(...)` | `Q = !A` | Flipping the binary bits | `Q = ~A` |
-| XOR (Ex-OR) | `(...^...)` | `Q = (!(A) . B)` | `(A . ~B)` | Checking if 2 binary digits' bits aren't the same | `(~(A) & B) OR (A & ~B)` |
+| XOR (Ex-OR) | `(...^...)` | `Q = (!(A) . B) OR (A . ~B)` | Checking if 2 binary digits' bits aren't the same | `(~(A) & B) OR (A & ~B)` |
 | N-XOR (NOT-Ex-OR) | `~(...^...)` | `Q = !((!(A) . B) OR (A . ~B))` | Checking if 2 binary digits' bits are the same | `~((~(A) & B) OR (A & ~B))` | 
 | N-AND | `~(...&...)` |  `Q = !(A . B)` | State and circuit control when 2 states are true, the result is false and when the two states are false or one of them is false, the result is true | `Q = ~(A & B)` |
 | N-OR | `~(...OR...)` | `Q = !(A + B)` | - | `Q = ~(A & B)`
