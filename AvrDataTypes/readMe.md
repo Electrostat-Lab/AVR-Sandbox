@@ -115,7 +115,7 @@ s
 - Logical operations:
 
 | `Gate` | `Notation` | `Maths Notation` | `Usage` | `Boolean Expression` |
-|-------------|-------------|-------------|-------------|
+|-------------|-------------|-------------|-------------|-------------|
 | AND | `(...&...)` | `Q = A . B` | Mulitplying 2 binary digits | `Q = A & B` |
 | OR | `(...|...)` | `Q = A + B` | Adding up 2 binary digits | `Q = A | B` |
 | NOT | `~(...)` | `Q = !A` | Flipping the binary bits | `Q = ~A` |
@@ -127,7 +127,7 @@ s
 - Shifting operations
 
 | `Operator` | `Notation` | `Name` | `Usage` | `Equivalent maths equation` | `Example` |
-|-------------|-------------|-------------|-------------|-------------|
+|-------------|-------------|-------------|-------------|-------------|-------------|
 | `<<` | `BINARY_NUMBER << NUM_OF_SHIFTS` | Left shift | Left shifting bits on (BINARY_NUMBER) by a number of times (NUM_OF_SHIFTS) | `BINARY_NUMBER * pow(2, NUM_OF_SHIFTS)` | `(0b00001110 << 3) is the same as (((0b00001110 << 1) << 1) << 1)` | 
 | `>>` | `BINARY_NUMBER >> NUM_OF_SHIFTS` | Right shift | Right shifting bits on (BINARY_NUMBER) by a number of times (NUM_OF_SHIFTS) | `BINARY_NUMBER * pow(2, -NUM_OF_SHIFTS)` | `(0b00111000 >> 3) is the same as (((0b00111000 >> 1) >> 1) >> 1)` | 
 
