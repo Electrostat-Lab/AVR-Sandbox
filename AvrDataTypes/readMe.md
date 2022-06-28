@@ -1,4 +1,4 @@
-## Avr-Data-Types
+# Avr-Data-Types
 
 An example demonstrates the available data types in avr-gnu lib.
 
@@ -13,7 +13,7 @@ Topics covered:
 
 ----------------------------------------------------------------------------------------------------------------------
 
-1) Different integer datatypes, defined on `stdint.h`: 
+## 1) Different integer datatypes, defined on `stdint.h`: 
 
 | `Data type` | `Equivalent type` | `Size` | `MIN_VALUE` | `MAX_VALUE` |
 |-------------|-------------|-------------|-------------|-------------|
@@ -21,7 +21,7 @@ Topics covered:
 | uint16_t | unsigned int | 16-bit | 0 | 512 (in dec), 0b(11111111)(11111111) (in bin), 0x(FF)(FF) (in hex) |
 | uint32_t | unsigned long int | 32-bit | 0 | 1024 (in dec), 0b(11111111)(11111111)(11111111)(11111111) (in bin), 0x(FF)(FF)(FF)(FF) (in hex)  | 
 
-2) Converting integers to strings: 
+## 2) Converting integers to strings: 
 - Use the function `itoa(int val, char* buffer, int radix)` offered by `<stdlib.h>` as it converts the integer value from `val` into an ASCII representation that will be stored under `s`, the 
 buffer size depends on the radix, if it's 10 (decimal) then the buffer size = `sizeof(uint8_t) + 1`; where the additional charachter is the string termination char `\0` or `NULL`, if the radix is 2 (binary) then the buffer size = `8 * sizeof(uint8_t) + 1`; where 8 is the number of bits in an integer to be converted to string in the form of binary digits.
 - Example: 
@@ -33,7 +33,7 @@ char* strBuffer = (char*) calloc(1, SIZE_OF_BINARY_INTEGER_STR);
 const char* output = itoa(data, strBuffer, radix); // now : output = strBuffer
 ```
 
-3) UART printing strings and integers:
+## 3) UART printing strings and integers:
 
 - Printing strings in the same line: 
 ```c
@@ -111,7 +111,7 @@ void println(uint8_t data, uint8_t radix) {
 }
 ```
 
-4) Bitwise operations:
+## 4) Bitwise operations:
 
 - Logical operations:
 
