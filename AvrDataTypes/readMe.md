@@ -26,7 +26,8 @@ Topics covered:
 buffer size depends on the radix, if it's 10 (decimal) then the buffer size = `sizeof(uint8_t) + 1`; where the additional charachter is the string termination char `\0` or `NULL`, if the radix is 2 (binary) then the buffer size = `8 * sizeof(uint8_t) + 1`; where 8 is the number of bits in an integer to be converted to string in the form of binary digits.
 - Example: 
 ```c
-const uint8_t SIZE_OF_BINARY_INTEGER_STR = 8 * sizeof(uint8_t) + 1; // 8 -> number of bits to be converted to chars, 1 -> string terminator constant '\0'
+// 8 -> number of bits to be converted to chars, 1 -> string terminator constant '\0'
+const uint8_t SIZE_OF_BINARY_INTEGER_STR = 8 * sizeof(uint8_t) + 1; 
 char* strBuffer = (char*) calloc(1, SIZE_OF_BINARY_INTEGER_STR);
 // convert input to string
 const char* output = itoa(data, strBuffer, radix); // now : output = strBuffer
@@ -118,7 +119,7 @@ void println(uint8_t data, uint8_t radix) {
 |-------------|-------------|-------------|-------------|-------------|
 | AND | `(...&...)` | `Q = A . B` | Mulitplying 2 binary digits | `Q = A & B` |
 | OR | `(...OR...)` | `Q = A + B` | Adding up 2 binary digits | `Q = A OR B` |
-| NOT | `~(...)` | `Q = !A` | Flipping the binary bits | `Q = ~A` |
+| NOT | `~(...)` | `Q = !A` | Flipping the binary bits (finding the 1s complement of a binary number) | `Q = ~A` |
 | XOR (Ex-OR) | `(...^...)` | `Q = (!(A) . B) OR (A . ~B)` | Checking if 2 binary digits' bits aren't the same | `(~(A) & B) OR (A & ~B)` |
 | N-XOR (NOT-Ex-OR) | `~(...^...)` | `Q = !((!(A) . B) OR (A . ~B))` | Checking if 2 binary digits' bits are the same | `~((~(A) & B) OR (A & ~B))` | 
 | N-AND | `~(...&...)` |  `Q = !(A . B)` | State and circuit control when 2 states are true, the result is false and when the two states are false or one of them is false, the result is true | `Q = ~(A & B)` |
