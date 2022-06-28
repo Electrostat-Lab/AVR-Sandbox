@@ -141,5 +141,15 @@ void println(uint8_t data, uint8_t radix) {
 
 - Subtraction
 
+| `General layout` | `Steps` | `Example 1` | `Example 2` |
+|-------------|-------------|-------------|-------------|
+| Minuend - Subtrahend = Minuend + (-Subtrahend) = Minuend + (1s Complement of Subtrahend + 0b01) = Minuend + (2s Complement of the Subtrahend) | First, find the 2s' complement of the subtrahend, which is the 1s' complement plus one, then add the 2s' complement of the subtrahend to the minuend | 0b00001111 (15) - 0b00000011 (3) = 0b00001111 + (0b11111100 + 0b00000001) = 0b00001111 + 0b11111101 = 0b00001100 (12) | 0b00000010 (2) - 0b00000001 (1) = 0b00000010 + (0b11111111) = 0b00000001 (1) |
+
+Notes: 
+- The 1s complement of a binary number is taken by applying a `NOT` gate to the number, ie by flipping bits.
+- The 2s complement of a binary number is taken by adding 1 to the 1s complement of that binary number.
+
+
+
 
 
