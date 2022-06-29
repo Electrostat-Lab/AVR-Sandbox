@@ -159,3 +159,6 @@ Notes:
 | void free(void*) | Frees up the memory allocated by the pointer (void*) to be used else where, the pointer (memory address) should be settled to zero after this, to ensure not accessing the unintended data (if we are not going to use realloc) | `free(data);` |
 | void* realloc(void*, size_t) | Reallocates a non-const pointer (void*) with the size (size_t) | `const char* dataRealloc = (char*) realloc(data, sizeof(char*));` |
 
+## 6) Allocating indirect stack buffers
+
+- `void* alloca(size_t)` from `alloca.h`, allocates new memory on the stack caller of the frame, this temporary space is automatically freed when the function that called alloca() returns to its caller.
