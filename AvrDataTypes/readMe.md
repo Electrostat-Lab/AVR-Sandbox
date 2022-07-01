@@ -162,3 +162,10 @@ Notes:
 ## 6) Allocating indirect stack buffers
 
 - `void* alloca(size_t)` from `alloca.h`, allocates new memory on the stack caller of the frame, this temporary space is automatically freed when the function that called alloca() returns to its caller.
+
+## 7) String utilities (found on `string.h`)
+
+| `Function` | `Documentation` |
+|------------|-----------------|
+| `size_t strlen(char*)` | Finds the number of the characters of a string excluding the terminating '\0' |
+| `char* strcpy(char*, const char*` | Copies the characters from (const char*) to the buffer (char*) |
