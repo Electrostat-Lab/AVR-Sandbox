@@ -154,7 +154,11 @@ Notes:
 
 | `Function` | `Definition` | `Example` |
 |------------|--------------|------------|
-| void* malloc(size_t) | Directly allocates an object pointer memory on the heap without zeroing it, returns NULL if it fails, also `ERRNO = ENOMEM`, but in avr ENOMEM is ignored | `char* name = (char*) malloc(sizeof(char*));` |
+| void* malloc(size_t) | Directly allocates an object pointer memory on the heap without zeroing it, returns NULL if it fails, also `ERRNO = ENOMEM`, but in avr ENOMEM is ignored | `
+char* name = (char*) malloc(sizeof(char*));
+for (int i = 0; i < strlen(name); i++) {
+   name[i] = 0;
+}` |
 | void* calloc(int , size_t) | Directly allocates an array object pointer memory on the heap and clears it to zeros, (int) is the number of items to be allocated using the (size_t) parameter | `char* data = (char*) calloc(1, sizeof(char*));` |
 | void free(void*) | Frees up the memory allocated by the pointer (void*) to be used else where, the pointer (memory address) should be settled to zero after this, to ensure not accessing the unintended data (if we are not going to use realloc) | `free(data);` |
 | void* realloc(void*, size_t) | Reallocates a non-const pointer (void*) with the size (size_t) | `const char* dataRealloc = (char*) realloc(data, sizeof(char*));` |
