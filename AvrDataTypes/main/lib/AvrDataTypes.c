@@ -299,7 +299,7 @@ int main(void) {
     uint8_t result = strcmp(name, id);
     println(result, 10);
 	
-	sprintln((char*) "Mem size V.S. String len:");
+    sprintln((char*) "Mem size V.S. String len:");
     // find the length (number of chars) of a string
     uint8_t len = strlen(name);
     println(len, 10);
