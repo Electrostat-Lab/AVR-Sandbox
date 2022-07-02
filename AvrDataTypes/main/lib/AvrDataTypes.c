@@ -250,8 +250,29 @@ int main(void) {
     println(NOR_AB, 2);
     const uint8_t NXOR_AB = ~XOR_AB; /* 0b00111100, usage: tests whether the 2 inputs are the same (Q = 1) or not (Q = 0).*/
     println(NXOR_AB, 2);
+	
+    // 7) Binary addition/subtraction
+    
+    // addition
+    const uint8_t BINARY_1 = 0b00000010; // 2
+    const uint8_t BINARY_2 = 0b00000011; // 3
+    const uint8_t SUM = BINARY_1 + BINARY_2; /* 0b00000010 + 0b00000011 = 0b00000101 (5), (0 + 1 = 1), (1 + 1 = 0 and carry 1 to the MSB -- most significant bit) */
+    sprintln((char*) "Test Binary Addition:");
+    println(SUM, 2);
+    
+    // subtraction, DIFF = SUM - BINARY_2 = 0b00000101 - 0b00000011 = 0b00000101 + (0b11111100 + 0b00000001) = 0b00000101 + 0b11111101 = 0b00000010 (2 in Decimal)
+   
+    // Steps: 
+    // 1- Finds the 1s complement of the subtrahend number: 
+    const uint8_t onesComplement = ~BINARY_2;
+    // 2- Finds the 2s complement by adding (0b01) to the ones complement:
+    const uint8_t twosComplement = onesComplement + 0b01;
+    // 3- Add the 2s complement to the minuend (1st binary number): 
+    const uint8_t DIFF = SUM + twosComplement;
+    sprintln((char*) "Test Binary Subtraction:");
+    println(DIFF, 2);
 
-    // 7) Strings: strings are represented in the form of character arrays or pointer
+    // 8) Strings: strings are represented in the form of character arrays or pointer
     char* name = (char*) calloc(1, sizeof(char*));
     char* id = (char*) calloc(1, sizeof(char*));
 
@@ -296,7 +317,7 @@ int main(void) {
     println(isblank(' '), 10);
 
     // test xmas 
-    sprintln((char*) "Test Xmas LEDs:");
+    sprintln((char*) "Test Xmas LEDs started, connect PORTB pins to LEDs and see the magic:");
     SerialCounter::Counter* counter = (SerialCounter::Counter*) calloc(1, sizeof(SerialCounter::Counter*));
     counter->start(PORTB, 300);
 
