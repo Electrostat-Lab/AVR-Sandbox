@@ -1,6 +1,12 @@
 # Avr-Data-Types
 
+Libs Folder:
+
 [AvrDataTypes.c](https://github.com/Software-Hardware-Codesign/AVR-Sandbox/blob/master/AvrDataTypes/main/lib/AvrDataTypes.c): is an example that demonstrates the available data types in avr-gnu lib combining them with the basics of digital electronics and circuit control.
+
+[Register.c - Register::Register8](https://github.com/Software-Hardware-Codesign/AVR-Sandbox/blob/master/AvrDataTypes/main/lib/Register.c): digitally reads/writes from/to a register bits.
+
+[SerialCounter.c - SerialCounter::Counter](https://github.com/Software-Hardware-Codesign/AVR-Sandbox/blob/master/AvrDataTypes/main/lib/SerialCounter.c): creates an 8-bit counter with a software serial clock with `(1000/delay) HZ` frequency.
 
 Topics covered: 
 - Different integer data types (uint8_t, uint16_t, uint32_t) and their equivalent compound types.
