@@ -1,6 +1,6 @@
 # Avr-Data-Types
 
-An example demonstrates the available data types in avr-gnu lib.
+[AvrDataTypes.c](https://github.com/Software-Hardware-Codesign/AVR-Sandbox/blob/master/AvrDataTypes/main/lib/AvrDataTypes.c): is an example that demonstrates the available data types in avr-gnu lib combining them with the basics of digital electronics and circuit control.
 
 Topics covered: 
 - Different integer data types (uint8_t, uint16_t, uint32_t) and their equivalent compound types.
