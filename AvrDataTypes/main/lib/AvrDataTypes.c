@@ -42,9 +42,9 @@ int main(void);
  * @brief Initializes the UART protocol.
  */
 void usart_init(void) {
-	UCSR0B = 0b00001000; // TXEN_BIT = 1, enables the transmitter buffer register.
-	UCSR0C = 0b10000110; // enables the UCSZ0, UCSZ1 and URSEL
-	UBRR0 = 0x10; // 0x10 (16) for BR = 57600 // 0x33 (51) for 9600
+    UCSR0B = 0b00001000; // TXEN_BIT = 1, enables the transmitter buffer register.
+    UCSR0C = 0b10000110; // enables the UCSZ0, UCSZ1 and URSEL
+    UBRR0 = 0x10; // 0x10 (16) for BR = 57600 // 0x33 (51) for 9600
 }
 
 /**
@@ -53,8 +53,8 @@ void usart_init(void) {
  * @param character a char to send (unsigned char) of 8-bits
  */
 void usart_send(uint8_t character) {
-	while (! (UCSR0A & (1 << UDRE0)));
-	UDR0 = character;
+    while (! (UCSR0A & (1 << UDRE0)));
+    UDR0 = character;
 }
 
 /**
@@ -65,13 +65,13 @@ void usart_send(uint8_t character) {
  */
 void print(uint8_t data, uint8_t radix) {
     char* strBuffer;
-	if (radix == BIN_RADIX) {
-		strBuffer =(char*) calloc(1, CHAR_OF_BIN);
-	} else if (radix == DEC_RADIX) {
-		strBuffer =(char*) calloc(1, CHAR_OF_DEC);
-	} else {
-		return;
-	}
+    if (radix == BIN_RADIX) {
+	strBuffer =(char*) calloc(1, CHAR_OF_BIN);
+    } else if (radix == DEC_RADIX) {
+	strBuffer =(char*) calloc(1, CHAR_OF_DEC);
+    } else {
+	return;
+    }
     // convert input to string
     itoa(data, strBuffer, radix);
     int i = 0;
@@ -89,7 +89,7 @@ void print(uint8_t data, uint8_t radix) {
  */
 void println(uint8_t data, uint8_t radix) {
     print(data, radix);
-	sprint(NEW_LINE_CARRIAGE_R);
+    sprint(NEW_LINE_CARRIAGE_R);
 }
 
 /**
@@ -111,7 +111,7 @@ void sprint(char* data) {
  */
 void sprintln(char* data) {
     sprint(data);
-	sprint(NEW_LINE_CARRIAGE_R);
+    sprint(NEW_LINE_CARRIAGE_R);
 }
 
 /**
