@@ -1,3 +1,13 @@
+/**
+ * @file Serial.c
+ * @author pavl_g.
+ * @brief An implementation for the [Serial.h] header file.
+ * @version 0.1
+ * @date 2022-07-04
+ * 
+ * @copyright Copyright (c) 2022
+ * 
+ */
 #include<Serial.h>
 
 void Serial::UART::startProtocol() {
@@ -10,7 +20,7 @@ void Serial::UART::stopProtocol() {
     UCSR0B = 0x00; 
 }
 
-uint8_t Serial::UART::read() {
+uint8_t Serial::UART::readASCII() {
     while (!(UCSR0A & (1 << RXC0)));
 	return UDR0;
 }
@@ -37,15 +47,8 @@ void Serial::UART::sprintln(char* data) {
     sprint(NEW_LINE_CARRIAGE_R);
 }
 
-void Serial::UART::print(const uint8_t& data, const uint8_t& base) {
-    char* strBuffer;
-    if (base == BIN_RADIX) {
-	    strBuffer = (char*) calloc(1, CHAR_OF_BIN);
-    } else if (base == DEC_RADIX) {
-	    strBuffer = (char*) calloc(1, CHAR_OF_DEC);
-    } else {
-	    return;
-    }
+void Serial::UART::print(const int64_t& data, const uint8_t& base) {
+    char* strBuffer = allocateStringBuffer();
     // convert input to string
     itoa(data, strBuffer, base);
     int i = 0;
@@ -55,7 +58,7 @@ void Serial::UART::print(const uint8_t& data, const uint8_t& base) {
     free(strBuffer);
 }
 
-void Serial::UART::println(const uint8_t& data, const uint8_t& base) {
+void Serial::UART::println(const int64_t& data, const uint8_t& base) {
     print(data, base);
     sprint(NEW_LINE_CARRIAGE_R);
 }
