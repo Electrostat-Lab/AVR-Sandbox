@@ -141,3 +141,37 @@ cd ../AVR-Sandbox/HelloAnalogRead/build/
 ```
 5) To compile only use `./compile`.
 6) To read from the serial port, run `sudo ./readPort`.
+```bash
+pavl@pavl-machine:/home/twisted/GradleProjects/AVR-Sandbox/HelloAnalogRead/build$ sudo ./readPort.sh 
+[sudo] password for pavl:             
+
+
+Started reading PORT [/dev/ttyUSB0]
+
+510
+510
+510
+510
+511
+509
+1022
+1021
+1023
+1022
+510
+982
+1023
+510
+510
+221
+0
+184
+0
+0
+506
+3
+0
+510
+1023
+510
+```
