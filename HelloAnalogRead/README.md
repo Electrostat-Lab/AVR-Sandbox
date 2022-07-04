@@ -21,11 +21,12 @@ Refer to [HelloUART tutorial](https://github.com/Software-Hardware-Codesign/AVR-
 - Start conversion and end of conversion (EOC) signals
 - Successive approximation ADC
 
-<a name="OPERATION"></a>
-
 #### 2) Operating ADC in `atmega328p` using C avr lib:
 To operate the ADC in the atmega32, you will need to study the `ADMUX` of the multiplexer which encodes the ADC pins and the status and control 
 register `ADCSRA` of the avr:
+
+<a name="ADMUX"></a>
+
 - ADMUX: ADC multiplexer selection register:
 
 | `ADMUX Register Bits` |
@@ -42,6 +43,8 @@ register `ADCSRA` of the avr:
 | `ADCSRA Register Bits` | 
 |------------------------|
 | ![image](https://user-images.githubusercontent.com/60224159/177142491-bb6aa25e-7377-4627-ba30-95f7483561d0.png) |
+
+<a name="COVERSION"></a>
 
 | `ADC Start Conversion bit` |
 |----------------------------|
@@ -62,7 +65,7 @@ register `ADCSRA` of the avr:
 
 ### Steps of implementing the ADC protocol using AVR lib c:
 
-1) Adjusting the `ADMUX` register: to enable the ADC protocol, the interrupt service handler and the clock pre-scaler to valid clock greater than 200k HZ from the Fosc value (frequency of the crystal oscillator): [--Jump to ADMUX Docs--](#OPERATION)
+1) Adjusting the `ADMUX` register: to enable the ADC protocol, the interrupt service handler and the clock pre-scaler to valid clock greater than 200k HZ from the Fosc value (frequency of the crystal oscillator): [--Jump to ADMUX Docs--](#ADMUX)
 ```c
 void Analog::Adc::startProtocol() {
     /* setup ADCSRA */
@@ -70,7 +73,7 @@ void Analog::Adc::startProtocol() {
                 | (1 << ADPS2) | (1 << ADPS1) | (1 << ADPS0) /*set clock prescaler to clk/128*/; 
 }
 ```
-2) Start the conversion on an ADC_MUX code which encodes for `ADC0...ADC7` according to a truth table: [--Jump to A/D Conversion Docs--](#OPERATION)
+2) Start the conversion on an ADC_MUX code which encodes for `ADC0...ADC7` according to a truth table: [--Jump to A/D Conversion Docs--](#COVERSION)
 ```c
 /* define analog ADC pins based on the multiplexers codes */
 #define ADC_MUX0 ((const uint8_t) 0x00)
