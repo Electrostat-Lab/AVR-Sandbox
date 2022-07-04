@@ -58,10 +58,40 @@ register `ADCSRA` of the avr:
 
 --------------
 
+### Steps of implementing the ADC protocol using AVR lib c:
 
-
-
-
-
-
-
+1) Adjusting the `ADMUX` register: to enable the ADC protocol, the interrupt service handler and the clock pre-scaler to valid clock greater than 200k HZ from the Fosc value (frequency of the crystal oscillator): [--Jump to ADMUX Docs--](https://github.com/Software-Hardware-Codesign/AVR-Sandbox/tree/hello-analog-read/HelloAnalogRead#2-operating-adc-in-atmega328p-using-c-avr-lib)
+```c
+void Analog::Adc::startProtocol() {
+    /* setup ADCSRA */
+    ADCSRA = (1 << ADEN) /*enable adc protocol*/ | (1 << ADIE) /*enable interrupt service*/ 
+                | (1 << ADPS2) | (1 << ADPS1) | (1 << ADPS0) /*set clock prescaler to clk/128*/; 
+}
+```
+2) Start the conversion on an ADC_MUX code which encodes for `ADC0...ADC7` according to a truth table: [--Jump to A/D Conversion Docs](https://github.com/Software-Hardware-Codesign/AVR-Sandbox/tree/hello-analog-read/HelloAnalogRead#2-operating-adc-in-atmega328p-using-c-avr-lib)
+```c
+/* define analog ADC pins based on the multiplexers codes */
+#define ADC_MUX0 ((const uint8_t) 0x00)
+#define ADC_MUX1 (ADC_MUX0 + 0x01)
+#define ADC_MUX2 (ADC_MUX1 + 0x01)
+#define ADC_MUX3 (ADC_MUX2 + 0x01)
+#define ADC_MUX4 (ADC_MUX3 + 0x01)
+#define ADC_MUX5 (ADC_MUX4 + 0x01)
+#define ADC_MUX6 (ADC_MUX5 + 0x01)
+#define ADC_MUX7 (ADC_MUX6 + 0x01)
+...
+void Analog::Adc::startConversion(const uint8_t& PIN) {
+    /* setup ADMUX */
+    ADMUX = 0b01000000 | PIN; /* 1 for REFS0 for (VREF = VCC) */
+    ADCSRA |= (1 << ADSC); /* the last step: start conversion */
+}
+```
+3) Read the analog data using `uint16_t Analog::Adc#analogRead()` inside the interrupt service subroutine `ISR(ADC_vect) {...}` and then re-start conversion to trigger the interrupt service handler again for continous monitoring: 
+```c
+uint16_t Analog::Adc::analogRead() { 
+    volatile uint8_t adcl = ADCL; /* ADCL must be read before ADCH */
+    volatile uint8_t adch = ADCH;
+    return ((0x00 | adch) << 8) | adcl; /* concatenate the 2 (8-bit registers) in a 16-bit software register */
+}
+```
+4) The code example [HelloAnalogRead.c]().
