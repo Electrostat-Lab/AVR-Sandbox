@@ -60,7 +60,7 @@ register `ADCSRA` of the avr:
 
 ### Steps of implementing the ADC protocol using AVR lib c:
 
-1) Adjusting the `ADMUX` register: to enable the ADC protocol, the interrupt service handler and the clock pre-scaler to valid clock greater than 200k HZ from the Fosc value (frequency of the crystal oscillator): [--Jump to ADMUX Docs--](https://github.com/Software-Hardware-Codesign/AVR-Sandbox/tree/hello-analog-read/HelloAnalogRead#2-operating-adc-in-atmega328p-using-c-avr-lib)
+1) Adjusting the `ADMUX` register: to enable the ADC protocol, the interrupt service handler and the clock pre-scaler to valid clock greater than 200k HZ from the Fosc value (frequency of the crystal oscillator): [--Jump to ADMUX Docs--](https://github.com/Software-Hardware-Codesign/AVR-Sandbox/tree/master/HelloAnalogRead#2-operating-adc-in-atmega328p-using-c-avr-lib)
 ```c
 void Analog::Adc::startProtocol() {
     /* setup ADCSRA */
@@ -68,7 +68,7 @@ void Analog::Adc::startProtocol() {
                 | (1 << ADPS2) | (1 << ADPS1) | (1 << ADPS0) /*set clock prescaler to clk/128*/; 
 }
 ```
-2) Start the conversion on an ADC_MUX code which encodes for `ADC0...ADC7` according to a truth table: [--Jump to A/D Conversion Docs](https://github.com/Software-Hardware-Codesign/AVR-Sandbox/tree/hello-analog-read/HelloAnalogRead#2-operating-adc-in-atmega328p-using-c-avr-lib)
+2) Start the conversion on an ADC_MUX code which encodes for `ADC0...ADC7` according to a truth table: [--Jump to A/D Conversion Docs--](https://github.com/Software-Hardware-Codesign/AVR-Sandbox/tree/master/HelloAnalogRead#2-operating-adc-in-atmega328p-using-c-avr-lib)
 ```c
 /* define analog ADC pins based on the multiplexers codes */
 #define ADC_MUX0 ((const uint8_t) 0x00)
