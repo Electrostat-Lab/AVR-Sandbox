@@ -95,3 +95,49 @@ uint16_t Analog::Adc::analogRead() {
 }
 ```
 4) The code example [HelloAnalogRead.c]().
+
+-------------
+
+### Uploading code and reading from the serial port: 
+1) Install the avr dude through [Avr-dude-install](https://github.com/avrdudes/avrdude#documentation).
+2) Connect the programmer to the laptop.
+3) Adjust the variables (the chip board, baud rate and the programmer) accordingly, for more refer to avr-dude-docs:
+- [Avr-dude-table-of-contents](https://avrdudes.github.io/avrdude/7.0/avrdude_toc.html#SEC_Contents).
+- [Avr-dude-docs](https://avrdudes.github.io/avrdude/7.0/avrdude.html).
+- [Avr-dude-options-docs](https://avrdudes.github.io/avrdude/7.0/avrdude_3.html#Option-Descriptions).
+- [Avr-dude-Command-line-examples](https://avrdudes.github.io/avrdude/7.0/avrdude_5.html#Example-Command-Line-Invocations).
+```bash
+#**
+#* Ccoffee Build tool, manual build, alpha-v1.
+#*
+#* @author pavl_g.
+#*#
+
+# define work directory
+# 1) print the current working directory to a string value
+pwd=`pwd`
+# cut the working directory from its end by a one '/' delimiter
+project="${pwd%/*}"
+# cut the working directory from its end by a one '/' delimiter again
+rootProject="${project%/*}"
+# pass the value of the dire
+
+clibName=('libHelloAnalogRead')
+# AVR-DUDE properties
+BAUD_RATE='57600'
+PORT='/dev/ttyUSB0'
+CHIP='atmega328p'
+CHIP_ALIAS='m328p'
+PROGRAMMER='arduino'
+# Common Variables contain colors
+source ${rootProject}'/CommonVariables.sh'
+source ${rootProject}'/AVR__HOME.sh'
+output=${project}'/output/'${clibName}
+```
+4) Navigate to the `AVR-Sandbox/HelloAnalogRead/build/` and run: 
+```bash
+cd ../AVR-Sandbox/HelloAnalogRead/build/
+./build
+```
+5) To compile only use `./compile`.
+6) To read from the serial port, run `sudo ./readPort`.
