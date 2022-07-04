@@ -10,10 +10,10 @@
  */
 #include<Serial.h>
 
-void Serial::UART::startProtocol() {
+void Serial::UART::startProtocol(const uint8_t& BAUD_RATE_VAL) {
     UCSR0B = (1 << TXEN0) | (1 << RXEN0); // TXEN_BIT = 1, enables the transmitter buffer register.
     UCSR0C = (1 << USBS0) | (3 << UCSZ00); // enables the UCSZ0, UCSZ1 and URSEL
-    UBRR0 = 0x10; // 0x10 (16) for BR = 57600 // 0x33 (51) for 9600
+    UBRR0 = BAUD_RATE_VAL; // 0x10 (16) for BR = 57600 // 0x33 (51) for 9600
 }
 
 void Serial::UART::stopProtocol() {

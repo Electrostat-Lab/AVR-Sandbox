@@ -38,7 +38,7 @@ ISR(ADC_vect) {
  */
 int main(void) {
 	
-	uart->startProtocol();
+	uart->startProtocol(BAUD_RATE_57600);
 
 	sei();
 

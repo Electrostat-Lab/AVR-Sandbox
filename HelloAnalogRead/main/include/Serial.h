@@ -15,6 +15,9 @@
 #include<string.h>
 #include<stdlib.h>
 
+#define BAUD_RATE_9600 ((const uint8_t) 0x67) 
+#define BAUD_RATE_57600 ((const uint8_t) 0x10)
+
 /**
  * @brief Defines a constant for the carriage return combined with the new line in a single value.
  */
@@ -60,8 +63,10 @@ namespace Serial {
         /**
          * @brief Starts the UART Protocol by setting up the control status registers and the baud rate register.
          * it operates the UART as Tx and Rx.
+         * 
+         * @param BAUD_RATE_VAL the code for the baud rate.
          */
-        void startProtocol();
+        void startProtocol(const uint8_t& BAUD_RATE_VAL);
 
         /**
          * @brief Stops the UART protocol by setting [UCSRB] to zero.
