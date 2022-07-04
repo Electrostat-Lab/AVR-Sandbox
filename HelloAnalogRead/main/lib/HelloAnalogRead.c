@@ -1,5 +1,5 @@
 /**
- * @file HelloInput.c
+ * @file HelloAnalogRead.c
  * @author pavl_g.
  * @brief The entry point for testing the ADC and UART implementations where you can see what you trigger on the analog side.
  * @version 0.1

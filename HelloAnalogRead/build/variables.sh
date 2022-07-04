@@ -14,7 +14,7 @@ project="${pwd%/*}"
 rootProject="${project%/*}"
 # pass the value of the dire
 
-clibName=('libHelloAnalog')
+clibName=('libHelloAnalogRead')
 # AVR-DUDE properties
 BAUD_RATE='57600'
 PORT='/dev/ttyUSB0'
