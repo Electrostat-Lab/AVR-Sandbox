@@ -94,7 +94,7 @@ uint16_t Analog::Adc::analogRead() {
     return ((0x00 | adch) << 8) | adcl; /* concatenate the 2 (8-bit registers) in a 16-bit software register */
 }
 ```
-4) The code example [HelloAnalogRead.c]().
+4) The code example [HelloAnalogRead.c](https://github.com/Software-Hardware-Codesign/AVR-Sandbox/blob/master/HelloAnalogRead/main/lib/HelloAnalogRead.c).
 
 -------------
 
