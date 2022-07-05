@@ -11,7 +11,7 @@ Shows an example of using UART on atmega328p.
 1) Basics of UART protocol (the RS232 handshakes).
 2) General layout of UART protocol on avr mcus.
 3) Programming UART protocol on `atmega328p` using the polling method (blocks the main application execution signals until data acquisition starts).
-4) Programming UART protocol on `atmega328p` using the UART interrupt service routine method (interrupts the main application execution signals when data acquisition starts).
+4) Programming UART protocol on `atmega328p` using the UART interrupt service routine method (interrupts the main application execution signals when data acquisition finishes).
 
 ---------------------------------------
 ## 1) Basics of UART protocol and the RS232 Handshakes: [--Jump to topics--](#TOPICS)
@@ -106,4 +106,14 @@ uint8_t Serial::UART::readASCII() {
 }
 ```
 ---------------------------------
-
+## 4) Programming UART protocol on `atmega328p` using the UART interrupt service routine method: [--Jump to topics--](#TOPICS)
+It interrupts the main application execution signals when data acquisition finishes:
+- Enabling the Receive complete interrupt `RXCIE` and Transmit interrupt services or the data register interrupt `UDRIE`.
+- Use the ISR (interrupt service routine) `ISR(USART_RXC_vect)` for the RX complete and `ISR(USART_UDRE_vect)` for the data register empty interrupt service event.
+- Trigger `sei();` to start the interrupt service unit.
+- For data transmit from the avr: 
+```c
+```
+- For data receive from the avr: 
+```c
+```
