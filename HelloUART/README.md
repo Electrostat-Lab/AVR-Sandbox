@@ -2,6 +2,9 @@
 
 Shows an example of using UART on atmega328p.
 
+![image](https://user-images.githubusercontent.com/60224159/177357955-a0df1f00-4835-4968-86e7-d43e55c83155.png)
+
+
 <a name="TOPICS"></a>
 
 ## Topics covered: 
@@ -44,5 +47,22 @@ Theses handshaking signals are for old systems using RS232 DB9 by IBM and not su
 | ![image](https://user-images.githubusercontent.com/60224159/177342916-db2c02d7-0388-4607-bf82-f57d63d15d98.png) | 
 
 ---------------
+## 2) General layout of AVR UART Registers: 
+To activate the UART protocol on the avr, we have to deal with a couple of registers: 
+- UCSRA (USART Control Status Register) 
+- UCSRB (USART Control Status Register) 
+- UCSRC (USART Control Status Register) 
+- UBRR (USART Baud Rate Register)
+- UDR (USART Data Register)
+
+Here are the illustrative tables from the datasheet: 
+| `UBBR values for different baud rates within a CLK Fosc` | `UCSRA Register bits` |
+|-----------------------|-------------------------------|
+| ![image](https://user-images.githubusercontent.com/60224159/177358158-730eb25a-0115-4e28-adfc-33a675c1b343.png) | ![image](https://user-images.githubusercontent.com/60224159/177361060-6411300e-d7cc-4101-a4a8-69ac8b13fe45.png) |
+
+ | `UCSRB Register bits` | `USCRC Register bits` |
+ |----------------------|-----------------------|
+ | ![image](https://user-images.githubusercontent.com/60224159/177361355-07f5abc3-1fcb-4b21-8a71-d5629143f47c.png) | ![image](https://user-images.githubusercontent.com/60224159/177361571-72cce3fc-744b-4a6e-a96d-6cbe62d08dc5.png) |
+
 
 
