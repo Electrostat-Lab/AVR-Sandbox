@@ -108,12 +108,78 @@ uint8_t Serial::UART::readASCII() {
 ---------------------------------
 ## 4) Programming UART protocol on `atmega328p` using the UART interrupt service routine method: [--Jump to topics--](#TOPICS)
 It interrupts the main application execution signals when data acquisition finishes:
-- Enabling the Receive complete interrupt `RXCIE` and Transmit interrupt services or the data register interrupt `UDRIE`.
+- Enabling the Receive complete interrupt `RXCIE` and Transmit interrupt services `TXCIE` and the data register interrupt `UDRIE`.
 - Use the ISR (interrupt service routine) `ISR(USART_RXC_vect)` for the RX complete and `ISR(USART_UDRE_vect)` for the data register empty interrupt service event.
 - Trigger `sei();` to start the interrupt service unit.
 - For data transmit from the avr: 
 ```c
+#include<avr/io.h>
+#include<string.h>
+#include<stdlib.h>
+#include<avr/interrupt.h>
+...
+
+/**
+ * @brief Triggered when the bit UDRE0 is one (the data register buffer is empty).
+ */
+ISR (USART_UDRE_vect) {
+	UDR0 = *(Serial::UART::getInstance()->transmitData);
+    Serial::UART::getInstance()->stopDataRegisterEmptyBufferISR();
+}
+
+/**
+ * @brief Triggered when the bit TXC is settled and the data transmission has been completed.
+ */
+ISR (USART_TX_vect) {
+    Serial::UART::getInstance()->onDataTransmitCompleted((const uint8_t) UDR0);
+    Serial::UART::getInstance()->stopTransmitterISR();
+}
+
+void Serial::UART::startTransmitterISR() {
+    UCSR0B |= (1 << TXCIE0);
+    /* start the interrupt service handlers */
+    sei();
+}
+
+void Serial::UART::stopTransmitterISR() {
+    // Finds the 1s complement of all bits in TXCIE0 ---> eg: 0b11111101
+    UCSR0B &= ~(1 << TXCIE0); 
+}
+
+void Serial::UART::startDataRegisterEmptyBufferISR() {
+    UCSR0B |= (1 << UDRIE0);
+    /* start the interrupt service handlers */
+    sei();
+}
+
+void Serial::UART::stopDataRegisterEmptyBufferISR() {
+    // Finds the 1s complement of all bits in UDRIE0 ---> eg: 0b11111101
+    UCSR0B &= ~(1 << UDRIE0); 
+}
 ```
 - For data receive from the avr: 
 ```c
+#include<avr/io.h>
+#include<string.h>
+#include<stdlib.h>
+#include<avr/interrupt.h>
+...
+
+/**
+ * @brief Triggered when the RXC0 is settled and the receiving has been completed.
+ */
+ISR (USART_RX_vect) {
+	Serial::UART::getInstance()->onDataReceiveCompleted(Serial::UART::getInstance()->readASCII());
+}
+
+void Serial::UART::startReceiverISR() {
+    UCSR0B |= (1 << RXCIE0);
+    /* start the interrupt service handlers */
+    sei();
+}
+
+void Serial::UART::stopReceiverISR() {
+    // Finds the 1s complement of all bits in RXCIE0 ---> eg: 0b11111101
+    UCSR0B &= ~(1 << RXCIE0); 
+}
 ```
