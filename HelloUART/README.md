@@ -183,3 +183,4 @@ void Serial::UART::stopReceiverISR() {
     UCSR0B &= ~(1 << RXCIE0); 
 }
 ```
+See [HelloUART.c](https://github.com/Software-Hardware-Codesign/AVR-Sandbox/blob/master/HelloUART/main/lib/HelloUART.c) for more about the USART protocol implementation in atmega328p.
