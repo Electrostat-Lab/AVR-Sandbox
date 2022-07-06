@@ -14,6 +14,7 @@
 #include<avr/io.h>
 #include<string.h>
 #include<stdlib.h>
+#include<avr/interrupt.h>
 
 #define BAUD_RATE_9600 ((const uint8_t) 0x67) 
 #define BAUD_RATE_57600 ((const uint8_t) 0x10)
@@ -46,20 +47,60 @@
  * @brief Encloses the UART control code.
  */
 namespace Serial {
+    
+    /**
+     * @warning Internal use only.
+     * 
+     * @brief An empty buffer to allocate a static pointer for the [Serial::UART] structure.
+     */
+    static void* INSTANCE = NULL;
+
     /**
      * @brief Operates, controls, read/write to UART serial port.
      */
     struct UART {
-
+        
+        /**
+         * @warning Internal use only.
+         * 
+         * @brief A volatile buffer to assign the transmitter data to the data register (UDRn).
+         * @see Serial::UART::setTransmitDataRegister(const uint8_t& transmitData) for implementation.
+         */
+        volatile uint8_t* transmitData;
+        
         /**
          * @brief Allocates a new UART pointer.
          * 
          * @return UART* a new pointer reference.
          */
-        static UART* getInstance() {
-            return (Serial::UART*) calloc(1, sizeof(Serial::UART*));
+        static Serial::UART* getInstance() {
+            if (Serial::INSTANCE == NULL) {
+                Serial::INSTANCE = (Serial::UART*) calloc(1, sizeof(Serial::UART*));
+            }
+            return (Serial::UART*) Serial::INSTANCE;
         }
 
+        /**
+         * @brief Triggered when the data receive is completed at the Rx pin.
+         * 
+         * @param data the received byte at the Rx pin.
+         */
+        void onDataReceiveCompleted(const uint8_t& data);
+        
+        /**
+         * @brief Triggered when the data transmit is completed at the Tx pin.
+         * 
+         * @param data the transmitted byte at the Tx pin which is equal to UDRn at that moment.
+         */
+        void onDataTransmitCompleted(const uint8_t& data);
+
+        /**
+         * @brief Sets the Transmit Data Register to be used by the UDR when the UDRE bit is set.
+         * 
+         * @param transmitData the data buffer to transmit.
+         */
+        void setTransmitDataRegister(const uint8_t& transmitData);
+        
         /**
          * @brief Starts the UART Protocol by setting up the control status registers and the baud rate register.
          * it operates the UART as Tx and Rx.
@@ -73,6 +114,47 @@ namespace Serial {
          */
         void stopProtocol();
 
+        /**
+         * @warning Internal use only.
+         * 
+         * @brief Activates the ISR handler for the UDRE (Data register empty) bit.
+         */
+        void startDataRegisterEmptyBufferISR();
+
+        /**
+         * @warning Internal use only.
+         * 
+         * @brief Activates the ISR handler for the RXC bit (Receiver Complete).
+         */
+        void startReceiverISR();
+        
+        /**
+         * @warning Internal use only.
+         * @brief Activates the ISR handler for the TXC bit (Transmitter Complete).
+         */
+        void startTransmitterISR();
+
+        /**
+         * @warning Internal use only.
+         * 
+         * @brief Deactivates the ISR handler for the UDRE (Data register empty) bit.
+         */
+        void stopDataRegisterEmptyBufferISR();
+
+        /**
+         * @warning Internal use only.
+         * 
+         * @brief Deactivates the ISR handler for the RXC bit (Receiver Complete).
+         */
+        void stopReceiverISR();
+        
+        /**
+         * @warning Internal use only.
+         * 
+         * @brief Deactivates the ISR handler for the TXC bit (Transmitter Complete).
+         */
+        void stopTransmitterISR();
+        
         /**
          * @brief Reads the [UDR0] Data register in ASCII as default.
          * 
@@ -134,5 +216,7 @@ namespace Serial {
         void println(const int64_t& data, const uint8_t& base);
     };
 }
+
+
 
 #endif
