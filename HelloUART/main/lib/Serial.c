@@ -14,14 +14,14 @@
  * @brief Triggered when the RXC0 is settled and the receiving has been completed.
  */
 ISR (USART_RX_vect) {
-	Serial::UART::getInstance()->onDataReceiveCompleted(Serial::UART::getInstance()->readASCII());
+    Serial::UART::getInstance()->onDataReceiveCompleted(Serial::UART::getInstance()->readASCII());
 }
 
 /**
  * @brief Triggered when the bit UDRE0 is one (the data register buffer is empty).
  */
 ISR (USART_UDRE_vect) {
-	UDR0 = *(Serial::UART::getInstance()->transmitData);
+    UDR0 = *(Serial::UART::getInstance()->transmitData);
     Serial::UART::getInstance()->stopDataRegisterEmptyBufferISR();
 }
 
