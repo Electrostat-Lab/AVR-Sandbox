@@ -8,7 +8,7 @@
  * @copyright Copyright (c) 2022
  * 
  */
-#define F_CPU 16000000
+#define F_CPU 16000000UL
 #include<avr/io.h>
 
 #include<Serial.h>
@@ -37,6 +37,7 @@ void GPIO::ExternalInterruptHandler::onPinChanged() {
           /* set the pin to LOW LEVEL as of after the FALLING EDGE */
           PORTD &= ~(1 << PD4);
       }
+      _delay_ms(500);
       reti(); /* exit to the main function */
 }
 

@@ -5,7 +5,7 @@ function compile() {
         nativeSources=`find ${project}'/main' -name '*.c' -o -name '*.cxx' -o -name '*.cpp' -o -name '*.h' -o -name '*.c++'`
 
 	sudo ${AVR_HOME}'/bin/avr-g++' \
-	-Wcpp \
+	-O3 \
 	-mmcu=${CHIP} ${nativeSources} \
 	-I${AVR_HOME}'/avr/include'    \
 	-I${project}'/main/include'    \
