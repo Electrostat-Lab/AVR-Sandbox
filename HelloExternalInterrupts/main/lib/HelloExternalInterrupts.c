@@ -1,3 +1,13 @@
+/**
+ * @file HelloExternalInterrupts.c
+ * @author pavl_g.
+ * @brief Shows an example of external pin change interrupt handlers using atmega328p.
+ * @version 0.1
+ * @date 2022-07-09
+ * 
+ * @copyright Copyright (c) 2022
+ * 
+ */
 #define F_CPU 16000000
 #include<avr/io.h>
 

@@ -1,3 +1,13 @@
+/**
+ * @file DigitalServiceHandler.c
+ * @author pavl_g.
+ * @brief Operates and controls the external interrupt service handlers for the pin change operations for atmega328p.
+ * @version 0.1
+ * @date 2022-07-09
+ * 
+ * @copyright Copyright (c) 2022
+ * 
+ */
 #include<DigitalServiceHandler.h>
 
 ISR (INT0_vect) {
