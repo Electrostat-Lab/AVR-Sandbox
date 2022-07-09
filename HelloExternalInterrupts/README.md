@@ -145,6 +145,47 @@ int main(void) {
 }
 ```
 
+7) Connect this circuit example and test using the port reader bash script provided within `./HelloExternalInterrupts/build/`: 
+
+![](https://github.com/Software-Hardware-Codesign/AVR-Sandbox/blob/master/HelloExternalInterrupts/fritzing/External%20Interrupts%20Test%20Circuit.png)
+
+8) Running the Serial port reader: 
+```bash
+pavl@pavl-machine:/home/twisted/GradleProjects/AVR-Sandbox/HelloExternalInterrupts/build$ sudo ./readPort.sh 
+[sudo] password for pavl:             
+
+
+Started reading PORT [/dev/ttyUSB0]
+
+OFF -- LOW LEVEL
+OFF -- LOW LEVEL
+OFF -- LOW LEVEL
+OFF -- LOW LEVEL
+OFF -- LOW LEVEL
+OFF -- LOW LEVEL
+OFF -- LOW LEVEL
+OFF -- LOW LEVEL
+OFF -- LOW LEVEL
+OFF -- LOW LEVEL
+OFF -- LOW LEVEL
+OFF -- LOW LEVEL
+OFF -- LOW LEVEL
+OFF -- LOW LEVEL
+OFF -- LOW LEVEL
+OFF -- LOW LEVEL
+OFF -- LOW LEVEL
+OFF -- LOW LEVEL
+OFF -- LOW LEVEL
+OFF -- LOW LEVEL
+OFF -- LOW LEVEL
+ON -- RISING EDGE
+OFF -- FALLING EDGE
+OFF -- LOW LEVEL
+OFF -- LOW LEVEL
+OFF -- LOW LEVEL
+OFF -- LOW LEVEL
+```
+
 
 
 
