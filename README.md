@@ -14,5 +14,9 @@ The testcases directrly access the `atmega328p`'s registers ports and their indi
 - [Lib-Iberty](https://software-hardware-codesign.github.io/AVR-Sandbox/docs/libiberty/libiberty.html)
 
 ## Current Projects: 
-- [Avr-lib C code basics Docs](https://software-hardware-codesign.github.io/AVR-Sandbox/AvrDataTypes) [Example](https://github.com/Software-Hardware-Codesign/AVR-Sandbox/blob/master/AvrDataTypes/main/lib/AvrDataTypes.c)
+- [Avr-lib C code basics Docs](https://software-hardware-codesign.github.io/AVR-Sandbox/AvrDataTypes) - [Example](https://github.com/Software-Hardware-Codesign/AVR-Sandbox/blob/master/AvrDataTypes/main/lib/AvrDataTypes.c)
+- [USART Protocol](https://software-hardware-codesign.github.io/AVR-Sandbox/HelloUART) - [Example](https://github.com/Software-Hardware-Codesign/AVR-Sandbox/blob/master/HelloUART/main/lib/HelloUART.c)
+- [ADC Protocol](https://software-hardware-codesign.github.io/AVR-Sandbox/HelloAnalogRead) - [Example](https://github.com/Software-Hardware-Codesign/AVR-Sandbox/blob/master/HelloAnalogRead/main/lib/HelloAnalogRead.c)
+- [External Interrupts](https://software-hardware-codesign.github.io/AVR-Sandbox/HelloExternalInterrupts) - [Example](https://github.com/Software-Hardware-Codesign/AVR-Sandbox/blob/master/HelloExternalInterrupts/main/lib/HelloExternalInterrupts.c)
+- [Timer Interrupts](https://software-hardware-codesign.github.io/AVR-Sandbox/HelloTimerInterrupts) - [Example](https://github.com/Software-Hardware-Codesign/AVR-Sandbox/blob/master/HelloTimerInterrupts/main/lib/HelloTimerInterrupt.c)
 - [Examples and tech demos](https://github.com/Software-Hardware-Codesign/AVR-Sandbox/projects/1?fullscreen=true)
