@@ -5,9 +5,15 @@ we will work on `arduino-nano` which is based on `atmega328p` also plain atmega 
 
 The testcases directrly access the `atmega328p`'s registers ports and their individual pins.
 
-## Atmega328p arduino-nano ports :
+## Atmega328p packages pin config :
 
-![](https://software-hardware-codesign.github.io/AVR-Sandbox/Pinout-NANO_latest.png)
+| `Atmega328p Pin Config` |
+|---------------------------|
+| ![image](https://user-images.githubusercontent.com/60224159/178119359-772c1963-6be5-4773-8e59-d9e5f5dcf3ba.png) |
+
+| `Arduino Nano Pin Config` | 
+|-------------------------|
+| ![](https://software-hardware-codesign.github.io/AVR-Sandbox/Pinout-NANO_latest.png) |
 
 ## Contents:
 - [AVR-C-Lib-Docs](https://software-hardware-codesign.github.io/AVR-Sandbox/docs/avr-libc/avr-libc-user-manual/index.html)
