@@ -51,6 +51,99 @@ Here are the mask/control status registers for the external interrupt handlers:
 
 ----------------------------
 
+## 4) Operating external interrupts on atmega328p as an example: [--Jump to contents--](#CONTENTS)
+
+1) Enabling bit corresponding to the required interrupt service uint on the control status register (eg: BIT (PCIE0) on REG (PCICR)).
+
+2) Enabling bit corresponding to the required PIN on the avr on the Mask Register (eg: BIT (PCINT0) on REG (PCMSK0)), use the main pin layout provided by the datasheet: 
+
+| `Atmega328p MLF (Micro Lead Frame) SMD Package Pin Config` | `Atmega32A PDIP (Plastic-Dual-In-Package) Pin Config` | 
+|--------------------------------------------------|-------------------------------------------|
+| ![image](https://user-images.githubusercontent.com/60224159/178118450-18ef663a-bd1a-4df8-9d38-425a4ed47ac4.png) | ![image](https://user-images.githubusercontent.com/60224159/178118473-f0783f82-bed1-4af0-bd7a-5b0ea5abad87.png) |
+
+3) Setting the I-bit to one on the `SREG` by calling `sei();`.
+
+```c
+#include<avr/io.h>
+#include<stdlib.h>
+#include<avr/interrupt.h>
+...
+void GPIO::ExternalInterruptHandler::activatePCINT0(const uint8_t& INT_VEC) {
+    PCICR |= (1 << PCIE0);
+    PCMSK0 |= INT_VEC;
+
+    sei();
+}
+```
+
+4) Define the `ISR (Vector) {...}` block based on the vector table provided above.
+
+5) Define a single obvserver method `GPIO::ExternalInterruptHandler::onPinChanged();` to complete the observer pattern, override this method in your application to listen for the external interrupt service.
+
+```c
+#include<avr/io.h>
+#include<stdlib.h>
+#include<avr/interrupt.h>
+...
+ISR (PCINT0_vect) {
+    GPIO::ExternalInterruptHandler::getInstance()->onPinChanged();
+}
+
+ISR (PCINT1_vect) {
+    GPIO::ExternalInterruptHandler::getInstance()->onPinChanged();
+}
+
+ISR (PCINT2_vect) {
+    GPIO::ExternalInterruptHandler::getInstance()->onPinChanged();
+}
+```
+
+6) ISR() code blocks are executed when the pin changes the state either from (HIGH) to (LOW) also known as (FALLING_EDGE) with a (LOGIC HIGH) value, or from (LOW) to (HIGH) aka (RISING_EDGE) with a (LOGIC_LOW) value, it depends on the initial state assigned from the software code which is either `HIGH_LEVEL` or `LOW_LEVEL`, a trigger change to the initial state can trigger the PCIF bits in PCIFR and jump the ISR() code.
+
+| `An initial LOW state can be assigned from code` | `FALLING EDGE Trigger (from HIGH to LOW) -- LOGIC = HIGH` | `RISING EDGE Trigger (from LOW to HIGH) -- LOGIC = LOW` | 
+|--------------------------------------------|-----------------------------------------|--------------------------------------------|
+| ![image](https://user-images.githubusercontent.com/60224159/178118774-72efe358-6089-4aae-987f-e9e210d19b9d.png) | ![image](https://user-images.githubusercontent.com/60224159/178118810-cf900223-aaa4-4169-9e66-7013de21168d.png) | ![image](https://user-images.githubusercontent.com/60224159/178118818-c94b10c7-0a1c-409b-bce6-bf71f2614dbf.png) | 
+
+Code example: 
+```c
+/**
+ * @brief Triggered when the PIN state is changing (From HIGH to LOW -- Falling edge -- LOGIC = 1) 
+ *        and (From LOW to HIGH -- Rising edge -- LOGIC = 0). 
+ */
+void GPIO::ExternalInterruptHandler::onPinChanged() {
+      /* print on the RISING edge (when PD4 is still LOW) -- FROM LOW TO HIGH Logic*/
+      if (!isPCINT20Active()) {
+          Serial::UART::getInstance()->sprintln((char*) "ON -- RISING EDGE");
+          /* set the pin to HIGH LEVEL as of after the RISING EDGE */
+          PORTD |= (1 << PD4);
+      /* print on the FALLING edge (when PD4 is still HIGH) -- FROM HIGH TO LOW Logic*/
+      } else if (isPCINT20Active()) {
+          Serial::UART::getInstance()->sprintln((char*) "OFF -- FALLING EDGE");
+          /* set the pin to LOW LEVEL as of after the FALLING EDGE */
+          PORTD &= ~(1 << PD4);
+      }
+      reti(); /* exit to the main function */
+}
+
+int main(void) {
+    Serial::UART::getInstance()->startProtocol(BAUD_RATE_57600);
+    /* Write PD4 to LOW */
+    PORTD &= ~(1 << PD4);
+    /* activate the external interrupt service routine handler on the PCINT20/PD4 */
+    GPIO::ExternalInterruptHandler::getInstance()->activatePCINT2(1 << PCINT20);
+    
+    /* block as long as the pin is on the ZERO LEVEL */
+    while (true) { 
+        if (!isPCINT20Active()) {
+            Serial::UART::getInstance()->sprintln((char*) "OFF -- LOW LEVEL");
+        }
+        _delay_ms(1000);
+    } 
+
+    while (1);
+    return 0;
+}
+```
 
 
 
