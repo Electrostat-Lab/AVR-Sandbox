@@ -1,4 +1,4 @@
-# AVR-Sandbox
+# <img src="https://user-images.githubusercontent.com/60224159/178119492-91d3cc70-a88f-4b9a-94a0-ca7b68b1d861.png" width="130" height="85"> AVR-Sandbox 
 
 This repository lists down some useful testcases and common logical algorithms using `AVR-CORE` that are widely used in the field of hardware development and embedded systems, 
 we will work on `arduino-nano` which is based on `atmega328p` also plain atmega is supported.
