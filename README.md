@@ -5,6 +5,10 @@ we will work on `arduino-nano` which is based on `atmega328p` also plain atmega 
 
 The testcases directrly access the `atmega328p`'s registers ports and their individual pins.
 
+## Block Diagram for AVR Architecture parts: 
+
+![image](https://user-images.githubusercontent.com/60224159/178119440-5a0fb95e-3dc6-4bc5-af58-9992d5c60221.png)
+
 ## Atmega328p packages pin config :
 
 | `Atmega328p Pin Config` |
