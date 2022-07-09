@@ -12,17 +12,29 @@ void Serial::UART::onDataTransmitCompleted(const uint8_t& data) {
 
 }
 
-void GPIO::ExternalInterruptHandler::onPortCycleCompleted(volatile uint8_t& data) {
-    Serial::UART::getInstance()->println(1, 10);
-    GPIO::ExternalInterruptHandler::getInstance()->startHandlersAt(1 << INT0);
-    PORTD |= (1 << PD2);
+/**
+ * @brief Triggered when the PIN state is changing (From HIGH to LOW -- Falling edge -- LOGIC = 1) and (From LOW to HIGH -- Rising edge -- LOGIC = 0) 
+ */
+void GPIO::ExternalInterruptHandler::onPinChanged() {
+      /* print on the RISING edge (when PD4 is still LOW) -- FROM LOW TO HIGH Logic*/
+      if (!isPCINT21Active()) {
+          Serial::UART::getInstance()->sprintln((char*) "ON -- RISING EDGE");
+      }
 }
 
 int main(void) {
     Serial::UART::getInstance()->startProtocol(BAUD_RATE_57600);
-    PORTD |= (1 << PD2);
-    GPIO::ExternalInterruptHandler::getInstance()->startHandlersAt(1 << INT0);
+    /* Write PD4 to LOW */
+    PORTD &= ~(1 << PD4);
+    /* activate the external interrupt service routine handler on the PCINT20/PD4 */
+    GPIO::ExternalInterruptHandler::getInstance()->activatePCINT2(1 << PCINT20);
     
-    while (1); // block forever
+    /* block as long as the pin is on the ZERO LEVEL */
+    while (!isPCINT21Active()) { 
+        Serial::UART::getInstance()->sprintln((char*) "OFF -- LOW LEVEL");
+        _delay_ms(500);
+    } 
+
+    while (1);
     return 0;
 }
