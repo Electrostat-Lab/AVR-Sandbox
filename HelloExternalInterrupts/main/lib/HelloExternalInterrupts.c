@@ -1,3 +1,4 @@
+#define F_CPU 16000000
 #include<avr/io.h>
 
 #include<Serial.h>
@@ -41,7 +42,7 @@ int main(void) {
         if (!isPCINT20Active()) {
             Serial::UART::getInstance()->sprintln((char*) "OFF -- LOW LEVEL");
         }
-        _delay_ms(1000);
+        _delay_ms(250);
     } 
 
     while (1);
