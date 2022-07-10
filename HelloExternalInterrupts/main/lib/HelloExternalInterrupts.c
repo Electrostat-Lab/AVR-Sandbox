@@ -15,6 +15,8 @@
 #include<util/delay.h>
 #include<DigitalServiceHandler.h>
 
+volatile uint8_t coolDownTime = 0;
+
 void Serial::UART::onDataReceiveCompleted(const uint8_t& data) {
 
 }
@@ -27,18 +29,24 @@ void Serial::UART::onDataTransmitCompleted(const uint8_t& data) {
  * @brief Triggered when the PIN state is changing (From HIGH to LOW -- Falling edge -- LOGIC = 1) and (From LOW to HIGH -- Rising edge -- LOGIC = 0) 
  */
 void GPIO::ExternalInterruptHandler::onPinChanged() {
-      /* print on the RISING edge (when PD4 is still LOW) -- FROM LOW TO HIGH Logic*/
-      if (!isPCINT20Active()) {
-          Serial::UART::getInstance()->sprintln((char*) "ON -- RISING EDGE");
-          /* set the pin to HIGH LEVEL as of after the RISING EDGE */
-          PORTD |= (1 << PD4);
-      } else if (isPCINT20Active()) {
-          Serial::UART::getInstance()->sprintln((char*) "OFF -- FALLING EDGE");
-          /* set the pin to LOW LEVEL as of after the FALLING EDGE */
-          PORTD &= ~(1 << PD4);
-      }
-      _delay_ms(500);
-      reti(); /* exit to the main function */
+    ++coolDownTime;
+    if (coolDownTime >= 2) {
+        _delay_ms(250);
+        coolDownTime = 0;
+        return;
+    }
+    /* print on the RISING edge (when PD4 is still LOW) -- FROM LOW TO HIGH Logic*/
+    if (!isPCINT20Active()) {
+        Serial::UART::getInstance()->sprintln((char*) "ON -- RISING EDGE");
+        /* set the pin to HIGH LEVEL as of after the RISING EDGE */
+        PORTD |= (1 << PD4);
+    } else if (isPCINT20Active()) {
+        Serial::UART::getInstance()->sprintln((char*) "OFF -- FALLING EDGE");
+        /* set the pin to LOW LEVEL as of after the FALLING EDGE */
+        PORTD &= ~(1 << PD4);
+    }
+
+    reti(); /* exit to the main function */
 }
 
 int main(void) {
@@ -53,9 +61,7 @@ int main(void) {
         if (!isPCINT20Active()) {
             Serial::UART::getInstance()->sprintln((char*) "OFF -- LOW LEVEL");
         }
-        _delay_ms(250);
+        _delay_ms(120);
     } 
-
-    while (1);
     return 0;
 }
