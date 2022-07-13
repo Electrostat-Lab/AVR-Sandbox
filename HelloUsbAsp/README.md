@@ -30,7 +30,7 @@ Topics Covered:
 
 ## 2) Calculating the protective resistance: [--Jump to Topics--](#TOPICS)
 
-By using Kirchhoff's voltage law on this closed circuit voltage uint: 
+By using Kirchhoff's voltage law (KVL) on this closed circuit voltage uint: 
 - E(V) = V(reg) + V(at) + V(r) = 0; where E -> Summation, V(reg) -> Regulator output, V(at) -> Atmega required voltage, V(r) -> Protective resistor voltage drop.
 - 6v - 5.5v - `I.r` = 0
 - 6v - 5.5v - `(300 * (10^-3)).r` = 0, by substituting `I` with `300mAmps`(depending on your power supply/Battery ratings)
@@ -71,3 +71,47 @@ In this case we are using the 4 banded resistors, so to find a 2 OHM resistor, t
 Typical resistor tolerances for film resistors range from 1% to 10% while carbon resistors have tolerances up to 20%. Resistors with tolerances lower than 2% are called precision resistors with the or lower tolerance resistors being more expensive. |
 
 -----------------------------------
+
+## 4) Circuit Connection: [--Jump to Topics--](#TOPICS) 
+
+Now connect your circuit as shown in this diagram:
+
+| `Circuit Diagram` | `Example` | 
+|-------------------|---------------|
+| ![UsbAsp External Circuit](https://user-images.githubusercontent.com/60224159/178742853-7bbd3b38-c829-4571-a11c-7d7f2aeb9108.png) | ![Circuit](https://user-images.githubusercontent.com/60224159/178741890-240ddcd1-03c8-42e7-8715-6c9f49e79189.jpg) |
+
+-------------------------------------
+
+## 5) Testing Output: [--Jump to Topics--](#TOPICS) 
+
+Now, connect your usbasp using the above circuit (don't forget to connect the SPI of the usbasp GND to the COM) and change the `variables.sh` to this:
+
+```sh
+#**
+#* Ccoffee Build tool, manual build, alpha-v1.
+#*
+#* @author pavl_g.
+#*#
+# define work directory
+# 1) print the current working directory to a string value
+pwd=`pwd`
+# cut the working directory from its end by a one '/' delimiter
+project="${pwd%/*}"
+# cut the working directory from its end by a one '/' delimiter again
+rootProject="${project%/*}"
+# pass the value of the dire
+
+clibName=('libHelloBlink')
+# AVR-DUDE properties
+BAUD_RATE='9600'
+PORT='/dev/ttyUSB0'
+CHIP='atmega32'
+CHIP_ALIAS='m32'
+PROGRAMMER='usbasp'
+# Common Variables contain colors
+source ${rootProject}'/CommonVariables.sh'
+source ${rootProject}'/AVR__HOME.sh'
+output=${project}'/output/'${clibName}
+```
+
+Connect the usbasp and start flashing..............
