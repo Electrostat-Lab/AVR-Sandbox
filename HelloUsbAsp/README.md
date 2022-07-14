@@ -30,6 +30,12 @@ Topics Covered:
 
 ## 2) Calculating the protective resistance: [--Jump to Topics--](#TOPICS)
 
+Before calculating the resistor value, take note of the max device ratings: 
+
+![image](https://user-images.githubusercontent.com/60224159/178972280-f2d97075-09da-4fff-85aa-b30b2872a0a0.png)
+
+
+
 By using Kirchhoff's voltage law (KVL) on this closed circuit voltage uint: 
 - E(V) = V(reg) + V(at) + V(r) = 0; where E -> Summation, V(reg) -> Regulator output, V(at) -> Atmega required voltage, V(r) -> Protective resistor voltage drop.
 - 6v - 5.5v - `I.r` = 0
