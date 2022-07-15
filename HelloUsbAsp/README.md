@@ -135,5 +135,5 @@ Connect the usbasp and start flashing..............
 
 ## 7) Live testing session: 
 
-[![Video](https://user-images.githubusercontent.com/60224159/179325445-3ec162c6-33d0-4dfa-a4f9-a98d22743fb8.png)](https://www.linkedin.com/embed/feed/update/urn:li:ugcPost:6953830384706953216)
+[![Video](https://user-images.githubusercontent.com/60224159/179325781-8e4e1148-c190-4fd8-9b6b-214881f1fb38.jpg)](https://www.linkedin.com/embed/feed/update/urn:li:ugcPost:6953830384706953216)
 
