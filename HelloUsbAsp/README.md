@@ -95,7 +95,7 @@ Now connect your circuit as shown in this diagram:
 
 | `Circuit Diagram` | `Example` | 
 |-------------------|---------------|
-| ![UsbAsp External Circuit](https://user-images.githubusercontent.com/60224159/178742853-7bbd3b38-c829-4571-a11c-7d7f2aeb9108.png) | ![Circuit](https://user-images.githubusercontent.com/60224159/178741890-240ddcd1-03c8-42e7-8715-6c9f49e79189.jpg) |
+| ![](https://github.com/Software-Hardware-Codesign/AVR-Sandbox/blob/master/HelloUsbAsp/fritzing/UsbAsp%20External%20Circuit.png) | ![Circuit](https://user-images.githubusercontent.com/60224159/178741890-240ddcd1-03c8-42e7-8715-6c9f49e79189.jpg) |
 
 -------------------------------------
 
