@@ -93,13 +93,13 @@ So, we are safe as long as we don't exceed the max wattage for the device
 
 Now connect your circuit as shown in this diagram:
 
-| `Circuit Diagram` | `Example` | 
-|-------------------|---------------|
-| ![](https://github.com/Software-Hardware-Codesign/AVR-Sandbox/blob/master/HelloUsbAsp/fritzing/UsbAsp%20External%20Circuit.png) | ![Circuit](https://user-images.githubusercontent.com/60224159/178741890-240ddcd1-03c8-42e7-8715-6c9f49e79189.jpg) |
+| `Circuit Diagram` | `Measuring Input Voltage in volts` | `Measuring Input Current in milli-amps` |
+|-------------------|---------------|---------------------------------------|
+| ![](https://github.com/Software-Hardware-Codesign/AVR-Sandbox/blob/master/HelloUsbAsp/fritzing/UsbAsp%20External%20Circuit.png) | ![Circuit](https://user-images.githubusercontent.com/60224159/179304213-e71b3e0f-1654-4e60-8875-3d219d3f2283.jpg) | ![Current Draw](https://user-images.githubusercontent.com/60224159/179313199-ef56e13c-48a9-49fb-b8fd-aff108e39f91.jpg) |
 
 -------------------------------------
 
-## 5) Testing Output: [--Jump to Topics--](#TOPICS) 
+## 6) Testing Output: [--Jump to Topics--](#TOPICS) 
 
 Now, connect your usbasp using the above circuit (don't forget to connect the SPI of the usbasp GND to the COM) and change the `variables.sh` to this:
 
