@@ -14,7 +14,13 @@
 #include<Digital.h>
 
 int main(void) {
- PORTB = 0xFF;
+  resetPin(PORTB, PIN_2);
+ for(;;) {
+    digitalWrite(PORTB, PIN_2, HIGH);
+    _delay_ms(2000);
+    digitalWrite(PORTB, PIN_2, LOW);
+    _delay_ms(2000);
+ }
  return 0;
 }
 
