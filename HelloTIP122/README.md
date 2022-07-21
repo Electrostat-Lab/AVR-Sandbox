@@ -3,6 +3,7 @@
 A showcase for the use of TIP122 with the avr gpio.
 
 <a name="TOPICS"></a>
+
 ## Topics Covered: 
 1) TIP122 Electrical Characteristics.
 2) TIP122~AtMega32A Connection.
