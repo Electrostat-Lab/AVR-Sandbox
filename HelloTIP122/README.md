@@ -52,13 +52,13 @@ From these findings:
 ```
 Using Ohm's Law (I = V/R), find the battery current draw (not the same as I(c)) at the CE circuit: 
 I(draw) = V(RL) / R(L) 
-     = 4v / (330 OHMS) = 0.0121 amps.
+     = 4v25 / (330 OHMS) = 0.01288 amps.
 ```
 ```
 Finding the BETA (Current Gain) value constructed by this circuit: 
 - Remove the LED and the Load Resistance as they limit the current draw affecting the I(C) and the recording.
 - Calculate I(B) and I(C) and plug them into this equation:
-    B = I(C) / I(B) = 125mAmps / 0.8mAmps = 156.25
+> B = I(C) / I(B) = 0.1amps / 0.8mAmps = 0.1 / (0.8 / 1000) = 125.
 ```
 The `TIP122` Darlington can provide over 1000 hFE as a current gain using the proper current at both the CE circuit and the BE circuit.
 
