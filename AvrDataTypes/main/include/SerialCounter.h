@@ -2,6 +2,8 @@
 
 #define SERIAL_C
 
+#define F_CPU 16000000UL
+
 #define __STDC_CONSTANT_MACROS
 #define __STDC_LIMIT_MACROS
 
@@ -23,7 +25,7 @@ namespace SerialCounter {
 		* @param PORT the port to count on, could be software/virtual port
 		* @param DELAY a delay in ms
 		*/
-		void start(volatile uint8_t& PORT, const double& DELAY);
+		void start(volatile uint8_t& PORT);
 	};
 };
 
