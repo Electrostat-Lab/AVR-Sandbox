@@ -139,6 +139,14 @@ char* substring(char* str, uint8_t start, uint8_t end) {
     return buffer;
 }
 
+/**
+ * @brief A structure used to test pointers and pointers operations.
+ */
+struct Leds {
+    int* rows;
+    int* columns;
+} LEDS;
+
 int main(void) {
     
     usart_init();
@@ -316,12 +324,26 @@ int main(void) {
     println(toascii('C'), 10);
     println(isblank(' '), 10);
 
+
+    // 8) Test pointers and pointers operations
+
+    sprintln((char*) "Pointer operations: ");
+    // pointer points to the first member (0)
+    println(*(LEDS.rows), 10);
+    LEDS.rows[0] = 1;
+    LEDS.rows[1] = 3;
+    LEDS.rows[2] = 4;
+    // pointer points to the first member (1)
+    println(*(LEDS.rows), 10);
+    // prefix increment operations on pointers --> gives us the pointer to the 2nd member (3)
+    println(*(++LEDS.rows), 10);
+
     // test xmas 
     sprintln((char*) "Test Xmas LEDs started, connect PORTB pins to LEDs and see the magic:");
     SerialCounter::Counter* counter = (SerialCounter::Counter*) calloc(1, sizeof(SerialCounter::Counter*));
-    counter->start(PORTB, 300);
+    counter->start(PORTB);
 
-    exit(0); // exit the program !
+    while(1); // block the program !
 
     return 0;
 }
