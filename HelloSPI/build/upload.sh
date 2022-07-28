@@ -1,7 +1,7 @@
 source variables.sh
 
 function upload() {
-	sudo avrdude -c ${PROGRAMMER} -b${BAUD_RATE} -P${PORT} -p${CHIP_ALIAS} -F -B8 -U flash:w:${output}'.hex'
+	sudo avrdude -c ${PROGRAMMER} -b${BAUD_RATE} -P${PORT} -p${CHIP_ALIAS} -F -U  flash:w:${output}'.hex'
 	return $?
 }
 

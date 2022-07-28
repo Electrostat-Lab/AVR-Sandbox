@@ -1,0 +1,23 @@
+{
+    "configurations": [
+        {
+            "name": "AVR-GCC",
+            "includePath": [
+                "${workspaceFolder}/**"
+            ],
+            "defines": [],
+            "compilerPath": "/home/twisted/GradleProjects/AVR-Sandbox/avr8-gnu-toolchain/avr8-gnu-toolchain-linux_x86_64/bin/avr-gcc",
+            "cStandard": "c17",
+            "cppStandard": "c++14",
+            "intelliSenseMode": "linux-clang-x64",
+            "mergeConfigurations": false,
+            "browse": {
+                "path": [
+                    "${workspaceFolder}/**"
+                ],
+                "limitSymbolsToIncludedHeaders": true
+            }
+        }
+    ],
+    "version": 4
+}

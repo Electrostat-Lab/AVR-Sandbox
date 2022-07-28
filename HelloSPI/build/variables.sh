@@ -15,11 +15,11 @@ rootProject="${project%/*}"
 
 clibName=('libHelloSpi')
 # AVR-DUDE properties
-BAUD_RATE='9600'
+BAUD_RATE='57600'
 PORT='/dev/ttyUSB0'
-CHIP='atmega32'
-CHIP_ALIAS='m32'
-PROGRAMMER='usbasp'
+CHIP='atmega328p'
+CHIP_ALIAS='m328p'
+PROGRAMMER='arduino'
 # Common Variables contain colors
 source ${rootProject}'/CommonVariables.sh'
 source ${rootProject}'/AVR__HOME.sh'

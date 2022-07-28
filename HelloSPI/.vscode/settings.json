@@ -1,0 +1,10 @@
+{
+    "files.associations": {
+        "spi.h": "c",
+        "io.h": "c",
+        "serial.h": "c",
+        "delay.h": "c",
+        "interrupt.h": "c"
+    },
+    "C_Cpp.errorSquiggles": "Disabled"
+}

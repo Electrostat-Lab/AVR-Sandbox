@@ -2,10 +2,11 @@ source variables.sh
 export LC_ALL=C
 function compile() {
 	# attrs : dir to compile & sharedLib name
-        nativeSources=`find ${project}'/main' -name '*.c' -o -name '*.cxx' -o -name '*.cpp' -o -name '*.h' -o -name '*.c++'`
+    nativeSources=`find ${project}'/main' -name '*.c' -o -name '*.cxx' -o -name '*.cpp' -o -name '*.h' -o -name '*.c++'`
 
 	sudo ${AVR_HOME}'/bin/avr-g++' \
 	-mmcu=${CHIP} ${nativeSources} \
+	-O2 						   \
 	-I${AVR_HOME}'/avr/include'    \
 	-I${project}'/main/include'    \
 	-o ${output}
