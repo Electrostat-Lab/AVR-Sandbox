@@ -6,6 +6,8 @@
 2) `avrdude` basic commands.
 3) `avrdude` using shell scripts.
 4) `avrdude` using makefile scripts.
+5) Programming avr fuses using avrdude terminal-mode and avr commands.
+6) Programming avr fuses using GNU Makefile instruction rules.
 ------------------------------------------------------
 
 ## 1) What's `avrdude` ? [--Jump to Topics--](#TOPICS)
@@ -445,3 +447,21 @@ avrdude: Device signature = 0x1e950f (probably m328p)
 avrdude> 
 ```
 - For more refer to the [GNU Makefile Docs Page](https://www.gnu.org/software/make/manual/make.html) and [GNU Makefile by example](https://makefiletutorial.com/#getting-started).
+
+---------------------------------------------------
+
+## 5) Programming avr fuses using avrdude terminal-mode and avr commands: [--Jump to Topics--](#TOPICS)
+
+1) Atmega32A fuses: 
+
+| `hfuse (High Fuse) byte` | `lfuse (Low Fuse) byte` |
+|-------------------------|--------------------------|
+| ![image](https://user-images.githubusercontent.com/60224159/181917861-31e51eea-596c-4b31-ad7f-7dde5a139211.png) | ![image](https://user-images.githubusercontent.com/60224159/181917883-cbf4d0c2-1021-4e69-afe7-ba12de43b1ad.png) |
+
+2) Atmega328p fuses: 
+
+| `hfuse (High Fuse) byte` | `lfuse (Low Fuse) byte` | `efuse (Extended Fuse) byte` |
+|--------------------------|-------------------------|------------------------------|
+| ![image](https://user-images.githubusercontent.com/60224159/181918287-d31db682-42c7-4578-82e5-6c12c600fc04.png) | ![image](https://user-images.githubusercontent.com/60224159/181918300-e56b410a-5d4c-4715-9fe2-de482ea93af4.png) | ![image](https://user-images.githubusercontent.com/60224159/181919286-332e999e-82fe-4882-bed3-7c79c5900eab.png) | 
+
+
