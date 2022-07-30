@@ -28,9 +28,9 @@ sudo avrdude -p${MCU_ALIAS} -P${PORT} -b{BAUD_RATE} -c${PROGRAMMER} -t
 ```
 - Those are the commands for the avrdude terminal mode operation: 
 
-| `Commands I` | `Commands II` |
-|-------------|----------------|
-| 
+| `Commands I` | `Commands II` | `Commands III` |
+|-------------|----------------|---------------|
+| ![image](https://user-images.githubusercontent.com/60224159/181906807-1a651c84-72c4-4692-9051-61c2831ac488.png) | ![image](https://user-images.githubusercontent.com/60224159/181906839-e016f192-ce0e-4f16-b0ac-6ccfa3ce53c4.png) | ![image](https://user-images.githubusercontent.com/60224159/181906861-f2579e89-62ba-4512-a807-17fe65d3f6f9.png) |
 
 - Examples: 
 ```sh
@@ -75,4 +75,51 @@ Memory Detail                 :
 
 avrdude> 
 ```
+- For more refer to the [documentation-file]().
+- To flash a `.hex` file use the -U with flash option: 
+```sh
+sudo avrdude -c ${PROGRAMMER} -b${BAUD_RATE} -P${PORT} -p${CHIP_ALIAS} -F -U flash:w:${output}'.hex'
+```
+- The `[-F] Option`: Normally, AVRDUDE tries to verify that the device signature read from the
+part is reasonable before continuing. Since it can happen from time to time that
+a device has a broken (erased or overwritten) device signature but is otherwise
+operating normally, this options is provided to override the check. Also, for
+programmers like the Atmel STK500 and STK600 which can adjust parameters
+local to the programming tool (independent of an actual connection to a target
+controller), this option can be used together with -t to continue in terminal
+mode.
+- Examples:
+```sh
+pavl@pavl-machine:/home/twisted/GradleProjects/AVR-Sandbox$ sudo avrdude -c'arduino' -b'57600' -P'/dev/ttyUSB0' -p'm328p' -F -U flash:w:'firmware.hex'
 
+avrdude: AVR device initialized and ready to accept instructions
+
+Reading | ################################################## | 100% 0.00s
+
+avrdude: Device signature = 0x1e950f (probably m328p)
+avrdude: NOTE: "flash" memory has been specified, an erase cycle will be performed
+         To disable this feature, specify the -D option.
+avrdude: erasing chip
+avrdude: reading input file "/home/twisted/GradleProjects/AVR-Sandbox/firmware.hex"
+avrdude: input file /home/twisted/GradleProjects/AVR-Sandbox/firmware.hex auto detected as Intel Hex
+avrdude: writing flash (3022 bytes):
+
+Writing | ################################################## | 100% 0.90s
+
+avrdude: 3022 bytes of flash written
+avrdude: verifying flash memory against /home/twisted/GradleProjects/AVR-Sandbox/firmware.hex:
+avrdude: load data flash data from input file /home/twisted/GradleProjects/AVR-Sandbox/firmware.hex:
+avrdude: input file /home/twisted/GradleProjects/AVR-Sandbox/firmware.hex auto detected as Intel Hex
+avrdude: input file /home/twisted/GradleProjects/AVR-Sandbox/firmware.hex contains 3022 bytes
+avrdude: reading on-chip flash data:
+
+Reading | ################################################## | 100% 0.68s
+
+avrdude: verifying ...
+avrdude: 3022 bytes of flash verified
+
+avrdude: safemode: Fuses OK (E:00, H:00, L:00)
+
+avrdude done.  Thank you.
+```
+------------------------------------------------------------------
