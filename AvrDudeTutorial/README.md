@@ -123,3 +123,57 @@ avrdude: safemode: Fuses OK (E:00, H:00, L:00)
 avrdude done.  Thank you.
 ```
 ------------------------------------------------------------------
+## 3) `avrdude` in shell scripts: 
+
+Use some variables in a source `variables.sh` and an `upload` function as follows: 
+- `variables.sh`:
+```sh
+#**
+#* Ccoffee Build tool, manual build, alpha-v1.
+#*
+#* @author pavl_g.
+#*#
+
+
+# define work directory
+# 1) print the current working directory to a string value
+pwd=`pwd`
+# cut the working directory from its end by a one '/' delimiter
+project="${pwd%/*}"
+# cut the working directory from its end by a one '/' delimiter again
+rootProject="${project%/*}"
+# pass the value of the dire
+
+clibName=('libHelloBlink')
+# AVR-DUDE properties
+BAUD_RATE='57600'
+PORT='/dev/ttyUSB0'
+CHIP='atmega328p'
+CHIP_ALIAS='m328'
+PROGRAMMER='arduino'
+# Common Variables contain colors
+source ${rootProject}'/CommonVariables.sh'
+source ${rootProject}'/AVR__HOME.sh'
+output=${project}'/output/'${clibName}
+```
+- `upload.sh`: 
+```sh
+source variables.sh
+
+function upload() {
+	sudo avrdude -c ${PROGRAMMER} -b${BAUD_RATE} -P${PORT} -p${CHIP_ALIAS} -F -U flash:w:${output}'.hex'
+	return $?
+}
+
+echo -e "${WHITE_C} --MajorTask@UploadingCode : Uploading Hex file"
+if [[ ! `upload` -eq 0 ]]; then
+	echo -e "${RED_C} --MajorTask@UploadingCode : Failed to upload hex file, exits with errno700."
+	exit 700
+else 
+	echo -e "${GREEN_C} --MajorTask@UploadingCode : Task finished."
+fi
+echo -e ${RESET_Cs}
+```
+For more, refer to the [shell-build]() folder.
+
+-----------------------------------------------------------
