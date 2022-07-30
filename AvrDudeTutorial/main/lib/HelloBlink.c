@@ -9,6 +9,8 @@
  * @copyright Copyright (c) 2022
  * 
  */
+#define F_CPU 16000000UL
+
 #include<avr/io.h>
 #include<util/delay.h>
 #include<Digital.h>
