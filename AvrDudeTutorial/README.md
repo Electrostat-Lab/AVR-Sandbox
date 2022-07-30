@@ -4,8 +4,8 @@
 ## Topics covered: 
 1) What's `avrdude` ?
 2) `avrdude` basic commands.
-3) `avrdude` in shell scripts.
-4) `avrdude` in makefile scripts.
+3) `avrdude` using shell scripts.
+4) `avrdude` using makefile scripts.
 ------------------------------------------------------
 
 ## 1) What's `avrdude` ? [--Jump to Topics--](#TOPICS)
@@ -123,7 +123,7 @@ avrdude: safemode: Fuses OK (E:00, H:00, L:00)
 avrdude done.  Thank you.
 ```
 ------------------------------------------------------------------
-## 3) `avrdude` in shell scripts: [--Jump to Topics--](#TOPICS)
+## 3) `avrdude` using shell scripts: [--Jump to Topics--](#TOPICS)
 
 Use some variables in a source `variables.sh` and an `upload` function as follows: 
 - `variables.sh`:
@@ -174,11 +174,11 @@ else
 fi
 echo -e ${RESET_Cs}
 ```
-For more, refer to the [shell-build]() folder.
+- For more, refer to the [shell-build]() folder.
 
 -----------------------------------------------------------
 
-## 4) `avrdude` in makefile scripts: [--Jump to Topics--](#TOPICS)
+## 4) `avrdude` using makefile scripts: [--Jump to Topics--](#TOPICS)
 
 General Syntax of GNU Makefile: 
 ```makefile
