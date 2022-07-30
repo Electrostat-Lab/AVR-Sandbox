@@ -1,16 +1,14 @@
 #include<SPI.h>
     
 ISR (SPI_STC_vect) {
-    Serial::SPI::getInstance()->onDataTransmitCompleted(SPDR);
+    // Serial::SPI::getInstance()->onDataTransmitCompleted(SPDR);
 }
 
 void Serial::SPI::startProtocol(const TransmissionType& transmissionType, const SPIFosc& spiFosc) {
 
     if (transmissionType == MASTER) {
         /* define user-defined pins as output */
-        PORTB |= (1 << MOSI) | (1 << SCK) | (1 << SS);
-        /* Pull SS down to initiate data connection */
-        PORTB &= ~(1 << SS);
+        DDRB |= (1 << MOSI) | (1 << SCK) | (1 << SS);
     } else if (transmissionType == SLAVE) {
         PORTB |= (1 << MISO);
     }
@@ -49,7 +47,26 @@ void Serial::SPI::startProtocol(const TransmissionType& transmissionType, const 
         SPSR &= ~(1 << SPI2X);
     }
     /* start the protocol with an interrupt event handler on data transmission */
-    SPCR |= (1 << SPE) | (transmissionType) | MODE_0_0;
+    SPCR |= (1 << SPE) | (transmissionType) | MODE_0_1;
+}
+
+void Serial::SPI::generateSCLK(const uint16_t& count, const uint8_t& width, void(*action)()) {
+    for (uint16_t i = 0; i < count; i++) {
+        PORTB &= ~(1 << SCK);
+        _delay_us(width / 1000);
+        PORTB |= (1 << SCK);
+        if (action != NULL) {
+            action();
+        }
+        _delay_us(width / 1000);
+    }
+}
+
+void Serial::SPI::resetSlaveSelect(volatile uint8_t& PORT, const uint8_t& PIN) {
+    _delay_us(100 / 1000);
+    PORT |= (1 << PIN);
+    _delay_us(270 / 1000);
+    PORT &= ~(1 << PIN);
 }
 
 void Serial::SPI::startSPIISR() {
@@ -70,11 +87,10 @@ void Serial::SPI::write(const uint8_t& data) {
     while (!isTransmissionCompleted());
 }
 
-volatile uint8_t& Serial::SPI::read() {
-    while (!isTransmissionCompleted());
-    return SPDR;
-}
-
 void Serial::SPI::disablePowerReductionRegister() {
     PRR &= ~(1 << PRSPI);
+}
+
+volatile uint8_t& Serial::SPI::getTransmittedData() {
+    return transmittedData;
 }

@@ -1,22 +1,30 @@
 #ifndef SPI_PROTOCOL
 
 #define SPI_PROTOCOL
+#define F_CPU 16000000UL
 
 #include<avr/io.h>
 #include<stdlib.h>
 #include<avr/interrupt.h>
+#include<util/delay.h>
+
+/** Defines a boolean type */
+#define boolean uint8_t
 
 /** Defines the [TransmissionType] datatype */
 #define TransmissionType int
 
+/** Defines the [SPIFosc] datatype */
 #define SPIFosc float
 
 /** Defines the [MASTER] and [SLAVE] transmission modes */
 #define MASTER (TransmissionType (1 << MSTR))
 #define SLAVE (TransmissionType (SPCR & ~(1 << MSTR)))
 
-#define isTransmissionCompleted() ((uint8_t) (SPSR & (1 << SPIF)))
-#define isSPIEnabled() ((uint8_t) (SPSR & (1 << SPE)))
+/** Defines boolean flags */
+#define isTransmissionCompleted() ((boolean) (SPSR & (1 << SPIF)))
+#define isSPIEnabled() ((boolean) (SPSR & (1 << SPE)))
+#define isDataCollisionWritten() ((boolean) (SPSR & (1 << WCOL)))
 
 /** Defines the SPI rate with respect to the Fosc */
 #define Fosc_1_4  ((SPIFosc) 0.25)
@@ -28,6 +36,7 @@
 
 /** Serial Data modes sampling */
 #define MODE_0_0 (SPCR & (~(1 << CPOL) & ~(1 << CPHA)))
+#define MODE_0_1 ((SPCR & ~(1 << CPOL)) | (1 << CPHA))
 
 #if defined (__AVR_ATmega32__)
 #   define MISO 6
@@ -50,7 +59,9 @@ namespace Serial {
     static void* SPI_INSTANCE = NULL;
 
     struct SPI {
-        
+    
+        volatile uint8_t transmittedData;
+
         /**
          * @brief Allocates a new SPI pointer.
          * 
@@ -71,6 +82,10 @@ namespace Serial {
          * @param spiFosc the spi bit rate.
          */
         void startProtocol(const TransmissionType& transmissionType, const SPIFosc& spiFosc);
+
+        void generateSCLK(const uint16_t& count, const uint8_t& width, void(*function)());
+
+        void resetSlaveSelect(volatile uint8_t& PORT, const uint8_t& PIN);
 
         /**
          * @brief Starts the SPI interrupt service routine.
@@ -95,11 +110,11 @@ namespace Serial {
         void write(const uint8_t& data);
 
         /**
-         * @brief Reads an 8-bit data from the SPI data register [SPDR] using the polling method.
+         * @brief Gets the Transmitted Data object
          * 
-         * @return uint8_t& an 8-bit data from [SPDR].
+         * @return const uint8_t& an 8-bit representation of the transmitted data.
          */
-        volatile uint8_t& read();
+        volatile uint8_t& getTransmittedData();
 
         /**
          * @brief Fired whenever an interrupt event handler is invoked when the flag [SPIF] is enabled and the [SPIE] bit is enabled.
