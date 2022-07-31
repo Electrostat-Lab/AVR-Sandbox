@@ -542,3 +542,237 @@ avrdude: stk500_recv(): programmer is not responding
 
 avrdude done.  Thank you.
 ```
+--------------------------------------------------
+
+## 6) Programming fuses using GNU Makefile: 
+
+- Add some GNU Make set of rules to apply some avrdude commands: 
+
+```makefile
+##
+# Test disable ESAVE bit by bringing the bit to one
+# -V -> bypasses verfications
+# -F -> force
+##
+setFuses: 
+	sudo ${AVR_DUDE} -V -F -U hfuse:w:0x08:m -U efuse:w:0x00:m -U lfuse:w:0x00:m
+```
+- Set `Hfuse` ESAVE to false by setting the bit to 1, so `0x08` or `0b00001000`: 
+```sh
+$ make setHfuse 
+sudo avrdude -c arduino -b'57600' -P'/dev/ttyUSB0' -pm328p -V -F -U hfuse:w:0x08:m
+
+avrdude: AVR device initialized and ready to accept instructions
+
+Reading | ################################################## | 100% 0.00s
+
+avrdude: Device signature = 0x1e950f (probably m328p)
+avrdude: reading input file "0x08"
+avrdude: writing hfuse (1 bytes):
+
+Writing |                                                    | 0% 0.00s ***failed;  
+Writing | ################################################## | 100% 0.05s
+
+avrdude: 1 bytes of hfuse written
+
+avrdude: safemode: hfuse changed! Was 8, and is now 0
+Would you like this fuse to be changed back? [y/n] n
+avrdude: safemode: Fuses OK (E:00, H:08, L:00)
+avrdude: stk500_recv(): programmer is not responding
+
+avrdude done.  Thank you.
+```
+- Set all fuses: 
+
+```sh
+$ make setFuses 
+sudo avrdude -c arduino -b'57600' -P'/dev/ttyUSB0' -pm328p -V -F -U hfuse:w:0x08:m -U efuse:w:0x00:m -U lfuse:w:0x00:m
+
+avrdude: AVR device initialized and ready to accept instructions
+
+Reading | ################################################## | 100% 0.00s
+
+avrdude: Device signature = 0x1e950f (probably m328p)
+avrdude: reading input file "0x08"
+avrdude: writing hfuse (1 bytes):
+
+Writing |                                                    | 0% 0.00s ***failed;  
+Writing | ################################################## | 100% 0.05s
+
+avrdude: 1 bytes of hfuse written
+avrdude: reading input file "0x00"
+avrdude: writing efuse (1 bytes):
+
+Writing | ################################################## | 100% 0.00s
+
+avrdude: 1 bytes of efuse written
+avrdude: reading input file "0x00"
+avrdude: writing lfuse (1 bytes):
+
+Writing | ################################################## | 100% 0.00s
+
+avrdude: 1 bytes of lfuse written
+
+avrdude: safemode: hfuse changed! Was 8, and is now 0
+Would you like this fuse to be changed back? [y/n] n
+avrdude: safemode: Fuses OK (E:00, H:08, L:00)
+
+```
+- Compile, upload and setFuses: 
+
+```sh
+$ make build setFuses 
+source 'shell-build/compile.sh'
+ --MajorTask@Compile : Compiling the project
+
+ --MajorTask@Compile : Compilation succeeded.
+
+ --MajorTask@Hexing : Creating Hex file
+ --MajorTask@Hexing : Hex file created successfully.
+
+source 'shell-build/upload.sh'
+ --MajorTask@UploadingCode : Uploading Hex file
+
+avrdude: AVR device initialized and ready to accept instructions
+
+Reading | ################################################## | 100% 0.00s
+
+avrdude: Device signature = 0x1e950f (probably m328p)
+avrdude: Expected signature for ATmega328 is 1E 95 14
+avrdude: NOTE: "flash" memory has been specified, an erase cycle will be performed
+         To disable this feature, specify the -D option.
+avrdude: erasing chip
+avrdude: reading input file "/home/twisted/GradleProjects/AVR-Sandbox/AvrDudeTutorial/output/libHelloBlink.hex"
+avrdude: input file /home/twisted/GradleProjects/AVR-Sandbox/AvrDudeTutorial/output/libHelloBlink.hex auto detected as Intel Hex
+avrdude: writing flash (324 bytes):
+
+Writing | ################################################## | 100% 0.11s
+
+avrdude: 324 bytes of flash written
+avrdude: verifying flash memory against /home/twisted/GradleProjects/AVR-Sandbox/AvrDudeTutorial/output/libHelloBlink.hex:
+avrdude: load data flash data from input file /home/twisted/GradleProjects/AVR-Sandbox/AvrDudeTutorial/output/libHelloBlink.hex:
+avrdude: input file /home/twisted/GradleProjects/AVR-Sandbox/AvrDudeTutorial/output/libHelloBlink.hex auto detected as Intel Hex
+avrdude: input file /home/twisted/GradleProjects/AVR-Sandbox/AvrDudeTutorial/output/libHelloBlink.hex contains 324 bytes
+avrdude: reading on-chip flash data:
+
+Reading | ################################################## | 100% 0.09s
+
+avrdude: verifying ...
+avrdude: 324 bytes of flash verified
+
+avrdude: safemode: Fuses OK (E:00, H:00, L:00)
+
+avrdude done.  Thank you.
+
+ --MajorTask@UploadingCode : Task finished.
+
+sudo avrdude -c arduino -b'57600' -P'/dev/ttyUSB0' -pm328p -V -F -U hfuse:w:0x08:m -U efuse:w:0x00:m -U lfuse:w:0x00:m
+
+avrdude: AVR device initialized and ready to accept instructions
+
+Reading | ################################################## | 100% 0.00s
+
+avrdude: Device signature = 0x1e950f (probably m328p)
+avrdude: reading input file "0x08"
+avrdude: writing hfuse (1 bytes):
+
+Writing |                                                    | 0% 0.00s ***failed;  
+Writing | ################################################## | 100% 0.05s
+
+avrdude: 1 bytes of hfuse written
+avrdude: reading input file "0x00"
+avrdude: writing efuse (1 bytes):
+
+Writing | ################################################## | 100% 0.00s
+
+avrdude: 1 bytes of efuse written
+avrdude: reading input file "0x00"
+avrdude: writing lfuse (1 bytes):
+
+Writing | ################################################## | 100% 0.00s
+
+avrdude: 1 bytes of lfuse written
+
+avrdude: safemode: hfuse changed! Was 8, and is now 0
+Would you like this fuse to be changed back? [y/n] n
+avrdude: safemode: Fuses OK (E:00, H:08, L:00)
+avrdude: stk500_recv(): programmer is not responding
+
+avrdude done.  Thank you.
+```
+- Read fuses to the <stdout>: 
+
+```makefile
+readFuses:
+	sudo ${AVR_DUDE} -D -V -F -U hfuse:r:-:i -U efuse:r:-:i -U lfuse:r:-:i
+```
+```sh
+$ make readFuses 
+sudo avrdude -c arduino -b'57600' -P'/dev/ttyUSB0' -pm328p -D -V -F -U hfuse:r:-:i -U efuse:r:-:i -U lfuse:r:-:i
+
+avrdude: AVR device initialized and ready to accept instructions
+
+Reading | ################################################## | 100% 0.00s
+
+avrdude: Device signature = 0x1e950f (probably m328p)
+avrdude: reading hfuse memory:
+
+Reading | ################################################## | 100% 0.00s
+
+avrdude: writing output file "<stdout>"
+:0100000000FF
+:00000001FF
+avrdude: reading efuse memory:
+
+Reading | ################################################## | 100% 0.00s
+
+avrdude: writing output file "<stdout>"
+:0100000000FF
+:00000001FF
+avrdude: reading lfuse memory:
+
+Reading | ################################################## | 100% 0.00s
+
+avrdude: writing output file "<stdout>"
+:0100000000FF
+:00000001FF
+
+avrdude: safemode: Fuses OK (E:00, H:00, L:00)
+
+avrdude done.  Thank you.
+```
+- Read fuses to `dump` files: 
+```makefile
+readFuses:
+	sudo ${AVR_DUDE} -D -V -F -U hfuse:r:'dumpHfuse.txt':i -U efuse:r:'dumpEfuse.txt':i -U lfuse:r:'dumpLfuse.txt':i
+```
+```sh
+$ make readFuses 
+sudo avrdude -c arduino -b'57600' -P'/dev/ttyUSB0' -pm328p -D -V -F -U hfuse:r:'dumpHfuse.txt':i -U efuse:r:'dumpEfuse.txt':i -U lfuse:r:'dumpLfuse.txt':i
+
+avrdude: AVR device initialized and ready to accept instructions
+
+Reading | ################################################## | 100% 0.00s
+
+avrdude: Device signature = 0x1e950f (probably m328p)
+avrdude: reading hfuse memory:
+
+Reading | ################################################## | 100% 0.00s
+
+avrdude: writing output file "dumpHfuse.txt"
+avrdude: reading efuse memory:
+
+Reading | ################################################## | 100% 0.00s
+
+avrdude: writing output file "dumpEfuse.txt"
+avrdude: reading lfuse memory:
+
+Reading | ################################################## | 100% 0.00s
+
+avrdude: writing output file "dumpLfuse.txt"
+
+avrdude: safemode: Fuses OK (E:00, H:00, L:00)
+
+avrdude done.  Thank you.
+```
+
