@@ -518,7 +518,27 @@ Memory Detail                 :
 avrdude>
 ```
 - Here, the value of `ReadBack` of hfuse is 0b00000000.
+- Writing to `hfuse` as `0b00001000` or `0x08` to disable EEPROM when doing chip erase: 
+```sh
+$ sudo avrdude -c'arduino' -b'57600' -P'/dev/ttyUSB0' -p'm328p' -V -U hfuse:w:0x08:m
 
+avrdude: AVR device initialized and ready to accept instructions
 
+Reading | ################################################## | 100% 0.00s
 
+avrdude: Device signature = 0x1e950f (probably m328p)
+avrdude: reading input file "0x08"
+avrdude: writing hfuse (1 bytes):
 
+Writing |                                                    | 0% 0.00s ***failed;  
+Writing | ################################################## | 100% 0.05s
+
+avrdude: 1 bytes of hfuse written
+
+avrdude: safemode: hfuse changed! Was 8, and is now 0
+Would you like this fuse to be changed back? [y/n] n
+avrdude: safemode: Fuses OK (E:00, H:08, L:00)
+avrdude: stk500_recv(): programmer is not responding
+
+avrdude done.  Thank you.
+```
