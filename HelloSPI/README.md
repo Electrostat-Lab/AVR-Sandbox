@@ -138,10 +138,11 @@ if (spiFosc == Fosc_1_2) {
 #define MODE_1_0 (ModeOfTransmission (SPCR & ((1 << CPOL) & ~(1 << CPHA))))
 #define MODE_1_1 (ModeOfTransmission (SPCR & ((1 << CPOL) | ((1 << CPHA))))
 ```
-4) Setup the MODE of the transmission: 
+4) Setup the transmission type, either MASTER or SLAVE: 
 
 ```c
-#define ModeOfTransmission uint8_t
+/** Defines the [TransmissionType] datatype */
+#define TransmissionType int
 
 /** Defines the [MASTER] and [SLAVE] transmission modes */
 #define MASTER (TransmissionType (1 << MSTR))
