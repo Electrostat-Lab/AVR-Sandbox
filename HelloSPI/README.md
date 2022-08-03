@@ -318,6 +318,18 @@ void AD::MCP3008::init(volatile uint8_t& PORT, const uint8_t& SS_PIN) {
 10) Generate another 8 SCLK signals to clock out the second data frame from the ADC register on the falling edge of the SCLK.
 11) Read the second data frame byte and concatenate it to a `uint16_t` data variable.
 ```c
+#define Configuartion uint8_t
+
+/** Define A/D Channels for config byte */
+#define CHANNEL_0 ((uint8_t) 0b10000000) 
+#define CHANNEL_1 (CHANNEL_0 + 1)
+#define CHANNEL_2 (CHANNEL_1 + 1)
+#define CHANNEL_3 (CHANNEL_2 + 1)
+#define CHANNEL_4 (CHANNEL_3 + 1)
+#define CHANNEL_5 (CHANNEL_4 + 1)
+#define CHANNEL_6 (CHANNEL_5 + 1)
+#define CHANNEL_7 (CHANNEL_6 + 1)
+...
 void AD::MCP3008::startADConversion(const Configuartion& config) {
 
     /* start A/D conversion on a CHANNEL */
