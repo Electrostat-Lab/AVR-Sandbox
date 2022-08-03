@@ -227,7 +227,7 @@ void Serial::SPI::write(const uint8_t& data) {
 ```
 ----------------------------------------------------------------
 
-## 4) Operating MCP3008 ADC using the SPI data bus interface: [--Jump to Topics--](#TOPICS) 
+## 4) Cracking MCP3008 Datasheet: [--Jump to Topics--](#TOPICS) 
 
 - `MCP3008`: is a write-only 10-bit Analog-to-Digital converter powered by a voltage comparator and a multiplexer, it operates using the SPI data bus interface.
 - To operate MCP3008 as a SLAVE, the MASTER and the SLAVE should agree on an SPI Clock Mode specified in the SLAVE's device datasheet, in this case, its modes [MODE_0_0] and [MODE_1_1].
@@ -263,16 +263,131 @@ void Serial::SPI::write(const uint8_t& data) {
 | Blue Square: represents the CHANNEL configuration byte written to the SPDR of the atmega32 at the DIN (MOSI or COPI) before the 2nd 8-clocks | 
 | Red Square: represents the data read from the SPDR at the DOUT (MISO or CIPO) line after the last 8-clocks |
 
-
-- MCP3008 Modes SPI operation, the MCP3008 can operate only in 2 SPI modes (MODE0 and MODE1):
+- MCP3008 Modes SPI operation, the MCP3008 can operate only in 2 SPI modes (MODE_0 and MODE_3):
 
 | `SPI Mode_0` | `SPI Mode_3` |
 |--------------|--------------|
 |![image](https://user-images.githubusercontent.com/60224159/182698382-08efa788-0059-4dcb-9de5-89855a58021a.png) | ![image](https://user-images.githubusercontent.com/60224159/182695490-94d76ef8-4d18-4d67-81f1-9b17de40b19a.png) |
 | In this mode the SPI CLK starts with LOW specified by [CPOL = 0] and the data is sampled at the leading edge specified by [CPHA = 0] | In this mode the SPI CLK defaults to HIGH specified by [CPOL = 1] and the data is sampled at the trailing edge specified by [CPHA = 1] |
-| Green dot and square: refers to the starter byte loaded to the SPDR before the first 8 clocks | 
-| Blue dot and square: refers to the configuration byte loaded to the SPDR before the second 8 clocks | 
-| Red dot and square: refers to the data read from the SPDR after the transmission of the last two 8 clocks | 
-| Orange: refers to the data write to the SPDR sampling state, the falling edge of the clk | 
-| Purpule/Pink: refers to the data read from SPDR sampling state, the rising edge of the clk |
+| Green dot and square: refers to the starter byte loaded to the SPDR before the first 8 clocks | Green dot and square: refers to the starter byte loaded to the SPDR before the first 8 clocks |
+| Blue dot and square: refers to the configuration byte loaded to the SPDR before the second 8 clocks | Blue dot and square: refers to the configuration byte loaded to the SPDR before the second 8 clocks |
+| Red dot and square: refers to the data read from the SPDR after the transmission of the last two 8 clocks | Red dot and square: refers to the data read from the SPDR after the transmission of the last two 8 clocks |
+| Orange: refers to the data write to the SPDR sampling state, the falling edge of the clk | Orange: refers to the data write to the SPDR sampling state, the falling edge of the clk |
+| Purpule/Pink: refers to the data read from SPDR sampling state, the rising edge of the clk | Purpule/Pink: refers to the data read from SPDR sampling state, the rising edge of the clk | 
+| Green Arrow: shows the idle mode state, LOW | The idle mode state is HIGH in this case |
 
+- The configuration byte directs which channels are able to send analog input to the device:
+
+| `Configuration bits for MCP3008` |
+|----------------------------------|
+| ![image](https://user-images.githubusercontent.com/60224159/182712982-a4df5e0a-f95c-45c0-b046-3fbff0563544.png) |
+
+---------------------------------------------------------------------------------------------------------------
+
+## 5) Operating MCP3008 using the SPI data bus interface: [--Jump to Topics--](#TOPICS)  
+
+1) Initialize the SPI as `MASTER` with SPI `MODE_0`.
+2) Bring CS to `LOW` to start the A/D Communication.
+3) Send the starter byte to the A/D register `[0]-[0]-[0]-[0]-[0]-[0]-[0]-[1]`.
+4) Generate 8 clocks to clock out the starter byte at the MOSI to the ADC at the rising edge of the SCLK.
+```c
+void AD::MCP3008::init(volatile uint8_t& PORT, const uint8_t& SS_PIN) {
+     
+    isADConversionFinished = 0;
+
+     /* start protocol */
+    Serial::SPI::getInstance()->startProtocol(MASTER, Fosc_1_4, MODE_0_0);
+    
+    /* bring CS or SS to low to start this slave communication */
+    PORTB &= ~(SS_PIN);
+    _delay_us(100 / 1000);
+
+    /* send starter bits */
+    Serial::SPI::getInstance()->write(0b00000001);
+
+    /* clock out the data to the A/D IC */
+    Serial::SPI::getInstance()->generateSCLK(8, 125);
+}
+```
+5) Start the A/D Conversion by writing the input AIN Channel configuration.
+6) Generate 8 SCLK signals to clock out the config data at the MOSI line to the ADC register and clock out the first data frame out of the A/D on the falling edge of the SCLK.
+7) Read the SPDR register to get a `[x]-[x]-[x]-[x]-[x]-[null-0]-[B10]-[B9]` data, an 8-bit data consisting of 5 UNKNOWN BITS, NULL BIT representing the start of the data frame and last 2 bits in the data frame representing the LSBs of the A/D conversion.
+8) Generate another 8 SCLK signals to clock out the second data frame from the ADC register on the falling edge of the SCLK.
+```c
+void AD::MCP3008::startADConversion(const Configuartion& config) {
+
+    /* start A/D conversion on a CHANNEL */
+    Serial::SPI::getInstance()->write(config);
+
+    /* clock out config to the A/D IC */
+    Serial::SPI::getInstance()->generateSCLK(8, 125);
+
+    /* remove NULL bit (bit no.3) from the first data frame and shift first frame 8-bits to the left */
+    analogData = (SPDR & 0b0000011) << 8;
+
+    /* clock to read the 2nd data frame */
+    Serial::SPI::getInstance()->generateSCLK(8, 125);
+
+    /* add the data frame to the uint16_t bit data buffer */
+    analogData |= SPDR;
+
+    isADConversionFinished = 1;
+}
+```
+9) Terminate the A/D conversion by bringing CS to `HIGH`.
+```c
+void AD::MCP3008::endADConversion(volatile uint8_t& PORT, const uint8_t& SS_PIN) {
+    /* finish A/D conversion by bringing the CS to high */
+    PORT |= SS_PIN;
+    _delay_us(270 / 1000);
+}
+```
+10) Re-iterate for more A/D conversion or use an A/D monitoring pattern. 
+```c
+void AD::MCP3008::monitorADConversion(const Configuartion& config, volatile uint8_t& PORT, const uint8_t& SS_PIN, void(*action)(uint16_t&)) {
+    while (1) {
+        /* initialize the MCP */
+        init(PORT, SS_PIN);
+        /* start A/D conversion on a CHANNEL */
+        startADConversion(config);
+        /* fire an observer */
+        if (action != NULL) {
+            action(analogData);
+        }
+        /* end A/D conversion */
+        endADConversion(PORT, SS_PIN);
+    }
+}
+```
+### Example: 
+```c
+#define F_CPU 16000000UL
+
+#include<Serial.h>
+#include<util/delay.h>
+#include<MCP3008/MCP3008.h>
+
+#define SS_PIN 2
+
+void Serial::SPI::onDataTransmitCompleted(volatile uint8_t& data) { }
+
+void Serial::UART::onDataReceiveCompleted(const uint8_t& data) { }
+
+void Serial::UART::onDataTransmitCompleted(const uint8_t& data) { }
+
+static inline void invoke(uint16_t& data) {
+    Serial::UART::getInstance()->println(data, 10);
+}
+
+int main (void) {
+    Serial::UART::getInstance()->startProtocol(BAUD_RATE_57600_16MHZ);
+    Serial::UART::getInstance()->sprintln((char*) "Communication starts...");
+   
+    /* set slave select as output */
+    DDRB |= (1 << SS_PIN);
+    /* start adc monitoring */
+    AD::MCP3008::getInstance()->monitorADConversion(CHANNEL_0, PORTB, (1 << SS_PIN), &invoke);
+
+    return 0;
+}
+```
