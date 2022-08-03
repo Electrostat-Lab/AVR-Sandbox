@@ -312,7 +312,7 @@ void AD::MCP3008::init(volatile uint8_t& PORT, const uint8_t& SS_PIN) {
 ```
 5) Start the A/D Conversion by writing the input AIN Channel configuration.
 6) Generate 8 SCLK signals to clock out the config data at the MOSI line to the ADC register and clock out the first data frame out of the A/D on the falling edge of the SCLK.
-7) Read the SPDR register to get a `[x]-[x]-[x]-[x]-[x]-[null-0]-[B10]-[B9]` data, an 8-bit data consisting of 5 UNKNOWN BITS, NULL BIT representing the start of the data frame and last 2 bits in the data frame representing the LSBs of the A/D conversion.
+7) Read the SPDR register to get a `[x]-[x]-[x]-[x]-[x]-[null-0]-[B10]-[B9]` data, an 8-bit data consisting of 5 UNKNOWN BITS, NULL BIT representing the start of the data frame and last 2 bits in the data frame representing the MSBs of the A/D conversion.
 8) Get rid of UNKOWN bits and NULL bit from the first data frame by `ANDING` the first data frame with `0b00000011` to preserve only the last 2 bits which represent the higheset 2 order bits of the conversion.
 9) Shift the first data frame eight bits to the left to leave room for the lower order bits (lower order frame).
 10) Generate another 8 SCLK signals to clock out the second data frame from the ADC register on the falling edge of the SCLK.
