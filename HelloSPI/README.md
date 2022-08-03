@@ -287,6 +287,10 @@ void Serial::SPI::write(const uint8_t& data) {
 
 ## 5) Operating MCP3008 using the SPI data bus interface: [--Jump to Topics--](#TOPICS)  
 
+| `MCP3008 - Arduino-NANO/AtMega328p Circuit diagram` |
+|-----------------------------------------------------|
+| ![](https://github.com/Software-Hardware-Codesign/AVR-Sandbox/blob/hello-spi/HelloSPI/fritzing/MCP3008%20Circuit_bb.png) |
+
 1) Initialize the SPI as `MASTER` with SPI `MODE_0`.
 2) Bring CS to `LOW` to start the A/D Communication.
 3) Send the starter byte to the A/D register `[0]-[0]-[0]-[0]-[0]-[0]-[0]-[1]`.
