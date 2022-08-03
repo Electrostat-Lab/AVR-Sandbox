@@ -5,7 +5,8 @@
 1) SPI basics.
 2) SPI Register in atmega32A/atmega328p.
 3) SPI Implementation for atmega32A/atmega328p.
-4) Operating MCP3008 ADC using SPI.
+4) Cracking MCP3008 Datasheet.
+5) Operating MCP3008 using the SPI data bus interface.
 ---------------------------------------------------------------------------
 
 ## 1) SPI basics: [--Jump to Topics--](#TOPICS)
