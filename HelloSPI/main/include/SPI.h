@@ -17,6 +17,8 @@
 /** Defines the [SPIFosc] datatype */
 #define SPIFosc float
 
+#define ModeOfTransmission uint8_t
+
 /** Defines the [MASTER] and [SLAVE] transmission modes */
 #define MASTER (TransmissionType (1 << MSTR))
 #define SLAVE (TransmissionType (SPCR & ~(1 << MSTR)))
@@ -35,8 +37,8 @@
 #define Fosc_1_32 ((SPIFosc) 1/32)
 
 /** Serial Data modes sampling */
-#define MODE_0_0 (SPCR & (~(1 << CPOL) & ~(1 << CPHA)))
-#define MODE_0_1 ((SPCR & ~(1 << CPOL)) | (1 << CPHA))
+#define MODE_0_0 (ModeOfTransmission (SPCR & (~(1 << CPOL) & ~(1 << CPHA))))
+#define MODE_0_1 (ModeOfTransmission ((SPCR & ~(1 << CPOL)) | (1 << CPHA)))
 
 #if defined (__AVR_ATmega32__)
 #   define MISO 6
@@ -46,7 +48,6 @@
 #   define MISO 4
 #   define MOSI 3
 #   define SCK 5
-#   define SS 2
 #endif 
 
 namespace Serial {
@@ -59,8 +60,6 @@ namespace Serial {
     static void* SPI_INSTANCE = NULL;
 
     struct SPI {
-    
-        volatile uint8_t transmittedData;
 
         /**
          * @brief Allocates a new SPI pointer.
@@ -80,12 +79,18 @@ namespace Serial {
          * @param transmissionType the transmission type either [MASTER] or [SLAVE], [SLAVE] operates in sleep mode
          * until the mcu receives external clk from a master source.
          * @param spiFosc the spi bit rate.
+         * @param MODE the mode of transmission, either [SPI-MODE-0 (0, 0)]-[SPI-MODE-1 (0, 1)]-
+         * [SPI-MODE-2 (1, 0)]-[SPI-MODE-3 (1, 1)].
          */
-        void startProtocol(const TransmissionType& transmissionType, const SPIFosc& spiFosc);
+        void startProtocol(const TransmissionType& transmissionType, const SPIFosc& spiFosc, const ModeOfTransmission& MODE);
 
-        void generateSCLK(const uint16_t& count, const uint8_t& width, void(*function)());
-
-        void resetSlaveSelect(volatile uint8_t& PORT, const uint8_t& PIN);
+        /**
+         * @brief Generates Serial Clocks with [width] and [count].
+         * 
+         * @param count the number of clocks in integers.
+         * @param width the width of clocks in nano-seconds.
+         */
+        void generateSCLK(const uint32_t& count, const uint8_t& width);
 
         /**
          * @brief Starts the SPI interrupt service routine.

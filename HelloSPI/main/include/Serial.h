@@ -180,14 +180,14 @@ namespace Serial {
          * 
          * @param data the received byte at the Rx pin.
          */
-        virtual void onDataReceiveCompleted(const uint8_t& data);
+        void onDataReceiveCompleted(const uint8_t& data);
         
         /**
          * @brief Triggered when the data transmit is completed at the Tx pin.
          * 
          * @param data the transmitted byte at the Tx pin which is equal to UDRn at that moment.
          */
-        virtual void onDataTransmitCompleted(const uint8_t& data);
+        void onDataTransmitCompleted(const uint8_t& data);
 
         /**
          * @brief Sets the Transmit Data Register to be used by the UDR when the UDRE bit is set.

@@ -6,7 +6,7 @@ function compile() {
 
 	sudo ${AVR_HOME}'/bin/avr-g++' \
 	-mmcu=${CHIP} ${nativeSources} \
-	-O2 						   \
+	-O3 						   \
 	-I${AVR_HOME}'/avr/include'    \
 	-I${project}'/main/include'    \
 	-o ${output}

@@ -4,7 +4,8 @@
         "io.h": "c",
         "serial.h": "c",
         "delay.h": "c",
-        "interrupt.h": "c"
+        "interrupt.h": "c",
+        "mcp3008.h": "c"
     },
     "C_Cpp.errorSquiggles": "Disabled"
 }
