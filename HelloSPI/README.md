@@ -24,6 +24,7 @@ In this tutorial, we are going to show off the basics of the SPI protocol and in
 - Adjusting Clock Polartiy and Phase to determine the SPI Mode: 
 
 | `Clock Polarity (CPOL)` | `Clock Phase (CPHA)` | 
+|-------------------------|----------------------|
 | Determines the base value of the Serial Clock, either HIGH or LOW | Determines when to sample data, either on the leading edge or on the trailing edge |
 
 - Available SPI modes: 
@@ -225,3 +226,53 @@ void Serial::SPI::write(const uint8_t& data) {
 }
 ```
 ----------------------------------------------------------------
+
+## 4) Operating MCP3008 ADC using the SPI data bus interface: [--Jump to Topics--](#TOPICS) 
+
+- `MCP3008`: is a write-only 10-bit Analog-to-Digital converter powered by a voltage comparator and a multiplexer, it operates using the SPI data bus interface.
+- To operate MCP3008 as a SLAVE, the MASTER and the SLAVE should agree on an SPI Clock Mode specified in the SLAVE's device datasheet, in this case, its modes [MODE_0_0] and [MODE_1_1].
+
+| `General Charachteristics` | `Packages overview` | 
+|----------------------------|---------------------|
+| ![image](https://user-images.githubusercontent.com/60224159/182679789-1b577786-407f-4cab-9f14-8ab39a742356.png) | ![image](https://user-images.githubusercontent.com/60224159/182684477-b7b5bbdf-8a31-4a98-86c0-17b21015e62e.png) |
+| Dark Red: refers to the resolution and the channels for each package | Dark red: the AIN Channels and the Vref for resolution channel (comparator resolution) |
+| Light Red: refers to the supported SPI modes of operation | Green: Vin |
+| Green: refers to a brief electrical charachteristics including operating voltage and maximum current draw (in case of low resistivity status circuit) | Black: GNDs |
+| Orange: refers to the packages available in the market | Blue: the SPI lines |
+
+- Protect the device functionality by not exceeding these red flags:
+
+| `Absolute charachteristics` | 
+|-------------------------------|
+| ![image](https://user-images.githubusercontent.com/60224159/182681765-62eaf885-1117-47c9-8497-b8e7b7c88437.png) |
+
+- The SPI Clock charachteristics: 
+
+| `Clock Data` | `General SPI Clock diagram of the operation` |
+|--------------|----------------------------------------------|
+| ![image](https://user-images.githubusercontent.com/60224159/182683644-aef17765-b967-4b67-a54b-7343ab460300.png) | ![image](https://user-images.githubusercontent.com/60224159/182685543-c6d2900f-24bf-458d-a63f-be790fb3d3d7.png) |
+
+- The data frames on DIN and DOUT: 
+
+| `Serial Data frames` |
+|----------------------|
+| ![image](https://user-images.githubusercontent.com/60224159/182687365-3bd6d3b8-8b48-4ca3-ba42-09e6718379b8.png) |
+| Blue: the SPI data lines |
+| Purple: the CS or SS delay timings |
+| Green Square: represents the starter byte written to the SPDR of the atmega32 at the DIN (MOSI or COPI) before the 1st 8-clocks | 
+| Blue Square: represents the CHANNEL configuration byte written to the SPDR of the atmega32 at the DIN (MOSI or COPI) before the 2nd 8-clocks | 
+| Red Square: represents the data read from the SPDR at the DOUT (MISO or CIPO) line after the last 8-clocks |
+
+
+- MCP3008 Modes SPI operation, the MCP3008 can operate only in 2 SPI modes (MODE0 and MODE1):
+
+| `SPI Mode_0` | `SPI Mode_3` |
+|--------------|--------------|
+|![image](https://user-images.githubusercontent.com/60224159/182698382-08efa788-0059-4dcb-9de5-89855a58021a.png) | ![image](https://user-images.githubusercontent.com/60224159/182695490-94d76ef8-4d18-4d67-81f1-9b17de40b19a.png) |
+| In this mode the SPI CLK starts with LOW specified by [CPOL = 0] and the data is sampled at the leading edge specified by [CPHA = 0] | In this mode the SPI CLK defaults to HIGH specified by [CPOL = 1] and the data is sampled at the trailing edge specified by [CPHA = 1] |
+| Green dot and square: refers to the starter byte loaded to the SPDR before the first 8 clocks | 
+| Blue dot and square: refers to the configuration byte loaded to the SPDR before the second 8 clocks | 
+| Red dot and square: refers to the data read from the SPDR after the transmission of the last two 8 clocks | 
+| Orange: refers to the data write to the SPDR sampling state, the falling edge of the clk | 
+| Purpule/Pink: refers to the data read from SPDR sampling state, the rising edge of the clk |
+
