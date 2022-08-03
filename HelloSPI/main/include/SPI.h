@@ -38,8 +38,11 @@
 
 /** Serial Data modes sampling */
 #define MODE_0_0 (ModeOfTransmission (SPCR & (~(1 << CPOL) & ~(1 << CPHA))))
-#define MODE_0_1 (ModeOfTransmission ((SPCR & ~(1 << CPOL)) | (1 << CPHA)))
+#define MODE_0_1 (ModeOfTransmission (SPCR & (~(1 << CPOL) | (1 << CPHA))))
+#define MODE_1_0 (ModeOfTransmission (SPCR & ((1 << CPOL) & ~(1 << CPHA))))
+#define MODE_1_1 (ModeOfTransmission (SPCR & ((1 << CPOL) | ((1 << CPHA))))
 
+/** Define SPI pins according to the device and the datasheet */
 #if defined (__AVR_ATmega32__)
 #   define MISO 6
 #   define MOSI 5

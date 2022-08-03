@@ -46,7 +46,7 @@ void Serial::SPI::startProtocol(const TransmissionType& transmissionType, const 
         /* flip SPI2X bit to zero */
         SPSR &= ~(1 << SPI2X);
     }
-    /* start the protocol with an interrupt event handler on data transmission */
+    /* start the protocol */
     SPCR |= (1 << SPE) | (transmissionType) | MODE;
 }
 
