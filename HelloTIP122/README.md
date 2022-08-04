@@ -27,7 +27,7 @@ This image illustrates the connection between atmega32A GPIO PB2 and TIP122 Base
 
 ---------------------------------------------------------------
 
-## 3) Calculating the circuit charachteristics: 
+## 3) Calculating the circuit charachteristics: [--Jump to topics--](TOPICS) 
 
 ![image](https://user-images.githubusercontent.com/60224159/180249500-363d53cd-7ba7-4782-b400-b1acdfe15f79.png)
 
