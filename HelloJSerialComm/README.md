@@ -141,7 +141,7 @@ public class HelloJSerialComm implements SerialDataListener, EntityStatus<Serial
 
 ### Output: 
 ```
-6:53:01 PM: Executing task 'Launcher.main()'...
+9:18:37 PM: Executing task 'Launcher.main()'...
 
 > Task :compileJava
 > Task :processResources NO-SOURCE
@@ -149,9 +149,9 @@ public class HelloJSerialComm implements SerialDataListener, EntityStatus<Serial
 
 > Task :Launcher.main()
 ---------------Welcome to JSerialComm Testcase---------------
-48113
+30ad
 
-0
+
 
 
 
@@ -161,5 +161,10 @@ JSerialComm: Terminated
 
 BUILD SUCCESSFUL in 22s
 2 actionable tasks: 2 executed
-6:53:24 PM: Task execution finished 'Launcher.main()'.
+9:19:00 PM: Task execution finished 'Launcher.main()'.
 ```
+The transmitted value here is [`30ad`] which the hexdecimal code for [`0\n\r`]
+
+| [0x30] | [0x0a] | [0x0d] |
+|--------|--------|--------|
+| `0`   | `\n` | `\r` |
