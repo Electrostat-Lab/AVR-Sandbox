@@ -1,0 +1,16 @@
+<component name="libraryTable">
+  <library name="jSerialComm-2.9.1">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/libs/jSerialComm-2.9.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/jSerialComm-2.9.1.jar!/Android" />
+      <root url="jar://$PROJECT_DIR$/libs/jSerialComm-2.9.1.jar!/com" />
+      <root url="jar://$PROJECT_DIR$/libs/jSerialComm-2.9.1.jar!/FreeBSD" />
+      <root url="jar://$PROJECT_DIR$/libs/jSerialComm-2.9.1.jar!/Linux" />
+      <root url="jar://$PROJECT_DIR$/libs/jSerialComm-2.9.1.jar!/OpenBSD" />
+      <root url="jar://$PROJECT_DIR$/libs/jSerialComm-2.9.1.jar!/Solaris" />
+      <root url="jar://$PROJECT_DIR$/libs/jSerialComm-2.9.1.jar!/Windows" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

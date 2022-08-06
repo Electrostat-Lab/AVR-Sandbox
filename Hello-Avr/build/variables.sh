@@ -4,7 +4,6 @@
 #* @author pavl_g.
 #*#
 
-
 # define work directory
 # 1) print the current working directory to a string value
 pwd=`pwd`
@@ -16,11 +15,11 @@ rootProject="${project%/*}"
 
 clibName=('libHelloAvr')
 # AVR-DUDE properties
-BAUD_RATE='57600'
+BAUD_RATE='9600'
 PORT='/dev/ttyUSB0'
-CHIP='atmega328p'
-CHIP_ALIAS='m328'
-PROGRAMMER='arduino'
+CHIP='atmega8'
+CHIP_ALIAS='m8'
+PROGRAMMER='usbasp'
 # Common Variables contain colors
 source ${rootProject}'/CommonVariables.sh'
 source ${rootProject}'/AVR__HOME.sh'

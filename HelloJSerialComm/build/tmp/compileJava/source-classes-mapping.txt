@@ -1,0 +1,30 @@
+serial/entity/SerialMonitorEntity.java
+ serial.entity.SerialMonitorEntity
+serial/package-info.java
+ serial.package-info
+example/package-info.java
+ example.package-info
+serial/entity/impl/SerialWriteEntity.java
+ serial.entity.impl.SerialWriteEntity
+serial/entity/impl/package-info.java
+ serial.entity.impl.package-info
+serial/monitor/SerialMonitorException.java
+ serial.monitor.SerialMonitorException
+serial/monitor/SerialMonitor.java
+ serial.monitor.SerialMonitor
+serial/entity/package-info.java
+ serial.entity.package-info
+serial/entity/impl/SerialReadEntity.java
+ serial.entity.impl.SerialReadEntity
+serial/entity/impl/SerialWriteCapsule.java
+ serial.entity.impl.SerialWriteCapsule
+serial/monitor/SerialDataListener.java
+ serial.monitor.SerialDataListener
+serial/entity/EntityStatus.java
+ serial.entity.EntityStatus
+serial/monitor/package-info.java
+ serial.monitor.package-info
+example/Launcher.java
+ example.Launcher
+example/HelloJSerialComm.java
+ example.HelloJSerialComm
