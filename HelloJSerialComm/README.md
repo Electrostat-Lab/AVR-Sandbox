@@ -43,4 +43,123 @@ without opening the port.
 provided by a boolean flag to indicate that the data has been transmitted successfully.
 
 --------------------------------------------------------
+## 3) Serial-Monitor API implementation code: 
 
+1) Create a `SerialMonitor` instance and start data monitoring on a PORT with a BAUD_RATE: 
+```java
+final SerialMonitor serialMonitor = new SerialMonitor("Monitor A");
+serialMonitor.startDataMonitoring("/dev/ttyUSB0", 57600);
+```
+2) Set the write entity status instance to monitor the life cycle code for the SerialWriteEntity as follows:
+```java
+public class HelloJSerialComm implements SerialDataListener, EntityStatus<SerialWriteEntity> {
+  ...
+  public void run() {
+  ...
+      serialMonitor.setWriteEntityStatus(this);
+  ...
+  }
+  @Override
+  public void onSerialEntityInitialized(SerialWriteEntity serialMonitorEntity) {
+
+  }
+
+  @Override
+  public void onSerialEntityTerminated(SerialWriteEntity serialMonitorEntity) {
+      System.err.println("JSerialComm: Terminated");
+  }
+
+  @Override
+  public void onUpdate(SerialWriteEntity serialMonitorEntity) {
+      if (isDataSent) {
+          return;
+      }
+      /* send data after 5 seconds */
+      delay(5000);
+      /* send data in a UART capsule on the serial write entity thread */
+      writeInUARTCapsule(serialMonitorEntity.getSerialMonitor(), "0\n\r");
+      isDataSent = true;
+  }
+  ...
+}
+```
+3) Add a SerialData listener to listen for data R/W: 
+```java
+public class HelloJSerialComm implements SerialDataListener, EntityStatus<SerialWriteEntity> {
+    ...
+    public void run() {
+    ...
+        serialMonitor.addSerialDataListener(this);
+    ...
+    }
+    @Override
+    public void onDataReceived(int data) {
+
+    }
+
+    @Override
+    public void onDataTransmitted(int data) {
+
+    }
+
+    @Override
+    public void onDataReceived(String data) {
+
+    }
+    ...
+}
+```
+4) Write data using write capsules and monitor the output using `onDataReceived(data: String)`: 
+```java
+public class HelloJSerialComm implements SerialDataListener, EntityStatus<SerialWriteEntity> {
+    ...
+    public void run() {
+    ...
+        /* write data to UART with return-carriage/newline */
+        delay(2000);
+        writeInUARTCapsule(serialMonitor, "0\n\r");
+    ...
+    }
+    @Override
+    public void onDataReceived(int data) {
+
+    }
+
+    @Override
+    public void onDataTransmitted(int data) {
+
+    }
+
+    @Override
+    public void onDataReceived(String data) {
+        System.out.println(data);
+    }
+    ...
+}
+```
+5) Test by uploading the [HelloUART](https://github.com/Software-Hardware-Codesign/AVR-Sandbox/blob/master/HelloUART/main/lib/HelloUART.c) code to the ATMega328p.
+
+### Output: 
+```
+6:53:01 PM: Executing task 'Launcher.main()'...
+
+> Task :compileJava
+> Task :processResources NO-SOURCE
+> Task :classes
+
+> Task :Launcher.main()
+---------------Welcome to JSerialComm Testcase---------------
+48113
+
+0
+
+
+
+Data Transmission completed successfully !
+
+JSerialComm: Terminated
+
+BUILD SUCCESSFUL in 22s
+2 actionable tasks: 2 executed
+6:53:24 PM: Task execution finished 'Launcher.main()'.
+```
