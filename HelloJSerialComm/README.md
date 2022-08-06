@@ -139,6 +139,40 @@ public class HelloJSerialComm implements SerialDataListener, EntityStatus<Serial
 ```
 5) Test by uploading the [HelloUART](https://github.com/Software-Hardware-Codesign/AVR-Sandbox/blob/master/HelloUART/main/lib/HelloUART.c) code to the ATMega328p.
 
+### This is the C code for testing purposes, it prints the number transmitted from java in hex:
+```c
+/**
+ * @file HelloUART.c
+ * @author pavl_g.
+ * @brief Shows a basic implementation of the [Serial.h] library.
+ * @version 0.1
+ * @date 2022-07-07
+ * 
+ * @copyright Copyright (c) 2022
+ * 
+ */
+#include<avr/io.h>
+#include<string.h>
+
+#include<Serial.h>
+
+const char* message = "Data Transmission completed successfully !";
+
+void Serial::UART::onDataReceiveCompleted(const uint8_t& data) {
+	Serial::UART::getInstance()->println((const uint8_t) data, 16);
+}
+
+void Serial::UART::onDataTransmitCompleted(const uint8_t& data) {
+	Serial::UART::getInstance()->sprintln((char*) message);
+}
+
+int main(void) {
+	 Serial::UART::getInstance()->startProtocol(BAUD_RATE_57600);
+	 while (true); // wait forever
+ return 0;
+}
+```
+
 ### Output: 
 ```
 9:18:37 PM: Executing task 'Launcher.main()'...
