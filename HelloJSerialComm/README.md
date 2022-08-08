@@ -22,6 +22,8 @@ For more, refer to the documentation provided at:
 -----------------------------------------------------
 ## 2) Serial-Monitor API Basic Paradigm:
 
+![SerialMonitor](https://user-images.githubusercontent.com/60224159/183389356-e62ffe4b-9464-4d6c-abc7-60d822425249.svg)
+
 - `com.serial.monitor.SerialMonitor`: A threadgroup, it starts, controls and monitors the serial monitor R/W entities threads, 
 it also holds the basic piece of operation, the monitor port, an instance of `com.fazecast.jSerialComm.SerialPort`.
 
