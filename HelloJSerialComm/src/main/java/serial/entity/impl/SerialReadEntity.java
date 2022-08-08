@@ -99,14 +99,16 @@ public class SerialReadEntity extends SerialMonitorEntity {
                         /* get a string buffer from a data frame */
                         /* send data frames separated by [\n\r] the return carriage/newline */
                         stringBuffer.append(data);
-                        if (isUsingReturnCarriage()) {
-                            if (stringBuffer.toString().contains("\n\r")) {
+                        synchronized (SerialReadEntity.class) {
+                            if (isUsingReturnCarriage()) {
+                                if (stringBuffer.toString().contains("\n\r")) {
+                                    getSerialDataListeners().get(i).onDataReceived(stringBuffer.toString());
+                                    stringBuffer = new StringBuffer();
+                                }
+                            } else {
                                 getSerialDataListeners().get(i).onDataReceived(stringBuffer.toString());
                                 stringBuffer = new StringBuffer();
                             }
-                        } else {
-                            getSerialDataListeners().get(i).onDataReceived(stringBuffer.toString());
-                            stringBuffer = new StringBuffer();
                         }
 
                     }
