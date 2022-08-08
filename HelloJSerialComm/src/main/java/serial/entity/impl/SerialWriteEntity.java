@@ -141,7 +141,7 @@ public class SerialWriteEntity extends SerialMonitorEntity {
      *
      * @param writableCapsule a new {@link WritableCapsule} to add.
      */
-    public void addWritableCapsule(final WritableCapsule writableCapsule) {
+    public synchronized void addWritableCapsule(final WritableCapsule writableCapsule) {
         if (writableCapsules.contains(writableCapsule)) {
             return;
         }
@@ -167,7 +167,7 @@ public class SerialWriteEntity extends SerialMonitorEntity {
      *
      * @param data the data to send in integers.
      */
-    private void sendToUART(final int data) {
+    private synchronized void sendToUART(final int data) {
         try {
             getEntityStream().write(data);
         } catch (IOException e) {
