@@ -1,33 +1,33 @@
 /*
-* BSD 3-Clause License
-*
-* Copyright (c) 2022, Scrappers Team, The AVR-Sandbox Project
-* All rights reserved.
-*
-* Redistribution and use in source and binary forms, with or without
-* modification, are permitted provided that the following conditions are met:
-*
-* 1. Redistributions of source code must retain the above copyright notice, this
-* list of conditions and the following disclaimer.
-*
-* 2. Redistributions in binary form must reproduce the above copyright notice,
-* this list of conditions and the following disclaimer in the documentation
-* and/or other materials provided with the distribution.
-*
-* 3. Neither the name of the copyright holder nor the names of its
-* contributors may be used to endorse or promote products derived from
-* this software without specific prior written permission.
+ * BSD 3-Clause License
+ *
+ * Copyright (c) 2022, Scrappers Team, The AVR-Sandbox Project
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ * 1. Redistributions of source code must retain the above copyright notice, this
+ * list of conditions and the following disclaimer.
+ *
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ * this list of conditions and the following disclaimer in the documentation
+ * and/or other materials provided with the distribution.
+ *
+ * 3. Neither the name of the copyright holder nor the names of its
+ * contributors may be used to endorse or promote products derived from
+ * this software without specific prior written permission.
 
-* THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-* AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-* IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-* DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
-* FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-* DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-* SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-* CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-* OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-* OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 package serial.entity.impl;
 
@@ -47,7 +47,7 @@ import java.util.ArrayList;
  */
 public class SerialWriteEntity extends SerialMonitorEntity {
 
-    private final ArrayList<SerialWriteCapsule> capsules = new ArrayList<>();
+    private final ArrayList<WritableCapsule> writableCapsules = new ArrayList<>();
 
     public SerialWriteEntity(final SerialMonitor threadGroup) {
         super(threadGroup, SerialWriteEntity.class.getName());
@@ -88,7 +88,7 @@ public class SerialWriteEntity extends SerialMonitorEntity {
             }
 
             /* write required data  */
-            for (SerialWriteCapsule capsule : capsules) {
+            for (WritableCapsule capsule : writableCapsules) {
                 /* skip capsules with written data */
                 if (capsule.isDataWritten()) {
                     continue;
@@ -106,32 +106,6 @@ public class SerialWriteEntity extends SerialMonitorEntity {
         }
     }
 
-    public ArrayList<SerialWriteCapsule> getCapsules() {
-        return capsules;
-    }
-
-    public void addWriteCapsule(final SerialWriteCapsule serialWriteCapsule) {
-        if (capsules.contains(serialWriteCapsule)) {
-            return;
-        }
-        capsules.add(serialWriteCapsule);
-    }
-
-    public void removeWriteCapsule(final SerialWriteCapsule serialWriteCapsule) {
-        if (!capsules.contains(serialWriteCapsule)) {
-            return;
-        }
-        capsules.remove(serialWriteCapsule);
-    }
-
-    private void sendToUART(final int data) {
-        try {
-            getEntityStream().write(data);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     @Override
     protected OutputStream getEntityStream() {
         return getSerialMonitor().getWriteEntityStream();
@@ -139,16 +113,65 @@ public class SerialWriteEntity extends SerialMonitorEntity {
 
     @Override
     protected boolean isSerialEntityInitialized() {
-        return getSerialMonitor().isWriteSerialMonitorInitialized;
+        return getSerialMonitor().isWriteSerialEntityInitialized;
     }
 
     @Override
     protected void setSerialEntityInitialized(boolean state) {
-        getSerialMonitor().isWriteSerialMonitorInitialized = state;
+        getSerialMonitor().isWriteSerialEntityInitialized = state;
     }
 
     @Override
     protected EntityStatus<SerialWriteEntity> getSerialEntityStatusListener() {
-        return getSerialMonitor().writeThreadEntityStatus;
+        return getSerialMonitor().serialWriteEntityEntityStatus;
+    }
+
+    /**
+     * Gets the Serial writable Capsules holding the writable data.
+     *
+     * @return an array list of the writable capsules.
+     */
+    public ArrayList<WritableCapsule> getSerialWriteCapsules() {
+        return writableCapsules;
+    }
+
+    /**
+     * Adds a new writable capsule, the data will be extracted during the
+     * next update run.
+     *
+     * @param writableCapsule a new {@link WritableCapsule} to add.
+     */
+    public void addWritableCapsule(final WritableCapsule writableCapsule) {
+        if (writableCapsules.contains(writableCapsule)) {
+            return;
+        }
+        writableCapsules.add(writableCapsule);
+    }
+
+    /**
+     * Removes a writable capsule from the list of serial data capsules.
+     *
+     * @param writableCapsule an instance of the {@link WritableCapsule}.
+     */
+    public void removeWritableCapsule(final WritableCapsule writableCapsule) {
+        if (!writableCapsules.contains(writableCapsule)) {
+            return;
+        }
+        writableCapsules.remove(writableCapsule);
+    }
+
+    /**
+     * Internal-Use-Only.
+     *
+     * Sends data to the {@link OutputStream} of {@link com.fazecast.jSerialComm.SerialPort}.
+     *
+     * @param data the data to send in integers.
+     */
+    private void sendToUART(final int data) {
+        try {
+            getEntityStream().write(data);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

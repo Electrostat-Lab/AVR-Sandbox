@@ -32,7 +32,7 @@
 package example;
 
 import serial.entity.EntityStatus;
-import serial.entity.impl.SerialWriteCapsule;
+import serial.entity.impl.WritableCapsule;
 import serial.entity.impl.SerialWriteEntity;
 import serial.monitor.SerialDataListener;
 import serial.monitor.SerialMonitor;
@@ -55,7 +55,7 @@ public class HelloJSerialComm implements SerialDataListener, EntityStatus<Serial
 
         /* write data to UART with return-carriage/newline */
         delay(2000);
-        writeInUARTCapsule(serialMonitor, "111\n\r");
+        writeInUARTCapsule(serialMonitor, "0\n\r");
 
         /* terminate after 20 seconds */
         delay(20000);
@@ -63,9 +63,9 @@ public class HelloJSerialComm implements SerialDataListener, EntityStatus<Serial
     }
 
     private void writeInUARTCapsule(final SerialMonitor serialMonitor, final String data) {
-        final SerialWriteCapsule serialWriteCapsule = new SerialWriteCapsule();
-        serialWriteCapsule.write(data);
-        serialMonitor.getSerialWriteEntity().addWriteCapsule(serialWriteCapsule);
+        final WritableCapsule writableCapsule = new WritableCapsule();
+        writableCapsule.write(data);
+        serialMonitor.getSerialWriteEntity().addWritableCapsule(writableCapsule);
     }
 
     private void delay(final long millis) {

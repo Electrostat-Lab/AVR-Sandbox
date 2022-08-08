@@ -38,6 +38,9 @@ package serial.monitor;
  */
 public class SerialMonitorException extends IllegalStateException {
 
+    /**
+     * Provides a default message for quick usages.
+     */
     public static final String DEFAULT_MSG = "Cannot Access the monitor without opening the port !";
 
     public SerialMonitorException(String msg) {

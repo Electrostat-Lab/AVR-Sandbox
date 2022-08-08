@@ -128,7 +128,7 @@ public abstract class SerialMonitorEntity extends Thread {
      * @return a list instance representing the serial data listeners.
      */
     protected ArrayList<SerialDataListener> getSerialDataListeners() {
-        return getSerialMonitor().getListeners();
+        return getSerialMonitor().getSerialDataListeners();
     }
 
     /**
@@ -162,7 +162,21 @@ public abstract class SerialMonitorEntity extends Thread {
      */
     protected abstract boolean isSerialEntityInitialized();
 
+    /**
+     * Sets the serial entity initialized status.
+     *
+     * @see SerialMonitor#isReadSerialEntityInitialized
+     * @see SerialMonitor#isWriteSerialEntityInitialized
+     *
+     * @param state a state to set.
+     */
     protected abstract void setSerialEntityInitialized(boolean state);
 
+    /**
+     * Gets the entity stream provided by the {@link SerialPort}, either {@link java.io.OutputStream}
+     * or {@link java.io.InputStream}.
+     *
+     * @return a stream provided by the SerialPort.
+     */
     protected abstract Closeable getEntityStream();
 }

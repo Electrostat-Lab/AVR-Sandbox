@@ -45,28 +45,38 @@ import java.util.ArrayList;
  *
  * @author pavl_g.
  */
-public class SerialMonitor extends ThreadGroup {
+public final class SerialMonitor extends ThreadGroup {
 
-    private final ArrayList<SerialDataListener> listeners = new ArrayList<>();
+    private final ArrayList<SerialDataListener> serialDataListeners = new ArrayList<>();
+
+    public volatile EntityStatus<SerialReadEntity> serialReadEntityEntityStatus;
+    public volatile EntityStatus<SerialWriteEntity> serialWriteEntityEntityStatus;
+    public volatile boolean isReadSerialEntityInitialized;
+    public volatile boolean isWriteSerialEntityInitialized;
+    public volatile boolean isMonitoringStarted;
+    public volatile boolean useReturnCarriage = true;
+
     private volatile InputStream readEntityStream;
     private volatile OutputStream writeEntityStream;
     private volatile SerialPort monitorPort;
     private volatile boolean terminate = false;
     private volatile SerialReadEntity serialReadEntity;
     private volatile SerialWriteEntity serialWriteEntity;
-    public volatile EntityStatus<SerialReadEntity> readThreadEntityStatus;
-    public volatile EntityStatus<SerialWriteEntity> writeThreadEntityStatus;
-    public volatile boolean isReadSerialMonitorInitialized;
-    public volatile boolean isWriteSerialMonitorInitialized;
-    public volatile boolean isMonitoringStarted;
-    public volatile boolean useReturnCarriage = true;
 
+    /**
+     * Instantiates a new SerialMonitor with a name.
+     *
+     * Use {@link SerialMonitor#startDataMonitoring(String, int)} to initialize and start
+     * data monitoring.
+     *
+     * @param monitorName the name for this thread group.
+     */
     public SerialMonitor(final String monitorName) {
         super(monitorName);
     }
 
     /**
-     * Starts data monitoring with a [port] and a [baudRate]
+     * Initializes and starts data monitoring on a [port] and with a [baudRate]
      *
      * @param port specify the serial port.
      * @param baudRate specify the baud rate aka bits/seconds based for the connected FOsc.
@@ -107,57 +117,130 @@ public class SerialMonitor extends ThreadGroup {
         this.terminate = true;
     }
 
+    /**
+     * Gets the serial read input stream.
+     *
+     * @return the serial read input stream instance.
+     */
     public InputStream getReadEntityStream() {
         return readEntityStream;
     }
 
+    /**
+     * Gets the Serial monitor port.
+     *
+     * @return the serial monitor port instance.
+     */
     public SerialPort getMonitorPort() {
         return monitorPort;
     }
 
+    /**
+     * Gets the Serial write output stream.
+     *
+     * @return an output stream representing this.
+     */
     public OutputStream getWriteEntityStream() {
         return writeEntityStream;
     }
 
+    /**
+     * Gets the serial read entity used for reading data from the serial port using
+     * {@link SerialMonitor#readEntityStream}.
+     *
+     * @see SerialReadEntity
+     *
+     * @return the serial monitor read instance.
+     */
     public SerialReadEntity getSerialReadEntity() {
         return serialReadEntity;
     }
 
+    /**
+     * Gets the serial write entity used for writing data to the serial port using
+     * {@link SerialMonitor#writeEntityStream}.
+     *
+     * @see SerialWriteEntity
+     *
+     * @return the serial monitor write instance.
+     */
     public SerialWriteEntity getSerialWriteEntity() {
         return serialWriteEntity;
     }
 
+    /**
+     * Adds a new serial data listener to the list of the updatable listeners.
+     *
+     * @param serialDataListener the new serial data listener to add.
+     */
     public void addSerialDataListener(final SerialDataListener serialDataListener) {
-        if (listeners.contains(serialDataListener)) {
+        if (serialDataListeners.contains(serialDataListener)) {
             return;
         }
-        listeners.add(serialDataListener);
+        serialDataListeners.add(serialDataListener);
     }
 
+    /**
+     * Removes a serial data listener instance from the list of the list of the updatable listeners.
+     *
+     * @param serialDataListener the serial data listener to remove.
+     */
     public void removeSerialDataListener(final SerialDataListener serialDataListener) {
-        if (!listeners.contains(serialDataListener)) {
+        if (!serialDataListeners.contains(serialDataListener)) {
             return;
         }
-        listeners.remove(serialDataListener);
+        serialDataListeners.remove(serialDataListener);
     }
 
+    /**
+     * Sets the read entity status listener instance to listen for {@link SerialReadEntity} lifecycle.
+     *
+     * @param readThreadEntityStatus an instance to set.
+     */
     public void setReadEntityListener(EntityStatus<SerialReadEntity> readThreadEntityStatus) {
-        this.readThreadEntityStatus = readThreadEntityStatus;
+        this.serialReadEntityEntityStatus = readThreadEntityStatus;
     }
 
+    /**
+     * Sets the write entity status listener instance to listen for {@link SerialWriteEntity} lifecycle.
+     *
+     * @param writeThreadEntityStatus an instance to set.
+     */
     public void setWriteEntityStatus(EntityStatus<SerialWriteEntity> writeThreadEntityStatus) {
-        this.writeThreadEntityStatus = writeThreadEntityStatus;
+        this.serialWriteEntityEntityStatus = writeThreadEntityStatus;
     }
 
+    /**
+     * Tests whether [CR/LF] check is enabled.
+     *
+     * @apiNote
+     * CR: Carriage return, defined by '\r'
+     * LF: Line Feed, defined by '\n'
+     *
+     * @return true if [CR/LF] is enabled, false otherwise.
+     */
     public boolean isUsingReturnCarriage() {
         return useReturnCarriage;
     }
 
+    /**
+     * Triggers the [CR/LF] check state flag.
+     *
+     * @param useReturnCarriage true to enable [CR/LF] and return data frames
+     *                          at {@link SerialDataListener#onDataReceived(String)}, false to disable
+     *                          both the [CR/LF] check and disable {@link SerialDataListener#onDataReceived(String)}.
+     */
     public void setUseReturnCarriage(boolean useReturnCarriage) {
         this.useReturnCarriage = useReturnCarriage;
     }
 
-    public ArrayList<SerialDataListener> getListeners() {
-        return listeners;
+    /**
+     * Gets the serial data listeners used for listening to data changes at the
+     * this monitor port.
+     *
+     * @return a list of serial data listeners for this monitor.
+     */
+    public ArrayList<SerialDataListener> getSerialDataListeners() {
+        return serialDataListeners;
     }
 }

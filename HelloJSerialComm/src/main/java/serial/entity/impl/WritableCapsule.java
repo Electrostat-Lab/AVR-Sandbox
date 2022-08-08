@@ -36,7 +36,7 @@ package serial.entity.impl;
  *
  * @author pavl_g.
  */
-public final class SerialWriteCapsule implements Cloneable {
+public final class WritableCapsule implements Cloneable {
 
     private String data;
     private boolean dataWritten;

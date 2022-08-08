@@ -128,16 +128,16 @@ public class SerialReadEntity extends SerialMonitorEntity {
 
     @Override
     protected boolean isSerialEntityInitialized() {
-        return getSerialMonitor().isReadSerialMonitorInitialized;
+        return getSerialMonitor().isReadSerialEntityInitialized;
     }
 
     @Override
     protected void setSerialEntityInitialized(final boolean state) {
-        getSerialMonitor().isReadSerialMonitorInitialized = state;
+        getSerialMonitor().isReadSerialEntityInitialized = state;
     }
 
     @Override
     protected EntityStatus<SerialReadEntity> getSerialEntityStatusListener() {
-        return getSerialMonitor().readThreadEntityStatus;
+        return getSerialMonitor().serialReadEntityEntityStatus;
     }
 }
