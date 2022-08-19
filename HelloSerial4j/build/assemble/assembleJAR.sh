@@ -49,15 +49,6 @@ fi
 
 echo -e $RESET_Cs
 
-add_dependencies=`addDependencies`
-if (( add_dependencies > 0 )); then
-    echo -e "$RED_C Task@AddJavaDependencies : Failed"
-else
-    echo -e "$ORANGE_C Task@AddJavaDependencies : Completed"
-fi
-
-echo -e $RESET_Cs
-
 add_natives=`addDesktopNativeDependencies`
 if (( add_natives > 0 )); then 
     echo -e "$RED_C Task@AddDesktopNativeDependencies : Failed"

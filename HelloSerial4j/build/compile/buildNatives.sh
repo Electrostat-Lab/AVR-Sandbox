@@ -77,7 +77,9 @@ function linux_x86_x64() {
     g++ -fPIC $native_sources -shared -o $linux_natives_dir'/linux-x86-x64/'${clibName} \
         -I${JAVA__HOME%/*}'/include' \
         -I${JAVA__HOME%/*}'/include/linux' \
-        -I$nativessrc_directory'/include' \
+        -I${nativessrc_directory}'/include/linux/' \
+        -I${nativessrc_directory}'/include/' \
+
     return $?
 }
 

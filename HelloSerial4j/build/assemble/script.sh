@@ -40,26 +40,6 @@ function createManifest() {
 }
 
 #**
-#* Adds the dependencies to the dependencies directory at the code/java/dependencies relative path.
-#
-#* @return the number of errors, 0 if no errors, 1 or more if there are errors.
-#**
-function addDependencies() {
-    local errors=0
-	cd $dependencies
-	jars=`find -name '*.jar'`
-    if [[ ! `cp $jars $jar_tmp` -eq 0 ]]; then 
-        errors=$(( $errors + 1 ))
-    fi
-    cd $jar_tmp
-    printf '%s ' ${classpath} >> $jar_tmp'/Manifest.mf'
-    printf ' %s \n' ${jars[0]} >> $jar_tmp'/Manifest.mf'
-    errors=$(( $errors + $? ))
-
-    return $errors
-}
-
-#**
 #* Adds the android native dependencies (the .so native object files) as a jar dependency 
 #* at the output/Arithmos/dependencies relative path. 
 #
