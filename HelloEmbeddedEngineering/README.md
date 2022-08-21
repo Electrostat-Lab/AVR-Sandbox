@@ -1,7 +1,7 @@
 # Contents: 
-- Volatge, Current and basic components.
-- Embedded engineering principles questions.
-- Embedded basic C/C++.
+- Volatge, Current and basic components (circuits, resistors, transistors, batteries).
+- Embedded engineering principles questions (boolean algebra and digital electronics).
+- Embedded basic C/C++ (data types, variables, pointers, buffers and functions)
 - GNU C Compiler (GCC) and Scripting languages questions.
 - Advanced embedded engineering questions.
 - Advanced C/C++.
@@ -130,3 +130,103 @@ then, I(E) = I(B) + hFE . I(B) = I(B) . (1 + hFE).
 ```
 
 --------------------------------------
+
+## Embedded engineering principles questions:
+
+1) What's the usage of the AND gate ? 
+
+	- [ ] Adding 2 bytes together.
+	- [ ] Subtracting 2 bytes from one another.
+	- [x] Multiplying 2 bytes.
+	- [ ] A and C.
+
+2) What's the usage of the OR gate ? 
+
+	- [ ] Adding 2 bytes togther.
+	- [ ] Acts as an ON switch for a circuit with two logic values, if one of them is TRUE.
+	- [ ] Multiplying 2 bytes.
+	- [x] A and B.
+
+3) What's the result of `0b00000010 + 0b000000010` ? 
+
+	- [x] `0b00000100`
+	- [ ] `0b00000110`
+	- [ ] `0b00000011`
+	- [ ] `0b00000111`
+
+4) What's the result of `0b00000010 | 0b00000010` ?
+
+	- [x] `0b00000010`
+	- [ ] `0b00000110`
+	- [ ] `0b00000011`
+	- [ ] `0b00000111`
+
+5) What's the result of `0b00000010 | 0b00000011` ?
+
+	- [ ] `0b00000010`
+	- [ ] `0b00000110`
+	- [x] `0b00000011`
+	- [ ] `0b00000111`
+
+6) What's the result of `0b00000011 & 0b00000010` ? 
+
+	- [x] `0b00000010`
+	- [ ] `0b00000000`
+	- [ ] `0b00000011`
+	- [ ] `0b00000001`
+
+7) What's the result of `A.B`, where A = 0b00001111 and B = 0b00000011 ? 
+
+	- [x] `0b00000011`
+	- [ ] `0b00001111`
+	- [ ] `0b00001010`
+	- [ ] `0b00000000`
+
+8) How a computer subracts 2 bytes from one another ? 
+
+	- [x] By taking the 2s complement of the subtrahend and adding them.
+	- [ ] By taking the 1s complement of the minuend and adding them.
+	- [ ] By taking the 1s complement of both bytes and adding them.
+	- [ ] No right answer is provided here.
+
+9) How a computer performs this operation (0b000000010 - 0b000000001) ? 
+
+	Answer: 
+	By taking the 2s complement of the subtrahend (2nd digit), which is the 1s complement + 0b01
+	1) Taking the 1s complement: ~0b000000001 = 0b111111110
+	2) Adding 0b01: 0b111111110 + 0b01 = 0b111111111
+	3) Adding the Minuend (1st digit) to the 2s complement of the subtrahend: 0b000000010 + 0b111111111 = 0b000000001
+
+10) The 1s complement of a byte -----------
+
+	- [x] is taken by applying a NOT gate to the byte.
+	- [ ] is taken by applying adding 0x01 to the byte.
+	- [ ] is taken by applying an OR gate with 0x01.
+	- [ ] none of the above.
+
+11) The main usage of an OR gate is -----------
+
+	- [x] adding 2 bytes together.
+	- [ ] subtracting 2 bytes.
+	- [ ] controlling high voltage cicuits.
+	- [ ] none of the above.
+
+12) Which of the following is the equivalent gate to N-XOR gate ? 
+
+	- [ ] `~(...^...)`
+	- [ ] `~((~(A) & B) | (A & ~B))`
+	- [ ] `(...^...)`
+	- [ ] A and B
+
+13) The following truth table is an example of ------------
+
+	![image](https://user-images.githubusercontent.com/60224159/185800213-61b66af5-c062-48a1-8f9a-e221e9182cba.png)
+
+	- [x] Flip-Flops.
+	- [ ] AND-Gates.
+	- [ ] OR-Gates.
+	- [ ] NAND-Gates.
+
+------------------------------------------------------------------
+
+## Embedded basic C/C++: 
