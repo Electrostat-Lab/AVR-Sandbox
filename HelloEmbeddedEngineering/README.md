@@ -88,4 +88,43 @@
     - [ ] Resistor.
     - [ ] Capacitor.
 
+11) The following circuit, shows the operation of transistors as a switch with a current gain of hfE or Beta ? 
+
+    ![image](https://user-images.githubusercontent.com/60224159/185792197-3be5200f-ce02-409a-98f4-92676f110fe4.png)
+
+    - [x] true.
+    - [ ] false.
+
+    Where Beta or hFE equals : 
+    - [x] the gain ratio between Ic and IB.
+    - [ ] the gain ratio between Ie and IB.
+    - [ ] the gain ratio between Ic and GND.
+
+12) Which of the following equations is used for calculating the minimum base current I(B) required for the NPN to act as an AND gate (a switch) ?
+
+    ![image](https://user-images.githubusercontent.com/60224159/185792197-3be5200f-ce02-409a-98f4-92676f110fe4.png)
+    
+    `HINT: Apply the KVL on the loop BE and use the current gain equation hFE = I(C) / I(B) to substitute it in the equation I(E) = I(B) + I(C).`
+    
+    - [ ] (V<B> - V<BE>) / (1 + hFE) . R(2).
+    - [ ] (V<E>) / (1 + hFE) . R(2).
+    - [ ] (V<CE>) / (1 + hFE) . R(2).
+    - [x] A and B.
+Answer: 
+```
+V(B) = V(E) + V(BE), where V(BE) = 0.6 --(KVL)--
+
+then, V(E) = V(B) - 0.6 = 5v0 - 0v6 = 4v4.
+
+Since, I(E) = I(B) + I(C), V(E) = 4v4, I(C) = hFE * I(B) --(KCL)--
+
+then, I(E) = I(B) + hFE . I(B) = I(B) . (1 + hFE).
+
+==> I(B) = I(E) / (1 + hFE), I(E) = V(E) / R(2)
+
+==> I(B) = V(E) / (1 + hFE) . R(2)
+	     = 4v4 / (1 + hFE) . R(2) , where R(2) is the total resistance value for the CE circuit and hFE is the current gain for the 
+					             transistor. 
+```
+
 --------------------------------------
