@@ -110,6 +110,7 @@
     - [ ] (V<E>) / (1 + hFE) . R(2).
     - [ ] (V<CE>) / (1 + hFE) . R(2).
     - [x] A and B.
+	
 Answer: 
 ```
 V(B) = V(E) + V(BE), where V(BE) = 0.6 --(KVL)--
