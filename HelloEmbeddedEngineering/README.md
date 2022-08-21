@@ -216,7 +216,7 @@ then, I(E) = I(B) + hFE . I(B) = I(B) . (1 + hFE).
 	- [ ] `~(...^...)`
 	- [ ] `~((~(A) & B) | (A & ~B))`
 	- [ ] `(...^...)`
-	- [ ] A and B
+	- [x] A and B
 
 13) The following truth table is an example of ------------
 
@@ -230,3 +230,44 @@ then, I(E) = I(B) + hFE . I(B) = I(B) . (1 + hFE).
 ------------------------------------------------------------------
 
 ## Embedded basic C/C++: 
+
+1) What's the output of this code: 
+```c
+#include<stdint.h>
+
+#define TXEN 5
+#define RXEN 6
+
+const uint8_t ENABLE_RX_TX = (1 << RXEN) | (1 << TXEN);
+printf("%i\n", ENABLE_RX_TX);
+```
+-
+	- [x] 0b01100000
+	- [ ] 0b00110000
+	- [ ] 0b00010000
+	- [ ] 0b00111000
+
+
+2) What's the output of this code: 
+```c
+#include<stdint.h>
+
+#define UDRE 1
+#define UIEN 2
+#define TXEN 5
+#define RXEN 6
+
+#define USCR ((uint8_t) (1 << TXEN) | (1 << UDRE) | (1 << UIEN))
+
+#define isTxRxEnabled() ((uint8_t) (USCR & ((1 << TXEN) | (1 << RXEN))))
+
+printf("%i\n", isTxRxEnabled());
+```
+-
+	- [x] 0b00100000
+	- [ ] 0b01100000
+	- [ ] 0b00100011
+	- [ ] 0b01000000
+
+
+3) What's the output of this code: 
