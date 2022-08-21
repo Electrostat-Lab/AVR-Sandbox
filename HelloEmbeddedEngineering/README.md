@@ -106,9 +106,9 @@
     
     `HINT: Apply the KVL on the loop BE and use the current gain equation hFE = I(C) / I(B) to substitute it in the equation I(E) = I(B) + I(C).`
     
-    - [ ] (V<B> - V<BE>) / (1 + hFE) . R(2).
-    - [ ] (V<E>) / (1 + hFE) . R(2).
-    - [ ] (V<CE>) / (1 + hFE) . R(2).
+    - [ ] (V'B' - V'BE') / (1 + hFE) . R(2).
+    - [ ] (V'E') / (1 + hFE) . R(2).
+    - [ ] (V'CE') / (1 + hFE) . R(2).
     - [x] A and B.
 	
 Answer: 
@@ -124,8 +124,9 @@ then, I(E) = I(B) + hFE . I(B) = I(B) . (1 + hFE).
 ==> I(B) = I(E) / (1 + hFE), I(E) = V(E) / R(2)
 
 ==> I(B) = V(E) / (1 + hFE) . R(2)
-	     = 4v4 / (1 + hFE) . R(2) , where R(2) is the total resistance value for the CE circuit and hFE is the current gain for the 
-					             transistor. 
+	 = 4v4 / (1 + hFE) . R(2) 
+	 where R(2) is the total resistance value for the CE circuit and hFE is the current gain for the 
+         transistor. 
 ```
 
 --------------------------------------
