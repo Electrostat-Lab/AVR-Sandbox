@@ -250,6 +250,7 @@ printf("%i\n", ENABLE_RX_TX);
 
 2) What's the output of this code: 
 ```c
+#include<stdio.h>
 #include<stdint.h>
 
 #define UDRE 1
@@ -261,7 +262,10 @@ printf("%i\n", ENABLE_RX_TX);
 
 #define isTxRxEnabled() ((uint8_t) (USCR & ((1 << TXEN) | (1 << RXEN))))
 
-printf("%i\n", isTxRxEnabled());
+int main(void) {
+	printf("%i\n", isTxRxEnabled());
+return 0;
+}
 ```
 -
 	- [x] 0b00100000
@@ -271,3 +275,88 @@ printf("%i\n", isTxRxEnabled());
 
 
 3) What's the output of this code: 
+```c
+#include<stdio.h>
+#include<stdint.h>
+
+#define UDRE 1
+#define UIEN 2
+#define TXEN 5
+#define RXEN 6
+
+#define TxRxEnabledBit ((const uint8_t) ((1 << TXEN) | (1 << RXEN)))
+
+volatile uint8_t USCR = ((uint8_t) (1 << UDRE) | (1 << UIEN));
+
+static inline uint8_t setBitEnabled(volatile uint8_t* CSR, const uint8_t ENABLE_BIT) {
+	return *CSR |= ENABLE_BIT;
+} 
+
+int main()
+{   
+    setBitEnabled(&USCR, TxRxEnabledBit);
+    printf("%i", USCR);
+
+    return 0;
+}
+```
+-
+	- [ ] 0b00000000
+	- [x] 0b01100110
+	- [ ] 0b01100000
+	- [ ] 0b01000110
+	
+4) What's the output of this code ? 
+```c
+#include<stdio.h>
+#include<stdint.h>
+
+#define UDRE 1
+#define UIEN 2
+#define TXEN 5
+#define RXEN 6
+
+#define TxRxDisabledBit ~((const uint8_t) ((1 << TXEN) | (1 << RXEN)))
+
+volatile uint8_t USCR = ((uint8_t) (1 << UDRE) | (1 << UIEN) | (1 << RXEN) | (1 << TXEN));
+
+static inline uint8_t setBitDisabled(volatile uint8_t* CSR, const uint8_t DISABLE_BIT) {
+	return *CSR &= DISABLE_BIT;
+} 
+
+int main()
+{   
+    setBitDisabled(&USCR, TxRxDisabledBit);
+    printf("%i", USCR);
+
+    return 0;
+}
+```
+-
+	- [ ] 0b00000000
+	- [x] 0b00000110
+	- [ ] 0b01100000
+	- [ ] 0b01000110
+
+5) What's the difference between `union` and `struct` C structures ? 
+Answer: 
+
+
+6) What's the main usage of C structs ? 
+Answer: 
+
+7) Write a pseudo-code for this SPI diagram in C or C++ or java:
+
+For C/C++: add `#include<SPI.h>` and use already defined variables `CS, SCK, MOSI and MISO`.
+For java: add `import com.avr.spi.DataLines;` and use already defined fields `DataLines.CS.value`, `DataLines.SCK.value`, `DataLines.MOSI.value` and
+`DataLines.MISO.value`.
+
+[C/C++]
+```c
+
+
+![image](https://user-images.githubusercontent.com/60224159/185852881-440c976e-25ee-44a5-9bf8-a26bd9d83488.png)
+
+
+8) What's the output of this code ? 
+```c
