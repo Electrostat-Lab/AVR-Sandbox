@@ -428,7 +428,8 @@ int main(void) {
 
 	import com.avr.spi.Datalines;
 	import com.avr.spi.Register;
-
+      import java.lang.InterruptedException;
+      
 	public class TestSPI {
 
 		private static final int SDI = 0xef;
@@ -451,7 +452,7 @@ int main(void) {
 		    return Register.SPDR;
 		}
 
-		private static void generateSCLK(final int count, final int width) {
+		private static void generateSCLK(final int count, final int width) throws InterruptedException {
 		    for (int i = 0; i < count; i++) {
 			Register.PORTB &= ~(1 << Datalines.SCK);
 			Thread.sleep(width / Math.pow(10, 6));
@@ -460,7 +461,7 @@ int main(void) {
 		    }
 		}
 
-		public static void main(String args[]) {
+		public static void main(String args[]) throws InterruptedException {
 		    final Object[] buffer = new Object[1];
 
 		    setCSLow();
