@@ -339,11 +339,20 @@ int main(void) {
 	- [ ] 0b01000110
 
 5) What's the difference between `union` and `struct` C structures ? 
+
 Answer: 
+A structure contains an ordered group of data objects. Unlike the elements of an array, the data objects
+within a structure can have varied data types. Each data object in a structure is a member or field.
+A union is an object similar to a structure except that all of its members start at the same location in
+memory. 
+
+A union variable can represent the value of only one of its members at a time.
 
 
 6) What's the main usage of C structs ? 
+
 Answer: 
+For representing a group of data with varied data types or an object structure with members/fields outside of classes hierarchy logic.
 
 7) Write a pseudo-code for this SPI diagram in C or C++ or java with pulse width = 230ns.
 
