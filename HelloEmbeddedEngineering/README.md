@@ -356,9 +356,9 @@ int main(void) {
 	Answer: 
 	A structure contains an ordered group of data objects. Unlike the elements of an array, the data objects
 	within a structure can have varied data types. Each data object in a structure is a member or field.
+	
 	A union is an object similar to a structure except that all of its members start at the same location in
 	memory. 
-
 	A union variable can represent the value of only one of its members at a time.
 	```
 
