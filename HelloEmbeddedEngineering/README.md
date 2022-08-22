@@ -113,20 +113,30 @@
 	
 Answer: 
 ```
-V(B) = V(E) + V(BE), where V(BE) = 0.6 --(KVL)--
+Since,
 
-then, V(E) = V(B) - 0.6 = 5v0 - 0v6 = 4v4.
+- V(B) = V(E) + V(BE), --(K.V.L)
+- V(E) = I(E).R(E),    --(Ohm's Law)
+- I(E) = I(B) + I(C),  --(K.C.L)
+- I(C) = hFE * I(B).   --(Transistor current gain)
 
-Since, I(E) = I(B) + I(C), V(E) = 4v4, I(C) = hFE * I(B) --(KCL)--
+Then,
 
-then, I(E) = I(B) + hFE . I(B) = I(B) . (1 + hFE).
+By substituting "I(C) = hFE / I(B)" in "I(E) = I(B) + I(C)": 
+I(E) = I(B) + hFE * I(B) 
+     = I(B) . (1 + hFE).
 
-==> I(B) = I(E) / (1 + hFE), I(E) = V(E) / R(2)
+By substituting "I(E) = I(B) . (1 + hFE)" in " V(B) = V(E) + V(BE)", where; "V(E) = I(E) . R(E)":
+V(B) = V(E) + V(BE) 
+     = I(E) . R(E) + V(BE)
+     = (I(B) . (1 + hFE)) . R(E) + V(BE)
 
-==> I(B) = V(E) / (1 + hFE) . R(2)
-	 = 4v4 / (1 + hFE) . R(2) 
-	 where R(2) is the total resistance value for the CE circuit and hFE is the current gain for the 
-         transistor. 
+V(B) - V(BE) = (I(B) . (1 + hFE)) . R(E) 
+
+Then,
+
+I(B) = V(B) - V(BE) / R(E) . (1 + hFE)   (Q.E.D)
+
 ```
 
 --------------------------------------
@@ -191,13 +201,13 @@ then, I(E) = I(B) + hFE . I(B) = I(B) . (1 + hFE).
 
 9) How a computer performs this operation (0b000000010 - 0b000000001) ? 
       
-```
+	```
 	Answer: 
 	By taking the 2s complement of the subtrahend (2nd digit), which is the 1s complement + 0b01
 	1) Taking the 1s complement: ~0b000000001 = 0b111111110
 	2) Adding 0b01: 0b111111110 + 0b01 = 0b111111111
 	3) Adding the Minuend (1st digit) to the 2s complement of the subtrahend: 0b000000010 + 0b111111111 = 0b000000001
-```
+	```
 
 10) The 1s complement of a byte -----------
 
@@ -428,7 +438,7 @@ int main(void) {
 
 	import com.avr.spi.Datalines;
 	import com.avr.spi.Register;
-    import java.lang.InterruptedException;
+	import java.lang.InterruptedException;
       
 	public class TestSPI {
 
