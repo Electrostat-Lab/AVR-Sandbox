@@ -191,14 +191,13 @@ then, I(E) = I(B) + hFE . I(B) = I(B) . (1 + hFE).
 
 9) How a computer performs this operation (0b000000010 - 0b000000001) ? 
       
-        ```
+```
 	Answer: 
 	By taking the 2s complement of the subtrahend (2nd digit), which is the 1s complement + 0b01
 	1) Taking the 1s complement: ~0b000000001 = 0b111111110
 	2) Adding 0b01: 0b111111110 + 0b01 = 0b111111111
 	3) Adding the Minuend (1st digit) to the 2s complement of the subtrahend: 0b000000010 + 0b111111111 = 0b000000001
-
-        ```
+```
 
 10) The 1s complement of a byte -----------
 
