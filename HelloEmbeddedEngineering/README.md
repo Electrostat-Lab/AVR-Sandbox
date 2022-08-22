@@ -122,7 +122,7 @@ Since,
 
 Then,
 
-By substituting "I(C) = hFE / I(B)" in "I(E) = I(B) + I(C)": 
+By substituting "I(C) = hFE * I(B)" in "I(E) = I(B) + I(C)": 
 I(E) = I(B) + hFE * I(B) 
      = I(B) . (1 + hFE).
 
