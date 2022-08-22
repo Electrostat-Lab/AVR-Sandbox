@@ -428,7 +428,7 @@ int main(void) {
 
 	import com.avr.spi.Datalines;
 	import com.avr.spi.Register;
-      import java.lang.InterruptedException;
+    import java.lang.InterruptedException;
       
 	public class TestSPI {
 
