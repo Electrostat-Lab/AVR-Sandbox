@@ -292,8 +292,8 @@ static inline uint8_t setBitEnabled(volatile uint8_t* CSR, const uint8_t ENABLE_
 	return *CSR |= ENABLE_BIT;
 } 
 
-int main()
-{   
+int main(void) {   
+
     setBitEnabled(&USCR, TxRxEnabledBit);
     printf("%i", USCR);
 
@@ -324,8 +324,8 @@ static inline uint8_t setBitDisabled(volatile uint8_t* CSR, const uint8_t DISABL
 	return *CSR &= DISABLE_BIT;
 } 
 
-int main()
-{   
+int main(void) {
+
     setBitDisabled(&USCR, TxRxDisabledBit);
     printf("%i", USCR);
 
@@ -345,18 +345,121 @@ Answer:
 6) What's the main usage of C structs ? 
 Answer: 
 
-7) Write a pseudo-code for this SPI diagram in C or C++ or java:
+7) Write a pseudo-code for this SPI diagram in C or C++ or java with pulse width = 230ns.
 
-For C/C++: add `#include<SPI.h>` and use already defined variables `CS, SCK, MOSI and MISO`.
-For java: add `import com.avr.spi.DataLines;` and use already defined fields `DataLines.CS.value`, `DataLines.SCK.value`, `DataLines.MOSI.value` and
-`DataLines.MISO.value`.
+![image](https://user-images.githubusercontent.com/60224159/185855592-ffbf376f-3e8b-4f49-97d2-c00d456ccdfa.png)
+
+For C/C++: add `#include<SPI.h>` and use already defined bits `CS, SCK` all lies on PORTB and `SPDR` register.
+For java: add `import com.avr.spi.DataLines;` and use already defined fields `DataLines.CS.value`, `DataLines.SCK.value` all lies on `com.avr.spi.Register.PORTB` and `com.avr.spi.Register.SPDR` R/W register.
 
 [C/C++]
 ```c
+#include<stdint.h>
+#include<stdio.h>
+#include<stdlib.h>
+#include<SPI.h>
 
+#define SDI 0xef
 
-![image](https://user-images.githubusercontent.com/60224159/185852881-440c976e-25ee-44a5-9bf8-a26bd9d83488.png)
+static inline void setCSHigh() {
+   /* bring CS or SS to high to end this slave communication */
+    PORTB |= (1 << CS);	
+}
 
+static inline void setCSLow() {
+   /* bring CS or SS to low to start this slave communication */
+    PORTB &= ~(1 << CS);
+}
 
-8) What's the output of this code ? 
-```c
+static inline void setMOSIData(const uint8_t* data) {
+    SPDR = *data;
+}
+
+static inline volatile uint8_t* getMISOData() {
+    return &SPDR;
+}
+
+static inline void generateSCLK(const uint32_t count, const uint8_t width) {
+    for (uint32_t i = 0; i < count; i++) {
+        PORTB &= ~(1 << SCK);
+        _delay_us(width / 1000);
+        PORTB |= (1 << SCK);
+        _delay_us(width / 1000);
+    }
+}
+
+int main(void) {
+    volatile uint8_t* buffer = (uint8_t*) calloc(1, sizeof(uint8_t));
+    
+    setCSLow();
+    /* send the data register address */
+    setMOSIData(SDI);
+    /* clock out the address to the slave */
+    generateSCLK(8, 230);
+    /* clock in the data register to the master */
+    generateSCLK(8, 230);
+    
+    buffer = getMISOData();
+    
+    printf("%i", *buffer);
+    
+return 0;
+}
+
+```
+[java]
+```java
+package com.avr.examples;
+
+import com.avr.spi.Datalines;
+import com.avr.spi.Register;
+
+public class TestSPI {
+	
+	private static final int SDI = 0xef;
+	
+	private static void setCSHigh() {
+	    /* bring CS or SS to high to end this slave communication *
+	    Register.PORTB |= (1 << Datalines.CS); 
+	}
+	
+	private static void setCSLow() {
+	    /* bring CS or SS to low to start this slave communication */
+	    Register.PORTB &= ~(1 << Datalines.CS); 
+	}
+	
+	private static void setMOSIData(final int data) {
+	    Register.SPDR = data;
+	}
+	
+	private static int getMISOData() {
+	    return Register.SPDR;
+	}
+	
+	private static void generateSCLK(final int count, final int width) {
+	    for (int i = 0; i < count; i++) {
+		Register.PORTB &= ~(1 << Datalines.SCK);
+		Thread.sleep(width / Math.pow(10, 6));
+		Register.PORTB |= (1 << Datalines.SCK);
+		Thread.sleep(width / Math.pow(10, 6));
+	    }
+	}
+	
+	public static void main(String args[]) {
+	    final Object[] buffer = new Object[1];
+	    
+	    setCSLow();
+            /* send the data register address */
+            setMOSIData(SDI);
+            /* clock out the address to the slave */
+            generateSCLK(8, 230);
+            /* clock in the data register to the master */
+            generateSCLK(8, 230);
+    
+            buffer[0] = getMISOData();
+    
+            System.out.println(buffer[0]);
+	   
+	}
+}
+```
