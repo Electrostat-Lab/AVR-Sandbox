@@ -375,7 +375,8 @@ int main(void) {
 	![image](https://user-images.githubusercontent.com/60224159/185855592-ffbf376f-3e8b-4f49-97d2-c00d456ccdfa.png)
 
 	For C/C++: add `#include<SPI.h>` and use already defined bits `CS, SCK` all lies on PORTB and `SPDR` register.
-	For java: add `import com.avr.spi.DataLines;` and use already defined fields `DataLines.CS.value`, `DataLines.SCK.value` all lies on `com.avr.spi.Register.PORTB` and `com.avr.spi.Register.SPDR` R/W register.
+	
+	For java: add `import com.avr.spi.Datalines;` and use already defined fields `Datalines.CS.value`, `Datalines.SCK.value` all lies on `com.avr.spi.Register.PORTB` and `com.avr.spi.Register.SPDR` a R/W register.
 
 	[C/C++]
 	```c
