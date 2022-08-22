@@ -419,7 +419,7 @@ public class TestSPI {
 	private static final int SDI = 0xef;
 	
 	private static void setCSHigh() {
-	    /* bring CS or SS to high to end this slave communication *
+	    /* bring CS or SS to high to end this slave communication */
 	    Register.PORTB |= (1 << Datalines.CS); 
 	}
 	
