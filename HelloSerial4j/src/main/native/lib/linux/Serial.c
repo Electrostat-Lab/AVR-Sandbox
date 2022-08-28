@@ -1,11 +1,19 @@
 #include<Serial.h>
 
-int& Terminal::TerminalControl::openPort(const char* port) {
+int* Terminal::TerminalControl::openPort(const char* port) {
     this->portFileDescriptor = open(port, DEFAULT_FLAG);
-    return this->portFileDescriptor;
+    if (this->portFileDescriptor > 0) {
+        Logger::LOGS(SERIAL, "Serial Port Opened.");
+    } else {
+        Logger::LOGS(SERIAL, "Serial Port isn't available.");
+    }
+    return &(this->portFileDescriptor);
 }
 
 int Terminal::TerminalControl::fetchSerialPorts() {
+    if (this->portFileDescriptor > 0) {
+        Logger::LOGS(SERIAL, "Fetching serial devices.");
+    }
     DIR* dirp = opendir(DEVICES_DIR);
     
     /* sanity check the input */
@@ -17,20 +25,23 @@ int Terminal::TerminalControl::fetchSerialPorts() {
     struct stat filestat;
 
     /* start reading available ports */
-    for (long count = 0; (dp = readdir(dirp)) != NULL;) {
-        char* port = (char*) calloc(1, sizeof(char));
-        port = concatIntoDevice(port, dp->d_name);
-        if (!isSerialPort(port)) {
+    while ((dp = readdir(dirp)) != NULL) {
+        
+        char* device = (char*) calloc(1, sizeof(char*));
+        device = SerialUtils::concatIntoDevice(device, dp->d_name, DEVICES_DIR);
+        
+        /* delete the device buffer if it's not a serial port */
+        if (!SerialUtils::isSerialPort(device, DEFAULT_FLAG)) {
+            BufferUtils::deleteBuffer(device);
             continue;
         }
-        (this->serialPorts).add(port);
 
-        free(port);
-        port = NULL;
-        ++count;
+        /* add the device to the serial ports major buffer and count up */
+        (this->serialPorts).add(device);
     }
 
     closedir(dirp);
+    BufferUtils::deleteBuffer(dp);
 
     if ((this->serialPorts).getItem(0) == NULL) {
         return ERR_NO_RESULT;
@@ -97,10 +108,10 @@ int Terminal::TerminalControl::closePort() {
     return close(this->portFileDescriptor);
 } 
 
-int& Terminal::TerminalControl::getPortFileDescriptor() {
-    return this->portFileDescriptor;
+int* Terminal::TerminalControl::getPortFileDescriptor() {
+    return &(this->portFileDescriptor);
 }
 
-int& Terminal::TerminalControl::getErrno() {
-    return errno;
+int* Terminal::TerminalControl::getErrno() {
+    return &errno;
 }

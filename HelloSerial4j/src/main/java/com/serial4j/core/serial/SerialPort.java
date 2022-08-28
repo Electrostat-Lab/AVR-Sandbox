@@ -1,33 +1,136 @@
+/*
+ * BSD 3-Clause License
+ *
+ * Copyright (c) 2022, Scrappers Team, The AVR-Sandbox Project, Serial4j API.
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ * 1. Redistributions of source code must retain the above copyright notice, this
+ * list of conditions and the following disclaimer.
+ *
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ * this list of conditions and the following disclaimer in the documentation
+ * and/or other materials provided with the distribution.
+ *
+ * 3. Neither the name of the copyright holder nor the names of its
+ * contributors may be used to endorse or promote products derived from
+ * this software without specific prior written permission.
+
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
 package com.serial4j.core.serial;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import com.serial4j.core.errno.ErrnoToException;
 import com.serial4j.core.util.natives.NativeImageLoader;
+import com.serial4j.core.serial.throwable.PermissionDeniedException;
+import com.serial4j.core.serial.throwable.BrokenPipeException;
+import com.serial4j.core.serial.throwable.NoSuchDeviceException;
+import com.serial4j.core.serial.throwable.InvalidPortException;
+import com.serial4j.core.serial.throwable.NoResultException;
+import com.serial4j.core.serial.throwable.OperationFailedException;
 
+/**
+ * The main entry class for the native terminal device for Serial4j api.
+ * 
+ * @author pavl_g.
+ */
 public class SerialPort {
 
     static {
         NativeImageLoader.loadLibrary();
     }
 
-    private final String portDescriptor;
+    private static final Logger LOGGER = Logger.getLogger(SerialPort.class.getName());
+    private boolean loggingEnabled;
+    private final String portName;
+    private InputStream inputStream;
+    private OutputStream outputStream;
 
-    public SerialPort(final String portDescriptor) {
-        this.portDescriptor = portDescriptor;
+    public SerialPort(final String portName) {
+        this.portName = portName;
     }
 
-    public int fetchSerialPorts() {
-        return fetchSerialPorts0();
+    public void setSerial4jLoggingEnabled(final boolean loggingEnabled) {
+        this.loggingEnabled = loggingEnabled;
     }
 
-    public int openPort() {
-        return openPort0(portDescriptor);
+    public boolean isSerial4jLoggingEnabled() {
+        return loggingEnabled;
     }
 
-    public int initTermios() {
-        return initTermios0();
+    public void fetchSerialPorts() throws NoSuchDeviceException,
+                                          PermissionDeniedException,
+                                          BrokenPipeException,
+                                          InvalidPortException,
+                                          NoResultException,
+                                          OperationFailedException {
+        if (isSerial4jLoggingEnabled()) {
+            LOGGER.log(Level.INFO, "Fetching available devices");
+        }
+        final int errno = fetchSerialPorts0();
+        ErrnoToException.throwFromErrno(errno, "");                                    
     }
 
-    public void setBaudRate(final BaudRate baudRate) {
-        setBaudRate0(baudRate.getBaudRate());
+    public void openPort() throws NoSuchDeviceException,
+                                  PermissionDeniedException,
+                                  BrokenPipeException,
+                                  InvalidPortException,
+                                  NoResultException,
+                                  OperationFailedException {
+        if (isSerial4jLoggingEnabled()) {
+            LOGGER.log(Level.INFO, "Opening serial device" + portName);
+        }
+        final int errno = openPort0(portName);
+        ErrnoToException.throwFromErrno(errno, portName);
+    }
+
+    public void initTermios()throws NoSuchDeviceException,
+                                    PermissionDeniedException,
+                                    BrokenPipeException,
+                                    InvalidPortException,
+                                    NoResultException,
+                                    OperationFailedException,
+                                    FileNotFoundException {
+        if (isSerial4jLoggingEnabled()) {
+            LOGGER.log(Level.INFO, "Initializing serial device" + portName);
+        }
+        final int errno = initTermios0();
+        ErrnoToException.throwFromErrno(errno, portName);
+        
+        /* get the java streams from the port after initializing it with the native terminal */
+        inputStream = new FileInputStream(portName);
+        outputStream = new FileOutputStream(portName);
+    }
+
+    public void setBaudRate(final BaudRate baudRate) throws NoSuchDeviceException,
+                                                            PermissionDeniedException,
+                                                            BrokenPipeException,
+                                                            InvalidPortException,
+                                                            NoResultException,
+                                                            OperationFailedException {
+        if (isSerial4jLoggingEnabled()) {
+            LOGGER.log(Level.INFO, "Setting device baud rate to " + baudRate.getRealBaud());
+        }
+        final int errno = setBaudRate0(baudRate.getBaudRate());
+        ErrnoToException.throwFromErrno(errno, portName); 
     } 
 
     public long writeData(final int data) {
@@ -42,13 +145,44 @@ public class SerialPort {
         return getReadBuffer0();
     }
 
-    public int getBaudRate() {
-        return getBaudRate0();
+    public int getBaudRate() throws NoSuchDeviceException,
+                                    PermissionDeniedException,
+                                    BrokenPipeException,
+                                    InvalidPortException,
+                                    NoResultException,
+                                    OperationFailedException  {
+        final int errno = getBaudRate0();
+        ErrnoToException.throwFromErrno(errno, portName); 
+        return errno;
     }
 
     public int closePort() {
         return closePort0();
     } 
+
+    public void setNativeLoggingEnabled() {
+        setLoggingEnabled0();
+    }
+
+    public void setNativeLoggingDisabled() {
+        setLoggingDisabled0();
+    }
+
+    public int getPortDescriptor() {
+        return getFileDescriptor0();
+    }
+
+    public InputStream getInputStream() {
+        return inputStream;
+    }
+
+    public OutputStream getOutputStream() {
+        return outputStream;
+    }
+
+    private native void setLoggingEnabled0();
+
+    private native void setLoggingDisabled0();
 
     private native String[] getSerialPorts0();
 

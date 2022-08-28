@@ -9,6 +9,22 @@ extern "C" {
 #endif
 /*
  * Class:     com_serial4j_core_serial_SerialPort
+ * Method:    setLoggingEnabled0
+ * Signature: ()V
+ */
+JNIEXPORT void JNICALL Java_com_serial4j_core_serial_SerialPort_setLoggingEnabled0
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     com_serial4j_core_serial_SerialPort
+ * Method:    setLoggingDisabled0
+ * Signature: ()V
+ */
+JNIEXPORT void JNICALL Java_com_serial4j_core_serial_SerialPort_setLoggingDisabled0
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     com_serial4j_core_serial_SerialPort
  * Method:    getSerialPorts0
  * Signature: ()[Ljava/lang/String;
  */

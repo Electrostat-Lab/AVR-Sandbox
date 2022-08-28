@@ -1,5 +1,42 @@
+/**
+ * @file Serial.h
+ * @author pavl_g.
+ * @brief Represents the serial port devices control and operation for POSIX systems.
+ * @version 0.1
+ * @date 2022-08-24
+ * 
+ * @copyright 
+ * BSD 3-Clause License
+ *
+ * Copyright (c) 2022, Scrappers Team, The AVR-Sandbox Project, Serial4j API.
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ * 1. Redistributions of source code must retain the above copyright notice, this
+ * list of conditions and the following disclaimer.
+ *
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ * this list of conditions and the following disclaimer in the documentation
+ * and/or other materials provided with the distribution.
+ *
+ * 3. Neither the name of the copyright holder nor the names of its
+ * contributors may be used to endorse or promote products derived from
+ * this software without specific prior written permission.
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
 #ifndef SERIAL
-#define SERIAL
+#define SERIAL "Serial4j-API"
 
 #include<termios.h>
 #include<stdio.h>
@@ -13,14 +50,12 @@
 #include<sys/stat.h>
 
 #include<DynamicBuffer.h>
+#include<SerialUtils.util>
+#include<ErrnoUtils.util>
+#include<Logger.util>
 
 #define BUFFER_SIZE (1)
 #define DEVICES_DIR ((const char*) "/dev/")
-
-#define ERR_INVALID_PORT (-2)
-#define ERR_INVALID_DIR (-3)
-#define ERR_NO_RESULT (0)
-#define OPERATION_SUCCEEDED (1)
 
 #define DEFAULT_FLAG (O_RDWR | O_NONBLOCK | O_NOCTTY)
 
@@ -28,41 +63,39 @@ namespace Terminal {
 
     struct TerminalControl {
 
-        static inline char* concatIntoDevice(char* src, const char* file) {
-            strcat(src, DEVICES_DIR);
-            strcat(src, file);
-            return src;
-        }
-
-        /**
-         * @brief Tests whether the PATH specified is a real serial port.
-         * 
-         * @param path the path to specify if its a serial port.
-         * @return int 1 if FD is a valid descriptor, 0 otherwise.
-         */
-        static inline int isSerialPort(char* path) {
-            int fdp = open(path, DEFAULT_FLAG);
-            int state = isatty(fdp);
-            close(fdp);
-            return state;
-        }
-
         /** terminal attrs */
         termios tty;
         int portFileDescriptor;
         int baudRate;
 
         /** Serial Ports buffer */
-        DynamicBuffer serialPorts;
+        struct DynamicBuffer serialPorts;
 
         /** R/W buffers */
         int writeBuffer[BUFFER_SIZE];
         int readBuffer[BUFFER_SIZE];
         
+        /**
+         * @brief Fetches serial port devices on "/dev/" into [serialPorts] buffer.
+         * 
+         * @return int (1) for success, (0) for no result.
+         */
         int fetchSerialPorts();
 
-        int& openPort(const char* port);
+        /**
+         * @brief Opens a serial port device with a name.
+         * 
+         * @param port the path for the serial port device.
+         * @return int* a memory reference for the port file descriptor.
+         */
+        int* openPort(const char* port);
 
+        /**
+         * @brief Initializes the default terminal with the following charachteristics: 
+         * 
+         * 
+         * @return int (1) for success, (-1) for failure, (-2) for invalid port.
+         */
         int initTermios();
 
         /**
@@ -77,22 +110,52 @@ namespace Terminal {
         /**
          * @brief Sets the Baud Rate object for the terminal io.
          * 
-         * @param baudRate 
-         * @return int 
+         * @param baudRate the baud rate (bits/seconds).
+         * @return int (1) for success, (-1) for failure, (-2) for invalid port.
          */
         int setBaudRate(int baudRate);
 
+        /**
+         * @brief Gets the Baud Rate object.
+         * 
+         * @return speed_t baud rate in integers.
+         */
         speed_t getBaudRate();
 
+        /**
+         * @brief Writes data to the serial port device.
+         * 
+         * @return ssize_t the number of bytes written to the serial device.
+         */
         ssize_t writeData();
 
+        /**
+         * @brief Reads data from the serial port device.
+         * 
+         * @return ssize_t the number of bytes read from the terminal.
+         */
         ssize_t readData();
 
+        /**
+         * @brief Closes the serial port device.
+         * 
+         * @return int (1) for success, (-1) for failure, (-2) for invalid port.
+         */
         int closePort();
 
-        int& getPortFileDescriptor();
+        /**
+         * @brief Gets the Port File Descriptor object.
+         * 
+         * @return int* a memory reference to the file descriptor of the serial port device.
+         */
+        int* getPortFileDescriptor();
 
-        int& getErrno();
+        /**
+         * @brief Gets the Errno object
+         * 
+         * @return int* a memory reference to the generated errno.
+         */
+        int* getErrno();
 
     };
 }

@@ -1,15 +1,24 @@
 #include<com_serial4j_core_serial_SerialPort.h>
 #include<Serial.h>
 #include<stdlib.h>
+#include<Logger.util>
 
 Terminal::TerminalControl terminalControl;
-int writeBuffer[1];
+
+JNIEXPORT void JNICALL Java_com_serial4j_core_serial_SerialPort_setLoggingEnabled0
+  (JNIEnv* env, jobject object) {
+    Logger::setLoggingEnabled();
+}
+
+JNIEXPORT void JNICALL Java_com_serial4j_core_serial_SerialPort_setLoggingDisabled0
+  (JNIEnv* env, jobject object) {
+    Logger::setLoggingDisabled();
+}
 
 JNIEXPORT jobjectArray JNICALL Java_com_serial4j_core_serial_SerialPort_getSerialPorts0
   (JNIEnv* env, jobject object) {
     return NULL;
 }
-
 
 JNIEXPORT jint JNICALL Java_com_serial4j_core_serial_SerialPort_fetchSerialPorts0
   (JNIEnv* env, jobject object) {
@@ -23,8 +32,7 @@ JNIEXPORT jint JNICALL Java_com_serial4j_core_serial_SerialPort_getReadBuffer0
 
 JNIEXPORT jint JNICALL Java_com_serial4j_core_serial_SerialPort_setBaudRate0
   (JNIEnv* env, jobject object, jint baudRate) {
-    terminalControl.setBaudRate(baudRate);
-    return 0;
+    return terminalControl.setBaudRate(baudRate);
 }
 
 JNIEXPORT jint JNICALL Java_com_serial4j_core_serial_SerialPort_getBaudRate0
@@ -34,7 +42,7 @@ JNIEXPORT jint JNICALL Java_com_serial4j_core_serial_SerialPort_getBaudRate0
 
 JNIEXPORT jint JNICALL Java_com_serial4j_core_serial_SerialPort_getFileDescriptor0
   (JNIEnv* env, jobject object) {
-    return terminalControl.getPortFileDescriptor();
+    return *(terminalControl.getPortFileDescriptor());
 }
 
 JNIEXPORT jint JNICALL Java_com_serial4j_core_serial_SerialPort_initTermios0
@@ -44,7 +52,7 @@ JNIEXPORT jint JNICALL Java_com_serial4j_core_serial_SerialPort_initTermios0
 
 JNIEXPORT jint JNICALL Java_com_serial4j_core_serial_SerialPort_openPort0
   (JNIEnv* env, jobject object, jstring strBuffer) {
-    return terminalControl.openPort(env->GetStringUTFChars(strBuffer, 0));
+    return *(terminalControl.openPort(env->GetStringUTFChars(strBuffer, 0)));
 }
 
 JNIEXPORT jlong JNICALL Java_com_serial4j_core_serial_SerialPort_writeData0
@@ -65,5 +73,5 @@ JNIEXPORT jint JNICALL Java_com_serial4j_core_serial_SerialPort_closePort0
 
 JNIEXPORT jint JNICALL Java_com_serial4j_core_serial_SerialPort_getErrno0
   (JNIEnv* env, jobject object) {
-    return terminalControl.getErrno();
+    return *(terminalControl.getErrno());
 }
