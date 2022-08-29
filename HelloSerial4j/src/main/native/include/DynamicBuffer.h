@@ -40,8 +40,8 @@
 #define DY_BUFFER 1
 
 #include<stdlib.h>
-#include<ErrnoUtils.util>
-#include<BufferUtils.util>
+#include<ErrnoUtils.h>
+#include<BufferUtils.h>
 
 struct DynamicBuffer {
 

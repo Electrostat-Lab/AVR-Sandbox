@@ -1,9 +1,15 @@
 #include<com_serial4j_core_serial_SerialPort.h>
 #include<Serial.h>
 #include<stdlib.h>
-#include<Logger.util>
+#include<Logger.h>
+#include<JniUtils.h>
 
 Terminal::TerminalControl terminalControl;
+
+JNIEXPORT jint JNICALL Java_com_serial4j_core_serial_SerialPort_setupJniEnvironment0
+  (JNIEnv* env, jclass clazz) {
+    return JniUtils::setJniEnv(env);
+}
 
 JNIEXPORT void JNICALL Java_com_serial4j_core_serial_SerialPort_setLoggingEnabled0
   (JNIEnv* env, jobject object) {
@@ -17,7 +23,17 @@ JNIEXPORT void JNICALL Java_com_serial4j_core_serial_SerialPort_setLoggingDisabl
 
 JNIEXPORT jobjectArray JNICALL Java_com_serial4j_core_serial_SerialPort_getSerialPorts0
   (JNIEnv* env, jobject object) {
-    return NULL;
+    
+    int length = *(terminalControl.getDynamicBuffer()->getItemsCount());
+
+    jobjectArray array = JniUtils::createNewArrayFromBuffer(
+      java_lang_String, length);
+
+    jobject* objectArray = (jobject*) calloc(length, sizeof(jobject));
+    JniUtils::fillObjectBuffer(objectArray, terminalControl.getSerialPorts(), length);
+    JniUtils::setArrayElements(array, length, objectArray);
+
+    return array;
 }
 
 JNIEXPORT jint JNICALL Java_com_serial4j_core_serial_SerialPort_fetchSerialPorts0

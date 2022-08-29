@@ -9,7 +9,7 @@ jar_folder='serial4j'
 jar=${jar_folder}'.jar'
 
 manifest='Manifest-Version: 1.0'
-mainclass='Main-Class: com.serial4j.example.HelloSerial4J'
+mainclass='Main-Class: com.serial4j.example.HelloSerial4jIO'
 classpath='Class-Path: dependencies'
 
 assemble_dir=`pwd`

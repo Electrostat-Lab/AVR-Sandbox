@@ -1,7 +1,7 @@
 /**
  * @file JniUtils.util
  * @author pavl_g.
- * @brief Java Native Interface Utility methods for jni java 8.
+ * @brief Java Native Interface Utility methods for jni java 8 and invocation api.
  * @version 0.1
  * @date 2022-08-28
  * 
@@ -42,6 +42,7 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<stdint.h>
+#include<ErrnoUtils.h>
 
 #define CONSTRUCTOR ((const char*) "<init>")
 
@@ -49,6 +50,13 @@
 #define NON_PARAMETERIZED_INT_SIG ((const char*) "()I")
 #define NON_PARAMETERIZED_STRING_SIG ((const char*) "()[Ljava/lang/String;")
 #define NON_PARAMETERIZED_LONG_SIG ((const char*) "()J")
+
+#define java_lang_String ((const char*) "java/lang/String")
+#define java_io_IOException ((const char*) "java/io/IOException")
+#define java_io_InputStream ((const char*) "java/io/InputStream")
+#define java_io_OutputStream ((const char*) "java/io/OutputStream")
+#define java_io_FileInputStream ((const char*) "java/io/FileIntputStream")
+#define java_io_FileOutputStream ((const char*) "java/io/FileOutputStream")
 
 namespace JniUtils {
     static JNIEnv* env;
@@ -58,8 +66,12 @@ namespace JniUtils {
      * 
      * @param env the environment pointer to use.
      */
-    static inline void setJniEnv(JNIEnv* env) {
+    static inline int setJniEnv(JNIEnv* env) {
+        if (env == NULL) {
+            return OPERATION_FAILED;
+        }
         JniUtils::env = env;
+        return OPERATION_SUCCEEDED;
     }
 
     /**
@@ -92,18 +104,43 @@ namespace JniUtils {
      * @return jmethodID a new method id for the requested method.
      */
     static inline jmethodID getClassMethod(const char* clazzName, const char* methodName, const char* sig) {
-        return JniUtils::getJniEnv()->GetMethodID(clazz, methodName, sig);
+        return JniUtils::getJniEnv()->GetMethodID(getClassFromString(clazzName), methodName, sig);
     }
 
+    /**
+     * @brief Retrieves the java class constructor.
+     * 
+     * @version version 0 from getClassConstructor for parameteized constructors using constructor
+     * signature.
+     * @param clazzName the java class name in the format {"package/class"}.
+     * @param sig the constructor signature, eg: ()V for non-parameterized void type.
+     * @return jmethodID an id referring to the class constructor.
+     */
     static inline jmethodID getClassConstructor0(const char* clazzName, const char* sig) {
-        return JniUtils::getJMethodFromClass(clazzName, CONSTRUCTOR, sig);
+        return JniUtils::getClassMethod(clazzName, CONSTRUCTOR, sig);
     }
 
+    /**
+     * @brief Retrieves the java class non-parameterized constructor with signature
+     * [NON_PARAMTERIZED_VOID_SIG].
+     * 
+     * @param clazzName the java class name.
+     * @return jmethodID an id referring to the class non-parameterized constructor.
+     */
     static inline jmethodID getClassConstructor1(const char* clazzName) {
         return JniUtils::getClassConstructor0(clazzName, NON_PARAMTERIZED_VOID_SIG);
     }
 
-    static inline void callParameterizedMethod(const char* clazzName, const char* methodName, const char* sig, jvalues* args) {
+    /**
+     * @brief Calls a parameterized method [methodName] from class [clazzName].
+     * 
+     * @param clazzName the class name where the method is located, eg: {"java/io/IOException"}.
+     * @param methodName the method name to call.
+     * @param sig the signature of the method, eg: ()V for non-paramterized void methods.
+     * @param args an array for the method parameters of type [jvalue] referring to one of the JNI
+     * data types [jint, jbyte, jlong, jshort, jchar, jobject...etc].
+     */
+    static inline void callParameterizedMethod(const char* clazzName, const char* methodName, const char* sig, jvalue* args) {
         jclass clazz = JniUtils::getClassFromString(clazzName);
         jmethodID mid = JniUtils::getClassMethod(clazzName, methodName, sig);
         if (args == NULL) {
@@ -113,11 +150,26 @@ namespace JniUtils {
         }
     }
 
-    static inline void callNonParameterizedMethod(const char* clazzName, const char* sig) {
+    /**
+     * @brief Calls a non-parameterized method [methodName] with signature [sig].
+     * 
+     * @param clazzName the class name where the method is located, eg: {"java/lang/String"}.
+     * @param methodName the method name to call.
+     * @param sig the signature of the method, eg: ()V, ()I, ()J.
+     */
+    static inline void callNonParameterizedMethod(const char* clazzName, const char* methodName, const char* sig) {
         JniUtils::callParameterizedMethod(clazzName, methodName, sig, NULL);
     }
 
-    static inline void callParameterizedConstructor(const char* clazzName, const char* sig, jvalues* args) {
+    /**
+     * @brief Calls a class parameterized constructor (<init> method) with
+     * signature and jvalue (holds only one variable of one JNI data type at a time) parameters.
+     * 
+     * @param clazzName 
+     * @param sig 
+     * @param args 
+     */
+    static inline void callParameterizedConstructor(const char* clazzName, const char* sig, jvalue* args) {
         JniUtils::callParameterizedMethod(clazzName, CONSTRUCTOR, sig, args);
     }
 
@@ -126,16 +178,41 @@ namespace JniUtils {
     }
 
     static inline jobject getObjectFromClass0(const char* clazzName) {
-        return JniUtils::getJniEnv()->AllocObject(JniUtils::getJClassFromString(clazzName));
+        return JniUtils::getJniEnv()->AllocObject(JniUtils::getClassFromString(clazzName));
     }
 
     static inline jobject getObjectFromClass1(const char* clazzName, jmethodID constructor) {
-        return JniUtils::getJniEnv()->NewObject(clazzName, constructor);
+        return JniUtils::getJniEnv()->NewObject(JniUtils::getClassFromString(clazzName), constructor);
     }
 
     static inline jobject getObjectFromClass2(const char* clazzName) {
         return JniUtils::getObjectFromClass1(clazzName, JniUtils::getClassConstructor1(clazzName));
     }
+
+    static inline jobjectArray createNewArrayFromBuffer(const char* clazzName, jsize length) {
+        jobject initialElement = JniUtils::getJniEnv()->NewStringUTF("");
+
+        jclass clazz = JniUtils::getClassFromString(clazzName);
+        jobjectArray array = JniUtils::getJniEnv()->NewObjectArray(length, clazz, initialElement);
+        return array;
+    }
+
+    static inline jobject* fillObjectBuffer(jobject* objectBuffer, const char** buffer, int length) {
+        for (int i = 0; i < length; i++) {
+            objectBuffer[i] = JniUtils::getJniEnv()->NewStringUTF(buffer[i]);
+        }
+        return objectBuffer;
+    } 
+
+    static inline void setArrayElements(jobjectArray array, jsize length, jobject* buffer) {
+        for (int i = 0; i < length; i++) {
+            JniUtils::getJniEnv()->SetObjectArrayElement(array, i, buffer[i]);
+        }
+    }
+
+    static inline jobject getArrayElement(jobjectArray array, jsize index) {
+        return JniUtils::getJniEnv()->GetObjectArrayElement(array, index);
+    } 
 }
 
 #endif

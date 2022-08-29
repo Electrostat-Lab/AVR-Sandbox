@@ -50,9 +50,9 @@
 #include<sys/stat.h>
 
 #include<DynamicBuffer.h>
-#include<SerialUtils.util>
-#include<ErrnoUtils.util>
-#include<Logger.util>
+#include<SerialUtils.h>
+#include<ErrnoUtils.h>
+#include<Logger.h>
 
 #define BUFFER_SIZE (1)
 #define DEVICES_DIR ((const char*) "/dev/")
@@ -105,6 +105,10 @@ namespace Terminal {
          */
         const char** getSerialPorts() {
             return (const char**) serialPorts.getBuffer();
+        }
+
+        struct DynamicBuffer* getDynamicBuffer() {
+            return &serialPorts;
         }
 
         /**

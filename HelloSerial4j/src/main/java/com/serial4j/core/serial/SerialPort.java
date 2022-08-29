@@ -56,40 +56,19 @@ public class SerialPort {
 
     static {
         NativeImageLoader.loadLibrary();
+        setupJniEnvironment();
     }
 
     private static final Logger LOGGER = Logger.getLogger(SerialPort.class.getName());
     private boolean loggingEnabled;
-    private final String portName;
+    private String portName;
     private InputStream inputStream;
     private OutputStream outputStream;
 
-    public SerialPort(final String portName) {
-        this.portName = portName;
+    public SerialPort() {
     }
 
-    public void setSerial4jLoggingEnabled(final boolean loggingEnabled) {
-        this.loggingEnabled = loggingEnabled;
-    }
-
-    public boolean isSerial4jLoggingEnabled() {
-        return loggingEnabled;
-    }
-
-    public void fetchSerialPorts() throws NoSuchDeviceException,
-                                          PermissionDeniedException,
-                                          BrokenPipeException,
-                                          InvalidPortException,
-                                          NoResultException,
-                                          OperationFailedException {
-        if (isSerial4jLoggingEnabled()) {
-            LOGGER.log(Level.INFO, "Fetching available devices");
-        }
-        final int errno = fetchSerialPorts0();
-        ErrnoToException.throwFromErrno(errno, "");                                    
-    }
-
-    public void openPort() throws NoSuchDeviceException,
+    public void openPort(final String portName) throws NoSuchDeviceException,
                                   PermissionDeniedException,
                                   BrokenPipeException,
                                   InvalidPortException,
@@ -100,21 +79,22 @@ public class SerialPort {
         }
         final int errno = openPort0(portName);
         ErrnoToException.throwFromErrno(errno, portName);
+        this.portName = portName;
     }
 
-    public void initTermios()throws NoSuchDeviceException,
-                                    PermissionDeniedException,
-                                    BrokenPipeException,
-                                    InvalidPortException,
-                                    NoResultException,
-                                    OperationFailedException,
-                                    FileNotFoundException {
+    public void initTermios() throws NoSuchDeviceException,
+                                     PermissionDeniedException,
+                                     BrokenPipeException,
+                                     InvalidPortException,
+                                     NoResultException,
+                                     OperationFailedException,
+                                     FileNotFoundException {
         if (isSerial4jLoggingEnabled()) {
             LOGGER.log(Level.INFO, "Initializing serial device" + portName);
         }
         final int errno = initTermios0();
         ErrnoToException.throwFromErrno(errno, portName);
-        
+
         /* get the java streams from the port after initializing it with the native terminal */
         inputStream = new FileInputStream(portName);
         outputStream = new FileOutputStream(portName);
@@ -141,24 +121,64 @@ public class SerialPort {
         return readData0();
     }
 
-    public int getReadBuffer() {
-        return getReadBuffer0();
-    }
-
     public int getBaudRate() throws NoSuchDeviceException,
                                     PermissionDeniedException,
                                     BrokenPipeException,
                                     InvalidPortException,
                                     NoResultException,
-                                    OperationFailedException  {
+                                    OperationFailedException {
+        if (isSerial4jLoggingEnabled()) {
+            LOGGER.log(Level.INFO, "Getting device baud");
+        }
         final int errno = getBaudRate0();
         ErrnoToException.throwFromErrno(errno, portName); 
         return errno;
     }
 
-    public int closePort() {
-        return closePort0();
-    } 
+    public final String[] getSerialPorts() throws NoSuchDeviceException,
+                                                  PermissionDeniedException,
+                                                  BrokenPipeException,
+                                                  InvalidPortException,
+                                                  NoResultException,
+                                                  OperationFailedException {
+        fetchSerialPorts();
+        return getSerialPorts0();
+    }
+
+    public void throwExceptionFromNativeErrno() throws NoSuchDeviceException,
+                                                       PermissionDeniedException,
+                                                       BrokenPipeException,
+                                                       InvalidPortException,
+                                                       NoResultException,
+                                                       OperationFailedException {                                                
+        final int errno = getErrno0();
+        ErrnoToException.throwFromErrno(errno, "Native Errno: " + errno);
+    }
+
+    public void closePort() throws NoSuchDeviceException,
+                                   PermissionDeniedException,
+                                   BrokenPipeException,
+                                   InvalidPortException,
+                                   NoResultException,
+                                   OperationFailedException {
+        if (isSerial4jLoggingEnabled()) {
+            LOGGER.log(Level.INFO, "Closing port: " + portName);
+        }
+        final int errno = closePort0();
+        ErrnoToException.throwFromErrno(errno, portName);
+    }
+    
+    public void setSerial4jLoggingEnabled(final boolean loggingEnabled) {
+        this.loggingEnabled = loggingEnabled;
+    }
+
+    public boolean isSerial4jLoggingEnabled() {
+        return loggingEnabled;
+    }
+
+    public int getReadBuffer() {
+        return getReadBuffer0();
+    }
 
     public void setNativeLoggingEnabled() {
         setLoggingEnabled0();
@@ -168,17 +188,50 @@ public class SerialPort {
         setLoggingDisabled0();
     }
 
-    public int getPortDescriptor() {
+    public final int getPortDescriptor() {
         return getFileDescriptor0();
     }
 
-    public InputStream getInputStream() {
+    public final InputStream getInputStream() {
         return inputStream;
     }
 
-    public OutputStream getOutputStream() {
+    public final OutputStream getOutputStream() {
         return outputStream;
     }
+
+    public final String getPortName() {
+        return portName;
+    }
+
+    private static void setupJniEnvironment() {
+        try {
+            final int errno = setupJniEnvironment0();
+            ErrnoToException.throwFromErrno(errno, "Jni Environment passed is invalid !");
+        } catch (NoSuchDeviceException |
+                 PermissionDeniedException |
+                 BrokenPipeException |
+                 InvalidPortException |
+                 NoResultException |
+                 OperationFailedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void fetchSerialPorts() throws NoSuchDeviceException,
+                                           PermissionDeniedException,
+                                           BrokenPipeException,
+                                           InvalidPortException,
+                                           NoResultException,
+                                           OperationFailedException {
+        if (isSerial4jLoggingEnabled()) {
+            LOGGER.log(Level.INFO, "Fetching Serial ports.");
+        }
+        final int errno = fetchSerialPorts0();
+        ErrnoToException.throwFromErrno(errno, "No available devices !");                                    
+    }
+
+    private static native int setupJniEnvironment0();
 
     private native void setLoggingEnabled0();
 

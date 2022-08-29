@@ -9,6 +9,14 @@ extern "C" {
 #endif
 /*
  * Class:     com_serial4j_core_serial_SerialPort
+ * Method:    setupJniEnvironment0
+ * Signature: ()I
+ */
+JNIEXPORT jint JNICALL Java_com_serial4j_core_serial_SerialPort_setupJniEnvironment0
+  (JNIEnv *, jclass);
+
+/*
+ * Class:     com_serial4j_core_serial_SerialPort
  * Method:    setLoggingEnabled0
  * Signature: ()V
  */

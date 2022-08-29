@@ -5,7 +5,7 @@
 #include<stdio.h>
 #include<stdint.h>
 #include<stdlib.h>
-#include<ErrnoUtils.util>
+#include<ErrnoUtils.h>
 
 typedef const char* AlertType;
 
@@ -22,11 +22,11 @@ namespace Logger {
     static int loggingEnabled = 0;
 
     static inline void setLoggingEnabled() {
-        loggingEnabled = 1;
+        Logger::loggingEnabled = 1;
     }
 
     static inline void setLoggingDisabled() {
-        loggingEnabled = 0;
+        Logger::loggingEnabled = 0;
     }
 
     static inline int* isLoggingEnabled() {
