@@ -37,6 +37,7 @@ import com.serial4j.core.serial.throwable.NoSuchDeviceException;
 import com.serial4j.core.serial.throwable.InvalidPortException;
 import com.serial4j.core.serial.throwable.NoResultException;
 import com.serial4j.core.serial.throwable.OperationFailedException;
+import com.serial4j.core.serial.throwable.NoAvailableTtyDevicesException;
 import com.serial4j.core.errno.Errno;
 
 /**
@@ -55,7 +56,8 @@ public final class ErrnoToException {
                                                               BrokenPipeException,
                                                               InvalidPortException,
                                                               NoResultException,
-                                                              OperationFailedException {
+                                                              OperationFailedException,
+                                                              NoAvailableTtyDevicesException {
         if (errno == Errno.ENOENT.getValue()) {
             throw new NoSuchDeviceException(additionalText);
         } else if (errno == Errno.EACCES.getValue()) {
@@ -64,6 +66,8 @@ public final class ErrnoToException {
             throw new BrokenPipeException(additionalText);
         } else if (errno == Errno.EINVALID_PORT.getValue()) {
             throw new InvalidPortException(additionalText);
+        } else if (errno == Errno.ERR_NO_AVAILABLE_TTY_DEVICES.getValue()) {
+            throw new NoAvailableTtyDevicesException(additionalText);
         }
     }
 

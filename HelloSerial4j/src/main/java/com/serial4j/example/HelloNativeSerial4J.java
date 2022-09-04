@@ -35,8 +35,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Arrays;
 import java.io.FileNotFoundException;
+import com.serial4j.core.serial.ReadConfiguration;
 import com.serial4j.core.serial.BaudRate;
 import com.serial4j.core.serial.SerialPort;
+import com.serial4j.core.serial.TerminalDevice;
 import com.serial4j.core.serial.throwable.PermissionDeniedException;
 import com.serial4j.core.serial.throwable.BrokenPipeException;
 import com.serial4j.core.serial.throwable.NoSuchDeviceException;
@@ -51,56 +53,56 @@ import com.serial4j.core.serial.throwable.OperationFailedException;
  * @author pavl_g.
  */
 public final class HelloNativeSerial4J {
-	static SerialPort serialPort = new SerialPort();		
 	public static void main(String args[]) throws NoSuchDeviceException,
 												  PermissionDeniedException,
 												  BrokenPipeException,
 												  InvalidPortException,
 												  NoResultException,
 												  OperationFailedException,
-												  FileNotFoundException {
-
+												  FileNotFoundException {		
 		System.out.println("Started native io example: ");
-		serialPort.setSerial4jLoggingEnabled(true);
-		serialPort.setNativeLoggingEnabled();
-		serialPort.openPort("/dev/ttyUSB0");
-		if (serialPort.getPortDescriptor() > 0) {
-			System.out.println("Port Opened with "+serialPort.getPortDescriptor());
+		final TerminalDevice ttyDevice = new TerminalDevice();
+		ttyDevice.openPort(new SerialPort("/dev/ttyUSB0"));		
+		ttyDevice.setSerial4jLoggingEnabled(true);
+		ttyDevice.setNativeLoggingEnabled();
+		if (ttyDevice.getSerialPort().getFd() > 0) {
+			System.out.println("Port Opened with " + ttyDevice.getSerialPort().getFd());
 		}
-		serialPort.initTermios();
-		serialPort.setBaudRate(BaudRate.B57600);
-		System.out.println(Arrays.toString(serialPort.getSerialPorts()));
-		startReadThread(serialPort, 2500);
-		startWriteThread(serialPort, 0);
+		ttyDevice.initTermios();
+		ttyDevice.setBaudRate(BaudRate.B57600);
+		ttyDevice.setReadConfigurationMode(ReadConfiguration.BLOCKING_READ_ONE_CHAR, 0, 1);
+		System.out.println(Arrays.toString(ttyDevice.getSerialPorts()));
+		startReadThread(ttyDevice, 2500);
+		startWriteThread(ttyDevice, 0);
 	}
 
-	private static void startReadThread(final SerialPort serialPort, final long millis) {
+	private static void startReadThread(final TerminalDevice ttyDevice, final long millis) {
 		new Thread(new Runnable() {
 			public void run() {
 				try {
 					Thread.sleep(millis);
 					while(true) {
-						if (serialPort.readData() > 0) {
-							if ((char) serialPort.getReadBuffer() > 0) 
-							System.out.println((char) serialPort.getReadBuffer());
+						if (ttyDevice.readData() > 0) {
+							if ((char) ttyDevice.getReadBuffer() > 0) 
+							System.out.println((char) ttyDevice.getReadBuffer());
 						}
 					}	
-				}catch(InterruptedException e) {
+				} catch(Exception e) {
 					e.printStackTrace();
 				}		
 			}
 		}).start();
 	}
 
-	private static void startWriteThread(final SerialPort serialPort, final long millis) {
+	private static void startWriteThread(final TerminalDevice ttyDevice, final long millis) {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
 				try {
 					Thread.sleep(millis);
-					serialPort.writeData('B');
-					serialPort.writeData('C');
-					serialPort.closePort();
+					ttyDevice.writeData('B');
+					ttyDevice.writeData('C');
+					ttyDevice.closePort();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

@@ -11,9 +11,8 @@ int* Terminal::TerminalControl::openPort(const char* port) {
 }
 
 int Terminal::TerminalControl::fetchSerialPorts() {
-    if (this->portFileDescriptor > 0) {
-        Logger::LOGS(SERIAL, "Fetching serial devices.");
-    }
+    Logger::LOGS(SERIAL, "Fetching serial devices.");
+
     DIR* dirp = opendir(DEVICES_DIR);
     
     /* sanity check the input */
@@ -44,7 +43,7 @@ int Terminal::TerminalControl::fetchSerialPorts() {
     BufferUtils::deleteBuffer(dp);
 
     if ((this->serialPorts).getItem(0) == NULL) {
-        return ERR_NO_RESULT;
+        return ERR_NO_AVAILABLE_TTY_DEVICES;
     }
 
     return OPERATION_SUCCEEDED;
@@ -64,10 +63,23 @@ int Terminal::TerminalControl::initTermios() {
     this->tty.c_lflag &= ~(ICANON | ECHO | ECHOE | ECHOK | ECHOKE | ECHONL | ECHOPRT | ECHOCTL | ISIG | IEXTEN);
     this->tty.c_oflag &= ~(OPOST | ONLCR);
     this->tty.c_iflag = 0x00;
-    this->tty.c_cc[VTIME] = 0;
-    this->tty.c_cc[VMIN] = 1;
+
+    /* define default read mode as blocking read on char at a time */
+    this->tty.c_cc[VTIME] = BLOCKING_READ_ONE_CHAR[0];
+    this->tty.c_cc[VMIN] = BLOCKING_READ_ONE_CHAR[1];
 
     /* apply attriutes flag bits */
+
+    return tcsetattr(this->portFileDescriptor, TCSAFLUSH, &(this->tty));
+}
+
+int Terminal::TerminalControl::setReadConfigurationMode(const cc_t* readConfig, const int VTIME_VALUE, const int VMIN_VALUE) {
+    if (this->portFileDescriptor <= 0) {
+        return ERR_INVALID_PORT;
+    }
+
+    this->tty.c_cc[VTIME] = readConfig[0] * VTIME_VALUE;
+    this->tty.c_cc[VMIN] = readConfig[1] * VMIN_VALUE;
 
     return tcsetattr(this->portFileDescriptor, TCSAFLUSH, &(this->tty));
 }
@@ -88,21 +100,21 @@ speed_t Terminal::TerminalControl::getBaudRate() {
 }
 
 ssize_t Terminal::TerminalControl::writeData() {
-    if (this->portFileDescriptor < 0) {
+    if (this->portFileDescriptor <= 0) {
         return ERR_INVALID_PORT;
     }
     return write(this->portFileDescriptor, (void*) this->writeBuffer, BUFFER_SIZE);
 }
 
 ssize_t Terminal::TerminalControl::readData() {
-    if (this->portFileDescriptor < 0) {
+    if (this->portFileDescriptor <= 0) {
         return ERR_INVALID_PORT;
     }
     return read(this->portFileDescriptor, (void*) this->readBuffer, BUFFER_SIZE);
 }
 
 int Terminal::TerminalControl::closePort() {
-    if (this->portFileDescriptor < 0) {
+    if (this->portFileDescriptor <= 0) {
         return ERR_INVALID_PORT;
     }
     return close(this->portFileDescriptor);

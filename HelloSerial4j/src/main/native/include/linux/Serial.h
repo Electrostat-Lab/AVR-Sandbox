@@ -68,6 +68,12 @@ namespace Terminal {
         int portFileDescriptor;
         int baudRate;
 
+        /** Param@0 = VTIME, Param@1 = VMIN */
+        const cc_t POLLING_READ[2] = {0, 0};
+        const cc_t BLOCKING_READ_ONE_CHAR[2] = {0, 1};
+        const cc_t READ_WITH_TIMEOUT[2] = {1, 0};
+        const cc_t READ_WITH_INTERBYTE_TIMEOUT[2] = {1, 1};
+
         /** Serial Ports buffer */
         struct DynamicBuffer serialPorts;
 
@@ -99,6 +105,20 @@ namespace Terminal {
         int initTermios();
 
         /**
+         * @brief Sets the Read Configuration Mode using a ReadConfiguration with a
+         * VMIN_VALUE for lesser bytes to read and VTIME_VALUE for the elapsed time to 
+         * set if the ReadConfiguration mode provides a timeout.
+         * 
+         * @param readConfig the read configuration, either POLLING_READ, BLOCKING_READ_ONE_CHAR,
+         * READ_WITH_TIMEOUT or READ_WITH_INTERBYTE_TIMEOUT.
+         * @param VTIME_VALUE the value of the read timeout elapsed time, the timer starts 
+         * with this value after read() is called.
+         * @param VMIN_VALUE the value of the minimum number of bytes to read.
+         * @return int (ERR_INVALID_PORT = -2) if port isn't available, (0) otherwise.
+         */
+        int setReadConfigurationMode(const cc_t* readConfig, const int VTIME_VALUE, const int VMIN_VALUE);
+
+        /**
          * @brief Get the Serial Ports in a string array format.
          * 
          * @return const char** the serial ports in a string array format.
@@ -107,6 +127,12 @@ namespace Terminal {
             return (const char**) serialPorts.getBuffer();
         }
 
+        /**
+         * @brief Gets the Dynamic Buffer list containing the serial
+         * devices.
+         * 
+         * @return struct DynamicBuffer* a buffer representing a list for serial ports.
+         */
         struct DynamicBuffer* getDynamicBuffer() {
             return &serialPorts;
         }

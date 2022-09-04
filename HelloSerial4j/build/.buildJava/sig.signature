@@ -1,9 +1,155 @@
  Compiled 
  from 
- "SerialPort.java" 
+ "NativeEnvironment.java" 
+ public 
+ final 
+ class 
+ com.serial4j.core.serial.NativeEnvironment 
+ { 
+ public 
+ com.serial4j.core.serial.NativeEnvironment(); 
+ descriptor: 
+ ()V 
+ protected 
+ static 
+ native 
+ int 
+ setupJniEnvironment0(); 
+ descriptor: 
+ ()I 
+ static 
+ {}; 
+ descriptor: 
+ ()V 
+ } 
+ Compiled 
+ from 
+ "NativeTerminalDevice.java" 
+ public 
+ final 
+ class 
+ com.serial4j.core.serial.NativeTerminalDevice 
+ { 
+ protected 
+ com.serial4j.core.serial.NativeTerminalDevice(); 
+ descriptor: 
+ ()V 
+ protected 
+ static 
+ native 
+ int 
+ setupJniEnvironment0(); 
+ descriptor: 
+ ()I 
+ protected 
+ native 
+ int 
+ setReadConfigurationMode0(int[], 
+ int, 
+ int); 
+ descriptor: 
+ ([III)I 
+ protected 
+ native 
+ int[] 
+ getReadConfigurationMode0(); 
+ descriptor: 
+ ()[I 
+ protected 
+ native 
+ void 
+ setLoggingEnabled0(); 
+ descriptor: 
+ ()V 
+ protected 
+ native 
+ void 
+ setLoggingDisabled0(); 
+ descriptor: 
+ ()V 
+ protected 
+ native 
+ java.lang.String[] 
+ getSerialPorts0(); 
+ descriptor: 
+ ()[Ljava/lang/String; 
+ protected 
+ native 
+ int 
+ fetchSerialPorts0(); 
+ descriptor: 
+ ()I 
+ protected 
+ native 
+ int 
+ getBaudRate0(); 
+ descriptor: 
+ ()I 
+ protected 
+ native 
+ int 
+ getReadBuffer0(); 
+ descriptor: 
+ ()I 
+ protected 
+ native 
+ int 
+ getFileDescriptor0(); 
+ descriptor: 
+ ()I 
+ protected 
+ native 
+ long 
+ writeData0(int); 
+ descriptor: 
+ (I)J 
+ protected 
+ native 
+ long 
+ readData0(); 
+ descriptor: 
+ ()J 
+ protected 
+ native 
+ int 
+ getErrno0(); 
+ descriptor: 
+ ()I 
+ protected 
+ native 
+ int 
+ initTermios0(); 
+ descriptor: 
+ ()I 
+ protected 
+ native 
+ int 
+ setBaudRate0(int); 
+ descriptor: 
+ (I)I 
+ protected 
+ native 
+ int 
+ openPort0(java.lang.String); 
+ descriptor: 
+ (Ljava/lang/String;)I 
+ protected 
+ native 
+ int 
+ closePort0(); 
+ descriptor: 
+ ()I 
+ static 
+ {}; 
+ descriptor: 
+ ()V 
+ } 
+ Compiled 
+ from 
+ "TerminalDevice.java" 
  public 
  class 
- com.serial4j.core.serial.SerialPort 
+ com.serial4j.core.serial.TerminalDevice 
  { 
  private 
  static 
@@ -13,15 +159,26 @@
  descriptor: 
  Ljava/util/logging/Logger; 
  private 
+ final 
+ com.serial4j.core.serial.NativeTerminalDevice 
+ nativeTerminalDevice; 
+ descriptor: 
+ Lcom/serial4j/core/serial/NativeTerminalDevice; 
+ private 
+ com.serial4j.core.serial.SerialPort 
+ serialPort; 
+ descriptor: 
+ Lcom/serial4j/core/serial/SerialPort; 
+ private 
+ com.serial4j.core.serial.ReadConfiguration 
+ readConfiguration; 
+ descriptor: 
+ Lcom/serial4j/core/serial/ReadConfiguration; 
+ private 
  boolean 
  loggingEnabled; 
  descriptor: 
  Z 
- private 
- java.lang.String 
- portName; 
- descriptor: 
- Ljava/lang/String; 
  private 
  java.io.InputStream 
  inputStream; 
@@ -33,21 +190,29 @@
  descriptor: 
  Ljava/io/OutputStream; 
  public 
- com.serial4j.core.serial.SerialPort(); 
+ com.serial4j.core.serial.TerminalDevice(); 
+ descriptor: 
+ ()V 
+ private 
+ static 
+ void 
+ setupJniEnvironment(); 
  descriptor: 
  ()V 
  public 
+ final 
  void 
- openPort(java.lang.String) 
+ openPort(com.serial4j.core.serial.SerialPort) 
  throws 
  com.serial4j.core.serial.throwable.NoSuchDeviceException, 
  com.serial4j.core.serial.throwable.PermissionDeniedException, 
  com.serial4j.core.serial.throwable.BrokenPipeException, 
  com.serial4j.core.serial.throwable.InvalidPortException, 
  com.serial4j.core.serial.throwable.NoResultException, 
- com.serial4j.core.serial.throwable.OperationFailedException; 
+ com.serial4j.core.serial.throwable.OperationFailedException, 
+ com.serial4j.core.serial.throwable.NoAvailableTtyDevicesException; 
  descriptor: 
- (Ljava/lang/String;)V 
+ (Lcom/serial4j/core/serial/SerialPort;)V 
  public 
  void 
  initTermios() 
@@ -58,7 +223,8 @@
  com.serial4j.core.serial.throwable.InvalidPortException, 
  com.serial4j.core.serial.throwable.NoResultException, 
  com.serial4j.core.serial.throwable.OperationFailedException, 
- java.io.FileNotFoundException; 
+ java.io.FileNotFoundException, 
+ com.serial4j.core.serial.throwable.NoAvailableTtyDevicesException; 
  descriptor: 
  ()V 
  public 
@@ -70,9 +236,35 @@
  com.serial4j.core.serial.throwable.BrokenPipeException, 
  com.serial4j.core.serial.throwable.InvalidPortException, 
  com.serial4j.core.serial.throwable.NoResultException, 
- com.serial4j.core.serial.throwable.OperationFailedException; 
+ com.serial4j.core.serial.throwable.OperationFailedException, 
+ com.serial4j.core.serial.throwable.NoAvailableTtyDevicesException; 
  descriptor: 
  (Lcom/serial4j/core/serial/BaudRate;)V 
+ public 
+ void 
+ setReadConfigurationMode(com.serial4j.core.serial.ReadConfiguration, 
+ int, 
+ int) 
+ throws 
+ com.serial4j.core.serial.throwable.NoSuchDeviceException, 
+ com.serial4j.core.serial.throwable.PermissionDeniedException, 
+ com.serial4j.core.serial.throwable.BrokenPipeException, 
+ com.serial4j.core.serial.throwable.InvalidPortException, 
+ com.serial4j.core.serial.throwable.NoResultException, 
+ com.serial4j.core.serial.throwable.OperationFailedException, 
+ com.serial4j.core.serial.throwable.NoAvailableTtyDevicesException; 
+ descriptor: 
+ (Lcom/serial4j/core/serial/ReadConfiguration;II)V 
+ public 
+ com.serial4j.core.serial.ReadConfiguration 
+ getReadConfiguration(); 
+ descriptor: 
+ ()Lcom/serial4j/core/serial/ReadConfiguration; 
+ public 
+ int[] 
+ getReadConfigurationMode(); 
+ descriptor: 
+ ()[I 
  public 
  long 
  writeData(int); 
@@ -80,7 +272,15 @@
  (I)J 
  public 
  long 
- readData(); 
+ readData() 
+ throws 
+ com.serial4j.core.serial.throwable.NoSuchDeviceException, 
+ com.serial4j.core.serial.throwable.PermissionDeniedException, 
+ com.serial4j.core.serial.throwable.BrokenPipeException, 
+ com.serial4j.core.serial.throwable.InvalidPortException, 
+ com.serial4j.core.serial.throwable.NoResultException, 
+ com.serial4j.core.serial.throwable.OperationFailedException, 
+ com.serial4j.core.serial.throwable.NoAvailableTtyDevicesException; 
  descriptor: 
  ()J 
  public 
@@ -92,7 +292,8 @@
  com.serial4j.core.serial.throwable.BrokenPipeException, 
  com.serial4j.core.serial.throwable.InvalidPortException, 
  com.serial4j.core.serial.throwable.NoResultException, 
- com.serial4j.core.serial.throwable.OperationFailedException; 
+ com.serial4j.core.serial.throwable.OperationFailedException, 
+ com.serial4j.core.serial.throwable.NoAvailableTtyDevicesException; 
  descriptor: 
  ()I 
  public 
@@ -105,7 +306,8 @@
  com.serial4j.core.serial.throwable.BrokenPipeException, 
  com.serial4j.core.serial.throwable.InvalidPortException, 
  com.serial4j.core.serial.throwable.NoResultException, 
- com.serial4j.core.serial.throwable.OperationFailedException; 
+ com.serial4j.core.serial.throwable.OperationFailedException, 
+ com.serial4j.core.serial.throwable.NoAvailableTtyDevicesException; 
  descriptor: 
  ()[Ljava/lang/String; 
  public 
@@ -117,7 +319,8 @@
  com.serial4j.core.serial.throwable.BrokenPipeException, 
  com.serial4j.core.serial.throwable.InvalidPortException, 
  com.serial4j.core.serial.throwable.NoResultException, 
- com.serial4j.core.serial.throwable.OperationFailedException; 
+ com.serial4j.core.serial.throwable.OperationFailedException, 
+ com.serial4j.core.serial.throwable.NoAvailableTtyDevicesException; 
  descriptor: 
  ()V 
  public 
@@ -129,7 +332,8 @@
  com.serial4j.core.serial.throwable.BrokenPipeException, 
  com.serial4j.core.serial.throwable.InvalidPortException, 
  com.serial4j.core.serial.throwable.NoResultException, 
- com.serial4j.core.serial.throwable.OperationFailedException; 
+ com.serial4j.core.serial.throwable.OperationFailedException, 
+ com.serial4j.core.serial.throwable.NoAvailableTtyDevicesException; 
  descriptor: 
  ()V 
  public 
@@ -159,12 +363,6 @@
  ()V 
  public 
  final 
- int 
- getPortDescriptor(); 
- descriptor: 
- ()I 
- public 
- final 
  java.io.InputStream 
  getInputStream(); 
  descriptor: 
@@ -177,16 +375,24 @@
  ()Ljava/io/OutputStream; 
  public 
  final 
- java.lang.String 
- getPortName(); 
+ com.serial4j.core.serial.SerialPort 
+ getSerialPort(); 
  descriptor: 
- ()Ljava/lang/String; 
+ ()Lcom/serial4j/core/serial/SerialPort; 
  private 
- static 
- void 
- setupJniEnvironment(); 
+ final 
+ int 
+ getPortDescriptor() 
+ throws 
+ com.serial4j.core.serial.throwable.NoSuchDeviceException, 
+ com.serial4j.core.serial.throwable.PermissionDeniedException, 
+ com.serial4j.core.serial.throwable.BrokenPipeException, 
+ com.serial4j.core.serial.throwable.InvalidPortException, 
+ com.serial4j.core.serial.throwable.NoResultException, 
+ com.serial4j.core.serial.throwable.OperationFailedException, 
+ com.serial4j.core.serial.throwable.NoAvailableTtyDevicesException; 
  descriptor: 
- ()V 
+ ()I 
  private 
  void 
  fetchSerialPorts() 
@@ -196,104 +402,57 @@
  com.serial4j.core.serial.throwable.BrokenPipeException, 
  com.serial4j.core.serial.throwable.InvalidPortException, 
  com.serial4j.core.serial.throwable.NoResultException, 
- com.serial4j.core.serial.throwable.OperationFailedException; 
+ com.serial4j.core.serial.throwable.OperationFailedException, 
+ com.serial4j.core.serial.throwable.NoAvailableTtyDevicesException; 
  descriptor: 
  ()V 
- private 
- static 
- native 
- int 
- setupJniEnvironment0(); 
- descriptor: 
- ()I 
- private 
- native 
- void 
- setLoggingEnabled0(); 
- descriptor: 
- ()V 
- private 
- native 
- void 
- setLoggingDisabled0(); 
- descriptor: 
- ()V 
- private 
- native 
- java.lang.String[] 
- getSerialPorts0(); 
- descriptor: 
- ()[Ljava/lang/String; 
- private 
- native 
- int 
- fetchSerialPorts0(); 
- descriptor: 
- ()I 
- private 
- native 
- int 
- getBaudRate0(); 
- descriptor: 
- ()I 
- private 
- native 
- int 
- getReadBuffer0(); 
- descriptor: 
- ()I 
- private 
- native 
- int 
- getFileDescriptor0(); 
- descriptor: 
- ()I 
- private 
- native 
- long 
- writeData0(int); 
- descriptor: 
- (I)J 
- private 
- native 
- long 
- readData0(); 
- descriptor: 
- ()J 
- private 
- native 
- int 
- getErrno0(); 
- descriptor: 
- ()I 
- private 
- native 
- int 
- initTermios0(); 
- descriptor: 
- ()I 
- private 
- native 
- int 
- setBaudRate0(int); 
- descriptor: 
- (I)I 
- private 
- native 
- int 
- openPort0(java.lang.String); 
- descriptor: 
- (Ljava/lang/String;)I 
- private 
- native 
- int 
- closePort0(); 
- descriptor: 
- ()I 
  static 
  {}; 
  descriptor: 
  ()V 
+ } 
+ Compiled 
+ from 
+ "SerialPort.java" 
+ public 
+ final 
+ class 
+ com.serial4j.core.serial.SerialPort 
+ { 
+ private 
+ java.lang.String 
+ name; 
+ descriptor: 
+ Ljava/lang/String; 
+ private 
+ int 
+ fd; 
+ descriptor: 
+ I 
+ public 
+ com.serial4j.core.serial.SerialPort(java.lang.String); 
+ descriptor: 
+ (Ljava/lang/String;)V 
+ public 
+ void 
+ setFd(int); 
+ descriptor: 
+ (I)V 
+ public 
+ void 
+ setName(java.lang.String); 
+ descriptor: 
+ (Ljava/lang/String;)V 
+ public 
+ java.lang.String 
+ getName(); 
+ descriptor: 
+ ()Ljava/lang/String; 
+ public 
+ int 
+ getFd(); 
+ descriptor: 
+ ()I 
  } 
  Compiled 
  from 
@@ -640,6 +799,27 @@
  } 
  Compiled 
  from 
+ "NoAvailableTtyDevicesException.java" 
+ public 
+ class 
+ com.serial4j.core.serial.throwable.NoAvailableTtyDevicesException 
+ extends 
+ java.lang.RuntimeException 
+ implements 
+ com.serial4j.core.serial.throwable.SerialThrowable 
+ { 
+ public 
+ com.serial4j.core.serial.throwable.NoAvailableTtyDevicesException(java.lang.String); 
+ descriptor: 
+ (Ljava/lang/String;)V 
+ public 
+ com.serial4j.core.errno.Errno 
+ getCausingErrno(); 
+ descriptor: 
+ ()Lcom/serial4j/core/errno/Errno; 
+ } 
+ Compiled 
+ from 
  "InvalidPortException.java" 
  public 
  final 
@@ -727,6 +907,95 @@
  } 
  Compiled 
  from 
+ "ReadConfiguration.java" 
+ public 
+ final 
+ class 
+ com.serial4j.core.serial.ReadConfiguration 
+ extends 
+ java.lang.Enum<com.serial4j.core.serial.ReadConfiguration> 
+ { 
+ public 
+ static 
+ final 
+ com.serial4j.core.serial.ReadConfiguration 
+ POLLING_READ; 
+ descriptor: 
+ Lcom/serial4j/core/serial/ReadConfiguration; 
+ public 
+ static 
+ final 
+ com.serial4j.core.serial.ReadConfiguration 
+ BLOCKING_READ_ONE_CHAR; 
+ descriptor: 
+ Lcom/serial4j/core/serial/ReadConfiguration; 
+ public 
+ static 
+ final 
+ com.serial4j.core.serial.ReadConfiguration 
+ READ_WITH_TIMEOUT; 
+ descriptor: 
+ Lcom/serial4j/core/serial/ReadConfiguration; 
+ public 
+ static 
+ final 
+ com.serial4j.core.serial.ReadConfiguration 
+ READ_WITH_INTERBYTE_TIMEOUT; 
+ descriptor: 
+ Lcom/serial4j/core/serial/ReadConfiguration; 
+ private 
+ final 
+ int[] 
+ mode; 
+ descriptor: 
+ [I 
+ private 
+ final 
+ java.lang.String 
+ description; 
+ descriptor: 
+ Ljava/lang/String; 
+ private 
+ static 
+ final 
+ com.serial4j.core.serial.ReadConfiguration[] 
+ $VALUES; 
+ descriptor: 
+ [Lcom/serial4j/core/serial/ReadConfiguration; 
+ public 
+ static 
+ com.serial4j.core.serial.ReadConfiguration[] 
+ values(); 
+ descriptor: 
+ ()[Lcom/serial4j/core/serial/ReadConfiguration; 
+ public 
+ static 
+ com.serial4j.core.serial.ReadConfiguration 
+ valueOf(java.lang.String); 
+ descriptor: 
+ (Ljava/lang/String;)Lcom/serial4j/core/serial/ReadConfiguration; 
+ private 
+ com.serial4j.core.serial.ReadConfiguration(int[], 
+ java.lang.String); 
+ descriptor: 
+ (Ljava/lang/String;I[ILjava/lang/String;)V 
+ public 
+ int[] 
+ getMode(); 
+ descriptor: 
+ ()[I 
+ public 
+ java.lang.String 
+ getDescription(); 
+ descriptor: 
+ ()Ljava/lang/String; 
+ static 
+ {}; 
+ descriptor: 
+ ()V 
+ } 
+ Compiled 
+ from 
  "ErrnoToException.java" 
  public 
  final 
@@ -748,7 +1017,8 @@
  com.serial4j.core.serial.throwable.BrokenPipeException, 
  com.serial4j.core.serial.throwable.InvalidPortException, 
  com.serial4j.core.serial.throwable.NoResultException, 
- com.serial4j.core.serial.throwable.OperationFailedException; 
+ com.serial4j.core.serial.throwable.OperationFailedException, 
+ com.serial4j.core.serial.throwable.NoAvailableTtyDevicesException; 
  descriptor: 
  (ILjava/lang/String;)V 
  } 
@@ -802,6 +1072,13 @@
  final 
  com.serial4j.core.errno.Errno 
  EOPERATION_FAILED; 
+ descriptor: 
+ Lcom/serial4j/core/errno/Errno; 
+ public 
+ static 
+ final 
+ com.serial4j.core.errno.Errno 
+ ERR_NO_AVAILABLE_TTY_DEVICES; 
  descriptor: 
  Lcom/serial4j/core/errno/Errno; 
  private 
@@ -1338,14 +1615,14 @@
  descriptor: 
  J 
  final 
- com.serial4j.core.serial.SerialPort 
- val$serialPort; 
+ com.serial4j.core.serial.TerminalDevice 
+ val$ttyDevice; 
  descriptor: 
- Lcom/serial4j/core/serial/SerialPort; 
+ Lcom/serial4j/core/serial/TerminalDevice; 
  com.serial4j.example.HelloNativeSerial4J$2(long, 
- com.serial4j.core.serial.SerialPort); 
+ com.serial4j.core.serial.TerminalDevice); 
  descriptor: 
- (JLcom/serial4j/core/serial/SerialPort;)V 
+ (JLcom/serial4j/core/serial/TerminalDevice;)V 
  public 
  void 
  run(); 
@@ -1420,14 +1697,14 @@
  descriptor: 
  J 
  final 
- com.serial4j.core.serial.SerialPort 
- val$serialPort; 
+ com.serial4j.core.serial.TerminalDevice 
+ val$ttyDevice; 
  descriptor: 
- Lcom/serial4j/core/serial/SerialPort; 
+ Lcom/serial4j/core/serial/TerminalDevice; 
  com.serial4j.example.HelloSerial4jIO$1(long, 
- com.serial4j.core.serial.SerialPort); 
+ com.serial4j.core.serial.TerminalDevice); 
  descriptor: 
- (JLcom/serial4j/core/serial/SerialPort;)V 
+ (JLcom/serial4j/core/serial/TerminalDevice;)V 
  public 
  void 
  run(); 
@@ -1449,14 +1726,14 @@
  descriptor: 
  J 
  final 
- com.serial4j.core.serial.SerialPort 
- val$serialPort; 
+ com.serial4j.core.serial.TerminalDevice 
+ val$ttyDevice; 
  descriptor: 
- Lcom/serial4j/core/serial/SerialPort; 
+ Lcom/serial4j/core/serial/TerminalDevice; 
  com.serial4j.example.HelloNativeSerial4J$1(long, 
- com.serial4j.core.serial.SerialPort); 
+ com.serial4j.core.serial.TerminalDevice); 
  descriptor: 
- (JLcom/serial4j/core/serial/SerialPort;)V 
+ (JLcom/serial4j/core/serial/TerminalDevice;)V 
  public 
  void 
  run(); 
@@ -1471,11 +1748,6 @@
  class 
  com.serial4j.example.HelloSerial4jIO 
  { 
- static 
- com.serial4j.core.serial.SerialPort 
- serialPort; 
- descriptor: 
- Lcom/serial4j/core/serial/SerialPort; 
  public 
  com.serial4j.example.HelloSerial4jIO(); 
  descriptor: 
@@ -1498,21 +1770,17 @@
  private 
  static 
  void 
- startWriteThread(com.serial4j.core.serial.SerialPort, 
+ startWriteThread(com.serial4j.core.serial.TerminalDevice, 
  long); 
  descriptor: 
- (Lcom/serial4j/core/serial/SerialPort;J)V 
+ (Lcom/serial4j/core/serial/TerminalDevice;J)V 
  private 
  static 
  void 
- startReadThread(com.serial4j.core.serial.SerialPort, 
+ startReadThread(com.serial4j.core.serial.TerminalDevice, 
  long); 
  descriptor: 
- (Lcom/serial4j/core/serial/SerialPort;J)V 
- static 
- {}; 
- descriptor: 
- ()V 
+ (Lcom/serial4j/core/serial/TerminalDevice;J)V 
  } 
  Compiled 
  from 
@@ -1529,14 +1797,14 @@
  descriptor: 
  J 
  final 
- com.serial4j.core.serial.SerialPort 
- val$serialPort; 
+ com.serial4j.core.serial.TerminalDevice 
+ val$ttyDevice; 
  descriptor: 
- Lcom/serial4j/core/serial/SerialPort; 
+ Lcom/serial4j/core/serial/TerminalDevice; 
  com.serial4j.example.HelloSerial4jIO$2(long, 
- com.serial4j.core.serial.SerialPort); 
+ com.serial4j.core.serial.TerminalDevice); 
  descriptor: 
- (JLcom/serial4j/core/serial/SerialPort;)V 
+ (JLcom/serial4j/core/serial/TerminalDevice;)V 
  public 
  void 
  run(); 
@@ -1551,11 +1819,6 @@
  class 
  com.serial4j.example.HelloNativeSerial4J 
  { 
- static 
- com.serial4j.core.serial.SerialPort 
- serialPort; 
- descriptor: 
- Lcom/serial4j/core/serial/SerialPort; 
  public 
  com.serial4j.example.HelloNativeSerial4J(); 
  descriptor: 
@@ -1577,19 +1840,15 @@
  private 
  static 
  void 
- startReadThread(com.serial4j.core.serial.SerialPort, 
+ startReadThread(com.serial4j.core.serial.TerminalDevice, 
  long); 
  descriptor: 
- (Lcom/serial4j/core/serial/SerialPort;J)V 
+ (Lcom/serial4j/core/serial/TerminalDevice;J)V 
  private 
  static 
  void 
- startWriteThread(com.serial4j.core.serial.SerialPort, 
+ startWriteThread(com.serial4j.core.serial.TerminalDevice, 
  long); 
  descriptor: 
- (Lcom/serial4j/core/serial/SerialPort;J)V 
- static 
- {}; 
- descriptor: 
- ()V 
+ (Lcom/serial4j/core/serial/TerminalDevice;J)V 
  } 

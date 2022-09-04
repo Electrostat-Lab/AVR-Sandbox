@@ -35,8 +35,8 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-#ifndef JNI_UTILS
-#define JNI_UTILS
+#ifndef JNI_UTILS 
+#define JNI_UTILS 
 
 #include<jni.h>
 #include<stdio.h>
@@ -45,6 +45,7 @@
 #include<ErrnoUtils.h>
 
 #define CONSTRUCTOR ((const char*) "<init>")
+#define STATIC_INIT ((const char*) "<clinit>")
 
 #define NON_PARAMTERIZED_VOID_SIG ((const char*) "()V")
 #define NON_PARAMETERIZED_INT_SIG ((const char*) "()I")
@@ -197,7 +198,8 @@ namespace JniUtils {
         return array;
     }
 
-    static inline jobject* fillObjectBuffer(jobject* objectBuffer, const char** buffer, int length) {
+    static inline jobject* getObjectBufferFromString(const char** buffer, int length) {
+        jobject* objectBuffer = (jobject*) calloc(length, sizeof(jobject));
         for (int i = 0; i < length; i++) {
             objectBuffer[i] = JniUtils::getJniEnv()->NewStringUTF(buffer[i]);
         }
@@ -213,6 +215,10 @@ namespace JniUtils {
     static inline jobject getArrayElement(jobjectArray array, jsize index) {
         return JniUtils::getJniEnv()->GetObjectArrayElement(array, index);
     } 
+
+    static inline jint getIntArrayElement(jintArray array, jsize index) {
+        return JniUtils::getJniEnv()->GetIntArrayElements(array, 0)[index];
+    }
 }
 
 #endif

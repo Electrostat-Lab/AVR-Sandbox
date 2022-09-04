@@ -1,3 +1,34 @@
+/*
+ * BSD 3-Clause License
+ *
+ * Copyright (c) 2022, Scrappers Team, The AVR-Sandbox Project, Serial4j API.
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ * 1. Redistributions of source code must retain the above copyright notice, this
+ * list of conditions and the following disclaimer.
+ *
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ * this list of conditions and the following disclaimer in the documentation
+ * and/or other materials provided with the distribution.
+ *
+ * 3. Neither the name of the copyright holder nor the names of its
+ * contributors may be used to endorse or promote products derived from
+ * this software without specific prior written permission.
+
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
 package com.serial4j.example;
 
 import java.io.FileOutputStream;
@@ -6,6 +37,8 @@ import java.util.Arrays;
 import java.io.FileNotFoundException;
 import com.serial4j.core.serial.BaudRate;
 import com.serial4j.core.serial.SerialPort;
+import com.serial4j.core.serial.TerminalDevice;
+import com.serial4j.core.serial.ReadConfiguration;
 import com.serial4j.core.serial.throwable.PermissionDeniedException;
 import com.serial4j.example.HelloNativeSerial4J;
 import com.serial4j.core.serial.throwable.BrokenPipeException;
@@ -15,7 +48,6 @@ import com.serial4j.core.serial.throwable.NoResultException;
 import com.serial4j.core.serial.throwable.OperationFailedException;
 
 public final class HelloSerial4jIO {
-    static SerialPort serialPort = new SerialPort();		
     public static void main(String args[]) throws NoSuchDeviceException,
 												  PermissionDeniedException,
 												  BrokenPipeException,
@@ -27,30 +59,32 @@ public final class HelloSerial4jIO {
         
         // HelloNativeSerial4J.main(args);
         System.out.println("Started java io example: ");
-		serialPort.setSerial4jLoggingEnabled(true);
-		serialPort.setNativeLoggingEnabled();
-		serialPort.openPort(serialPort.getSerialPorts()[0]);
-		if (serialPort.getPortDescriptor() > 0) {
-			System.out.println("Port Opened with "+serialPort.getPortDescriptor());
+        final TerminalDevice ttyDevice = new TerminalDevice();		
+		ttyDevice.setSerial4jLoggingEnabled(true);
+		ttyDevice.setNativeLoggingEnabled();
+		ttyDevice.openPort(new SerialPort(ttyDevice.getSerialPorts()[0]));
+		if (ttyDevice.getSerialPort().getFd() > 0) {
+			System.out.println("Port Opened with " + ttyDevice.getSerialPort().getFd());
 		} else {
-            System.err.println("Cannot open serial port" + " " + serialPort.getPortDescriptor());
+            System.err.println("Cannot open serial port" + " " + ttyDevice.getSerialPort().getFd());
         }
-		serialPort.initTermios();
-		serialPort.setBaudRate(BaudRate.B57600);
-		System.out.println("Available serial ports: " + Arrays.toString(serialPort.getSerialPorts()));
-        startReadThread(serialPort, 5000);
-        startWriteThread(serialPort, 8000);
+		ttyDevice.initTermios();
+		ttyDevice.setBaudRate(BaudRate.B57600);
+        ttyDevice.setReadConfigurationMode(ReadConfiguration.BLOCKING_READ_ONE_CHAR, 0, 1);
+		System.out.println("Available serial ports: " + Arrays.toString(ttyDevice.getSerialPorts()));
+        startReadThread(ttyDevice, 5000);
+        startWriteThread(ttyDevice, 8000);
     }
 
-    private static void startWriteThread(final SerialPort serialPort, final long millis) {
+    private static void startWriteThread(final TerminalDevice ttyDevice, final long millis) {
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
                     Thread.sleep(millis);
-                    serialPort.getOutputStream().write('A');
-                    serialPort.getOutputStream().write('D');
-                    serialPort.closePort();
+                    ttyDevice.getOutputStream().write('A');
+                    ttyDevice.getOutputStream().write('D');
+                    ttyDevice.closePort();
                 } catch (IOException | InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -58,14 +92,14 @@ public final class HelloSerial4jIO {
         }).start();
     }
 
-    private static void startReadThread(final SerialPort serialPort, final long millis) {
+    private static void startReadThread(final TerminalDevice ttyDevice, final long millis) {
         new Thread(new Runnable() {
 			public void run() {
                 try {
                     Thread.sleep(millis);
                     while(true) {
-                        if (serialPort.getInputStream().available() > 0) {
-                            System.out.println((char) serialPort.getInputStream().read());
+                        if (ttyDevice.getInputStream().available() > 0) {
+                            System.out.println((char) ttyDevice.getInputStream().read());
                         }
                     }
                 } catch(IOException | InterruptedException e) {

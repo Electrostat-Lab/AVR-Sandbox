@@ -44,7 +44,8 @@ public enum Errno {
     EPIPE(32, "Broken pipe"),
     EINVALID_PORT(-2, "Invalid Port"),
     ENO_RESULT(0, "No result"),
-    EOPERATION_FAILED(-1, "Operation Failed");
+    EOPERATION_FAILED(-1, "Operation Failed"),
+    ERR_NO_AVAILABLE_TTY_DEVICES(-4, "No available teletype devices");
 
     private final int value;
     private final String description;

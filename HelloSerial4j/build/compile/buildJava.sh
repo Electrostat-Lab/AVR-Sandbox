@@ -46,7 +46,7 @@ function moveHeaders() {
     headers=`find -name "*.h"`
     # check if the headers exist then move them
     if [[ $headers ]]; then
-        mv $headers $nativessrc_directory'/include'
+        mv $headers $nativessrc_directory'/include/jni'
     fi
 }
 
