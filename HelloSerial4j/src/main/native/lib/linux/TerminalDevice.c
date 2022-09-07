@@ -1,7 +1,7 @@
-#include<Serial.h>
+#include<TerminalDevice.h>
 
-int* Terminal::TerminalControl::openPort(const char* port) {
-    this->portFileDescriptor = open(port, DEFAULT_FLAG);
+int* Terminal::TerminalDevice::openPort(const char* port) {
+    this->portFileDescriptor = open(port, flags);
     if (this->portFileDescriptor > 0) {
         Logger::LOGS(SERIAL, "Serial Port Opened.");
     } else {
@@ -10,7 +10,7 @@ int* Terminal::TerminalControl::openPort(const char* port) {
     return &(this->portFileDescriptor);
 }
 
-int Terminal::TerminalControl::fetchSerialPorts() {
+int Terminal::TerminalDevice::fetchSerialPorts() {
     Logger::LOGS(SERIAL, "Fetching serial devices.");
 
     DIR* dirp = opendir(DEVICES_DIR);
@@ -30,7 +30,7 @@ int Terminal::TerminalControl::fetchSerialPorts() {
         device = SerialUtils::concatIntoDevice(device, dp->d_name, DEVICES_DIR);
         
         /* delete the device buffer if it's not a serial port */
-        if (!SerialUtils::isSerialPort(device, DEFAULT_FLAG)) {
+        if (!SerialUtils::isSerialPort(device, flags)) {
             BufferUtils::deleteBuffer(device);
             continue;
         }
@@ -49,7 +49,7 @@ int Terminal::TerminalControl::fetchSerialPorts() {
     return OPERATION_SUCCEEDED;
 }
 
-int Terminal::TerminalControl::initTermios() {
+int Terminal::TerminalDevice::initTermios() {
     if (this->portFileDescriptor <= 0) {
         return ERR_INVALID_PORT;
     }
@@ -73,7 +73,7 @@ int Terminal::TerminalControl::initTermios() {
     return tcsetattr(this->portFileDescriptor, TCSAFLUSH, &(this->tty));
 }
 
-int Terminal::TerminalControl::setReadConfigurationMode(const cc_t* readConfig, const int VTIME_VALUE, const int VMIN_VALUE) {
+int Terminal::TerminalDevice::setReadConfigurationMode(const cc_t* readConfig, const int VTIME_VALUE, const int VMIN_VALUE) {
     if (this->portFileDescriptor <= 0) {
         return ERR_INVALID_PORT;
     }
@@ -84,7 +84,19 @@ int Terminal::TerminalControl::setReadConfigurationMode(const cc_t* readConfig, 
     return tcsetattr(this->portFileDescriptor, TCSAFLUSH, &(this->tty));
 }
 
-int Terminal::TerminalControl::setBaudRate(int baudRate) {
+cc_t* Terminal::TerminalDevice::getReadConfigurationMode() {
+    cc_t* readConfig = (cc_t*) calloc(2, sizeof(int));
+    if (this->portFileDescriptor <= 0) {
+        readConfig[0] = ERR_INVALID_PORT;
+        readConfig[1] = ERR_INVALID_PORT;
+        return readConfig;
+    }
+    readConfig[0] = this->tty.c_cc[VTIME];
+    readConfig[1] = this->tty.c_cc[VMIN];
+    return readConfig;
+}
+
+int Terminal::TerminalDevice::setBaudRate(int baudRate) {
     if (this->portFileDescriptor <= 0) {
         return ERR_INVALID_PORT;
     }
@@ -92,38 +104,38 @@ int Terminal::TerminalControl::setBaudRate(int baudRate) {
     return tcsetattr(this->portFileDescriptor, TCSAFLUSH, &(this->tty));
 }
 
-speed_t Terminal::TerminalControl::getBaudRate() {
+speed_t Terminal::TerminalDevice::getBaudRate() {
     if (this->portFileDescriptor <= 0) {
         return ERR_INVALID_PORT;
     }
     return cfgetospeed(&(this->tty));
 }
 
-ssize_t Terminal::TerminalControl::writeData() {
+ssize_t Terminal::TerminalDevice::writeData(const void* buffer, int length) {
     if (this->portFileDescriptor <= 0) {
         return ERR_INVALID_PORT;
     }
-    return write(this->portFileDescriptor, (void*) this->writeBuffer, BUFFER_SIZE);
+    return write(this->portFileDescriptor, buffer, length);
 }
 
-ssize_t Terminal::TerminalControl::readData() {
+ssize_t Terminal::TerminalDevice::readData(void* buffer, int length) {
     if (this->portFileDescriptor <= 0) {
         return ERR_INVALID_PORT;
     }
-    return read(this->portFileDescriptor, (void*) this->readBuffer, BUFFER_SIZE);
+    return read(this->portFileDescriptor, buffer, length);
 }
 
-int Terminal::TerminalControl::closePort() {
+int Terminal::TerminalDevice::closePort() {
     if (this->portFileDescriptor <= 0) {
         return ERR_INVALID_PORT;
     }
     return close(this->portFileDescriptor);
 } 
 
-int* Terminal::TerminalControl::getPortFileDescriptor() {
+int* Terminal::TerminalDevice::getPortFileDescriptor() {
     return &(this->portFileDescriptor);
 }
 
-int* Terminal::TerminalControl::getErrno() {
+int* Terminal::TerminalDevice::getErrno() {
     return &errno;
 }

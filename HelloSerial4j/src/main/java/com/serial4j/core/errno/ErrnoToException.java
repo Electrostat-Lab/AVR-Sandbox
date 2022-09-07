@@ -68,6 +68,8 @@ public final class ErrnoToException {
             throw new InvalidPortException(additionalText);
         } else if (errno == Errno.ERR_NO_AVAILABLE_TTY_DEVICES.getValue()) {
             throw new NoAvailableTtyDevicesException(additionalText);
+        } else if (errno == Errno.EOPERATION_FAILED.getValue()) {
+            throw new OperationFailedException(additionalText);
         }
     }
 

@@ -36,6 +36,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.io.FileNotFoundException;
 import com.serial4j.core.serial.ReadConfiguration;
+import com.serial4j.core.serial.Permissions;
 import com.serial4j.core.serial.BaudRate;
 import com.serial4j.core.serial.SerialPort;
 import com.serial4j.core.serial.TerminalDevice;
@@ -62,6 +63,11 @@ public final class HelloNativeSerial4J {
 												  FileNotFoundException {		
 		System.out.println("Started native io example: ");
 		final TerminalDevice ttyDevice = new TerminalDevice();
+		final int permissionsValue = Permissions.O_RDWR.getValue() | 
+									 Permissions.O_NOCTTY.getValue() | 
+									 Permissions.O_NONBLOCK.getValue();
+		final Permissions permissions = Permissions.createCustomPermissions(permissionsValue, "My Permissions");
+		ttyDevice.setPermissions(permissions);
 		ttyDevice.openPort(new SerialPort("/dev/ttyUSB0"));		
 		ttyDevice.setSerial4jLoggingEnabled(true);
 		ttyDevice.setNativeLoggingEnabled();
@@ -70,10 +76,10 @@ public final class HelloNativeSerial4J {
 		}
 		ttyDevice.initTermios();
 		ttyDevice.setBaudRate(BaudRate.B57600);
-		ttyDevice.setReadConfigurationMode(ReadConfiguration.BLOCKING_READ_ONE_CHAR, 0, 1);
+        ttyDevice.setReadConfigurationMode(ReadConfiguration.READ_WITH_INTERBYTE_TIMEOUT, 5, 510);
 		System.out.println(Arrays.toString(ttyDevice.getSerialPorts()));
-		startReadThread(ttyDevice, 2500);
-		startWriteThread(ttyDevice, 0);
+		startReadThread(ttyDevice, 0);
+		startWriteThread(ttyDevice, 2500);
 	}
 
 	private static void startReadThread(final TerminalDevice ttyDevice, final long millis) {
@@ -83,7 +89,6 @@ public final class HelloNativeSerial4J {
 					Thread.sleep(millis);
 					while(true) {
 						if (ttyDevice.readData() > 0) {
-							if ((char) ttyDevice.getReadBuffer() > 0) 
 							System.out.println((char) ttyDevice.getReadBuffer());
 						}
 					}	
@@ -100,9 +105,8 @@ public final class HelloNativeSerial4J {
 			public void run() {
 				try {
 					Thread.sleep(millis);
-					ttyDevice.writeData('B');
-					ttyDevice.writeData('C');
-					ttyDevice.closePort();
+					ttyDevice.writeBuffer("AB");
+					// ttyDevice.closePort();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

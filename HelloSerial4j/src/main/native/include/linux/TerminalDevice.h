@@ -54,33 +54,38 @@
 #include<ErrnoUtils.h>
 #include<Logger.h>
 
-#define BUFFER_SIZE (1)
+#define READ_CONFIG_SIZE (2)
 #define DEVICES_DIR ((const char*) "/dev/")
 
-#define DEFAULT_FLAG (O_RDWR | O_NONBLOCK | O_NOCTTY)
+#define DEFAULT_FLAGS (O_RDWR | O_NONBLOCK | O_NOCTTY)
 
 namespace Terminal {
 
-    struct TerminalControl {
+    struct TerminalDevice {
 
         /** terminal attrs */
-        termios tty;
+        struct termios tty;
+        int flags = DEFAULT_FLAGS;
         int portFileDescriptor;
         int baudRate;
 
         /** Param@0 = VTIME, Param@1 = VMIN */
-        const cc_t POLLING_READ[2] = {0, 0};
-        const cc_t BLOCKING_READ_ONE_CHAR[2] = {0, 1};
-        const cc_t READ_WITH_TIMEOUT[2] = {1, 0};
-        const cc_t READ_WITH_INTERBYTE_TIMEOUT[2] = {1, 1};
+        const cc_t POLLING_READ[READ_CONFIG_SIZE] = {0, 0};
+        const cc_t BLOCKING_READ_ONE_CHAR[READ_CONFIG_SIZE] = {0, 1};
+        const cc_t READ_WITH_TIMEOUT[READ_CONFIG_SIZE] = {1, 0};
+        const cc_t READ_WITH_INTERBYTE_TIMEOUT[READ_CONFIG_SIZE] = {1, 1};
 
         /** Serial Ports buffer */
         struct DynamicBuffer serialPorts;
 
-        /** R/W buffers */
-        int writeBuffer[BUFFER_SIZE];
-        int readBuffer[BUFFER_SIZE];
-        
+        void setIOFlags(int* flags) {
+            this->flags = *flags;
+        }
+
+        int* getIOFlags() {
+            return &flags;
+        }
+
         /**
          * @brief Fetches serial port devices on "/dev/" into [serialPorts] buffer.
          * 
@@ -117,7 +122,14 @@ namespace Terminal {
          * @return int (ERR_INVALID_PORT = -2) if port isn't available, (0) otherwise.
          */
         int setReadConfigurationMode(const cc_t* readConfig, const int VTIME_VALUE, const int VMIN_VALUE);
-
+        
+        /**
+         * @brief Get the Read Configuration Mode object
+         * 
+         * @return int* 
+         */
+        cc_t* getReadConfigurationMode();
+        
         /**
          * @brief Get the Serial Ports in a string array format.
          * 
@@ -157,14 +169,14 @@ namespace Terminal {
          * 
          * @return ssize_t the number of bytes written to the serial device.
          */
-        ssize_t writeData();
+        ssize_t writeData(const void* buffer, int length);
 
         /**
          * @brief Reads data from the serial port device.
          * 
          * @return ssize_t the number of bytes read from the terminal.
          */
-        ssize_t readData();
+        ssize_t readData(void* buffer, int length);
 
         /**
          * @brief Closes the serial port device.

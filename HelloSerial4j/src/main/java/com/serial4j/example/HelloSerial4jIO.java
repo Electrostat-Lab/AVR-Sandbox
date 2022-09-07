@@ -57,23 +57,22 @@ public final class HelloSerial4jIO {
 												  FileNotFoundException,
                                                   InterruptedException {
         
-        // HelloNativeSerial4J.main(args);
-        System.out.println("Started java io example: ");
-        final TerminalDevice ttyDevice = new TerminalDevice();		
-		ttyDevice.setSerial4jLoggingEnabled(true);
-		ttyDevice.setNativeLoggingEnabled();
-		ttyDevice.openPort(new SerialPort(ttyDevice.getSerialPorts()[0]));
-		if (ttyDevice.getSerialPort().getFd() > 0) {
-			System.out.println("Port Opened with " + ttyDevice.getSerialPort().getFd());
-		} else {
-            System.err.println("Cannot open serial port" + " " + ttyDevice.getSerialPort().getFd());
-        }
-		ttyDevice.initTermios();
-		ttyDevice.setBaudRate(BaudRate.B57600);
-        ttyDevice.setReadConfigurationMode(ReadConfiguration.BLOCKING_READ_ONE_CHAR, 0, 1);
-		System.out.println("Available serial ports: " + Arrays.toString(ttyDevice.getSerialPorts()));
-        startReadThread(ttyDevice, 5000);
-        startWriteThread(ttyDevice, 8000);
+        HelloNativeSerial4J.main(args);
+        // System.out.println("Started java io example: ");
+        // final TerminalDevice ttyDevice = new TerminalDevice();		
+		// ttyDevice.setSerial4jLoggingEnabled(true);
+		// ttyDevice.setNativeLoggingEnabled();
+		// ttyDevice.openPort(new SerialPort(ttyDevice.getSerialPorts()[0]));
+		// if (ttyDevice.getSerialPort().getFd() > 0) {
+		// 	System.out.println("Port Opened with " + ttyDevice.getSerialPort().getFd());
+		// } else {
+        //     System.err.println("Cannot open serial port" + " " + ttyDevice.getSerialPort().getFd());
+        // }
+		// ttyDevice.initTermios();
+		// ttyDevice.setBaudRate(BaudRate.B57600);
+		// System.out.println("Available serial ports: " + Arrays.toString(ttyDevice.getSerialPorts()));
+        // startReadThread(ttyDevice, 5000);
+        // startWriteThread(ttyDevice, 8000);
     }
 
     private static void startWriteThread(final TerminalDevice ttyDevice, final long millis) {

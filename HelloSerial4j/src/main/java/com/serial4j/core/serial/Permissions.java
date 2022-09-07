@@ -31,52 +31,37 @@
  */
 package com.serial4j.core.serial;
 
-import java.util.Arrays;
-import com.serial4j.core.errno.Errno;
-import com.serial4j.core.serial.throwable.InvalidPortException;
-
 /**
- * Provides a Unix terminal read configuration for the specified serial port of the 
- * terminal device.
+ * Provides Unix file system permissions for the specified serial port
+ * of the terminal device.
  * 
  * @author pavl_g.
  */
-public enum ReadConfiguration {
-    POLLING_READ(new int[] {0, 0}, "Polling Read"),
-    BLOCKING_READ_ONE_CHAR(new int[] {0, 1}, "Blocking read one charachter at a time"),
-    READ_WITH_TIMEOUT(new int[] {1, 0}, "Polling Read with timeout"),
-    READ_WITH_INTERBYTE_TIMEOUT(new int[] {1, 1}, "Blocking read with timeout"),
-    ERR_INVALID_PORT(new int[] {Errno.EINVALID_PORT.getValue(), Errno.EINVALID_PORT.getValue()}, "Error invalid port");
+public final class Permissions {
 
-    private final int[] mode;
+    public static final Permissions O_RDONLY = new Permissions(00, "Read Only");
+    public static final Permissions O_WRONLY = new Permissions(01, "Write Only");
+    public static final Permissions O_RDWR = new Permissions(02, "Read/Write");
+    public static final Permissions O_NOCTTY = new Permissions(0400, "No Control terminal device");
+    public static final Permissions O_NONBLOCK = new Permissions(04000, "");
+
+    private final int value;
     private final String description;
 
-    ReadConfiguration(final int[] mode, final String description) {
-        this.mode = mode;
+    private Permissions(final int value, final String description) {
+        this.value = value;
         this.description = description;
     }
+    
+    public static final Permissions createCustomPermissions(final int value, final String description) {
+        return new Permissions(value, description);
+    }
 
-    public int[] getMode() {
-        return mode;
+    public int getValue() {
+        return value;
     }
 
     public String getDescription() {
         return description;
-    }
-
-    public static ReadConfiguration getFromNativeReadConfig(final int[] nativeReadConfig) {
-        ReadConfiguration readConfiguration;
-        if (nativeReadConfig[0] < 1 && nativeReadConfig[1] >= 1) {
-            readConfiguration = ReadConfiguration.BLOCKING_READ_ONE_CHAR;
-        } else if ((nativeReadConfig[0] | nativeReadConfig[1]) == 0) {
-            readConfiguration = ReadConfiguration.POLLING_READ;
-        } else if (nativeReadConfig[0] >= 1 && nativeReadConfig[1] >= 1) {
-            readConfiguration = ReadConfiguration.READ_WITH_INTERBYTE_TIMEOUT;
-        } else if ((nativeReadConfig[0] & nativeReadConfig[1]) == Errno.EINVALID_PORT.getValue()) {
-            throw new InvalidPortException("Cannot get read configuration for an invalid port !");
-        } else {
-            readConfiguration = ReadConfiguration.READ_WITH_TIMEOUT;
-        }
-        return readConfiguration;
     }
 }

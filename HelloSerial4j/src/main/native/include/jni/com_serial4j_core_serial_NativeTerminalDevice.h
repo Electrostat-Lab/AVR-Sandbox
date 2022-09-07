@@ -17,6 +17,22 @@ JNIEXPORT jint JNICALL Java_com_serial4j_core_serial_NativeTerminalDevice_setupJ
 
 /*
  * Class:     com_serial4j_core_serial_NativeTerminalDevice
+ * Method:    setIOFlags
+ * Signature: (I)V
+ */
+JNIEXPORT void JNICALL Java_com_serial4j_core_serial_NativeTerminalDevice_setIOFlags
+  (JNIEnv *, jobject, jint);
+
+/*
+ * Class:     com_serial4j_core_serial_NativeTerminalDevice
+ * Method:    getIOFlags
+ * Signature: ()I
+ */
+JNIEXPORT jint JNICALL Java_com_serial4j_core_serial_NativeTerminalDevice_getIOFlags
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     com_serial4j_core_serial_NativeTerminalDevice
  * Method:    setReadConfigurationMode0
  * Signature: ([III)I
  */
@@ -101,6 +117,22 @@ JNIEXPORT jlong JNICALL Java_com_serial4j_core_serial_NativeTerminalDevice_write
  * Signature: ()J
  */
 JNIEXPORT jlong JNICALL Java_com_serial4j_core_serial_NativeTerminalDevice_readData0
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     com_serial4j_core_serial_NativeTerminalDevice
+ * Method:    writeBuffer0
+ * Signature: (Ljava/lang/String;I)J
+ */
+JNIEXPORT jlong JNICALL Java_com_serial4j_core_serial_NativeTerminalDevice_writeBuffer0
+  (JNIEnv *, jobject, jstring, jint);
+
+/*
+ * Class:     com_serial4j_core_serial_NativeTerminalDevice
+ * Method:    readBuffer0
+ * Signature: ()Ljava/lang/String;
+ */
+JNIEXPORT jstring JNICALL Java_com_serial4j_core_serial_NativeTerminalDevice_readBuffer0
   (JNIEnv *, jobject);
 
 /*

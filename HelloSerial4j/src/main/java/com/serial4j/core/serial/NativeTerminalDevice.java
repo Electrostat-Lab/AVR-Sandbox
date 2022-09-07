@@ -33,6 +33,11 @@ package com.serial4j.core.serial;
 
 import com.serial4j.core.util.natives.NativeImageLoader;
 
+/**
+ * Represents the native java binding for Serial4j API.
+ * 
+ * @author pavl_g.
+ */
 public final class NativeTerminalDevice {
 
     /**
@@ -51,6 +56,10 @@ public final class NativeTerminalDevice {
      * @return (-1) if the jni env pointer is NULL, (1) for successful initialization.
      */
     protected static native int setupJniEnvironment0();
+
+    protected native void setIOFlags(final int flags);
+
+    protected native int getIOFlags();
 
     protected native int setReadConfigurationMode0(final int[] mode, final int VTIME_VALUE, final int VMIN_VALUE);
 
@@ -73,6 +82,10 @@ public final class NativeTerminalDevice {
     protected native long writeData0(final int data);
 
     protected native long readData0();
+
+    protected native long writeBuffer0(final String buffer, final int length);
+
+    protected native String readBuffer0();
 
     protected native int getErrno0();
 

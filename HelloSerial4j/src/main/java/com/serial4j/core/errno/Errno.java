@@ -34,7 +34,7 @@ package com.serial4j.core.errno;
 /**
  * Interprets the native methods bad return values into error codes,
  * used by the java {@link com.serial4j.core.errno.ErrnoToException} 
- * to throw exceptions to the JRE.
+ * to throw exceptions against the JRE.
  * 
  * @author pavl_g.
  */

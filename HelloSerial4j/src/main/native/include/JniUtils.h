@@ -5,7 +5,7 @@
  * @version 0.1
  * @date 2022-08-28
  * 
-* @copyright 
+ * @copyright 
  * BSD 3-Clause License
  *
  * Copyright (c) 2022, Scrappers Team, The AVR-Sandbox Project, Serial4j API.
@@ -206,6 +206,14 @@ namespace JniUtils {
         return objectBuffer;
     } 
 
+    static inline const char* getBufferFromString(jstring string) {
+        return JniUtils::getJniEnv()->GetStringUTFChars(string, 0);
+    }
+
+    static inline jstring getStringFromBuffer(const char* buffer) {
+        return JniUtils::getJniEnv()->NewStringUTF(buffer);
+    }
+
     static inline void setArrayElements(jobjectArray array, jsize length, jobject* buffer) {
         for (int i = 0; i < length; i++) {
             JniUtils::getJniEnv()->SetObjectArrayElement(array, i, buffer[i]);
@@ -218,6 +226,12 @@ namespace JniUtils {
 
     static inline jint getIntArrayElement(jintArray array, jsize index) {
         return JniUtils::getJniEnv()->GetIntArrayElements(array, 0)[index];
+    }
+
+    static inline jintArray getIntArrayFromBuffer(int* buffer, int length) {
+        jintArray intArray = JniUtils::getJniEnv()->NewIntArray(length);
+        JniUtils::getJniEnv()->SetIntArrayRegion(intArray, 0, length, buffer);
+        return intArray;
     }
 }
 
