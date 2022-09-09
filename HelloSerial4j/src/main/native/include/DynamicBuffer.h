@@ -52,6 +52,10 @@ struct DynamicBuffer {
         return buffer;
     }
 
+    void resetDataPointer() {
+        this->count = 0;
+    }
+
     int* getItemsCount();
 
     int add(void* item);

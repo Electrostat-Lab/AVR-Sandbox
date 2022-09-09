@@ -29,20 +29,26 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.serial4j.core.serial.throwable;
+package com.serial4j.core.serial.control;
 
-import java.lang.RuntimeException;
-import com.serial4j.core.errno.Errno;
-import com.serial4j.core.serial.throwable.SerialThrowable;
+public final class TerminalControlFlag extends TerminalFlag {
 
-public final class NoResultException extends RuntimeException implements SerialThrowable {
+    public static final TerminalControlFlag EMPTY_INSTANCE = new TerminalControlFlag(0);
+    public static final TerminalControlFlag CIBAUD = new TerminalControlFlag(002003600000);
+    public static final TerminalControlFlag CS5 = new TerminalControlFlag(0000000);
+    public static final TerminalControlFlag CS6 = new TerminalControlFlag(0000020);
+    public static final TerminalControlFlag CS7 = new TerminalControlFlag(0000040);
+    public static final TerminalControlFlag CS8 = new TerminalControlFlag(0000060);
+    public static final TerminalControlFlag CLOCAL = new TerminalControlFlag(0004000);
+    public static final TerminalControlFlag CREAD = new TerminalControlFlag(0000200);
+    public static final TerminalControlFlag CMSPAR = new TerminalControlFlag(010000000000);
+    public static final TerminalControlFlag CRTSCTS = new TerminalControlFlag(020000000000);
+    public static final TerminalControlFlag CSTOPB = new TerminalControlFlag(0000100);
+    public static final TerminalControlFlag HUPCL = new TerminalControlFlag(0002000);
+    public static final TerminalControlFlag PARENB = new TerminalControlFlag(0000400);
+    public static final TerminalControlFlag PARODD = new TerminalControlFlag(0001000);
 
-    public NoResultException(final String additionalText) {
-        super(Errno.ENO_RESULT.getDescription() + "\n" + additionalText);
-    }
-    
-    @Override
-    public Errno getCausingErrno() {
-        return Errno.ENO_RESULT;
+    protected TerminalControlFlag(final long value) {
+        super(value);
     }
 }

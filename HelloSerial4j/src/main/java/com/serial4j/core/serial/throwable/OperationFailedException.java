@@ -38,7 +38,7 @@ import com.serial4j.core.serial.throwable.SerialThrowable;
 public final class OperationFailedException extends RuntimeException implements SerialThrowable {
 
     public OperationFailedException(final String additionalText) {
-        super(Errno.EOPERATION_FAILED.getDescription() + " " + additionalText);
+        super(Errno.EOPERATION_FAILED.getDescription() + "\n" + additionalText);
     }
     
     @Override

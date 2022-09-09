@@ -38,7 +38,7 @@ import com.serial4j.core.serial.throwable.SerialThrowable;
 public class PermissionDeniedException extends IOException implements SerialThrowable {
 
     public PermissionDeniedException(final String additionalText) {
-        super(Errno.EACCES.getDescription() + " " + additionalText);
+        super(Errno.EACCES.getDescription() + "\n" + additionalText);
     }
 
     @Override

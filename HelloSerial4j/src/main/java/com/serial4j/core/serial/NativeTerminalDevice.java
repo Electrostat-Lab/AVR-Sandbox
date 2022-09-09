@@ -61,6 +61,22 @@ public final class NativeTerminalDevice {
 
     protected native int getIOFlags();
 
+    protected native int setTerminalControlFlag(final long flag);
+
+    protected native int setTerminalLocalFlag(final long flag);
+
+    protected native int setTerminalInputFlag(final long flag);
+
+    protected native int setTerminalOutputFlag(final long flag);
+
+    protected native long getTerminalControlFlag();
+
+    protected native long getTerminalLocalFlag();
+
+    protected native long getTerminalInputFlag();
+
+    protected native long getTerminalOutputFlag();
+
     protected native int setReadConfigurationMode0(final int[] mode, final int VTIME_VALUE, final int VMIN_VALUE);
 
     protected native int[] getReadConfigurationMode0();

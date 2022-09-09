@@ -43,18 +43,31 @@ public final class Permissions {
     public static final Permissions O_WRONLY = new Permissions(01, "Write Only");
     public static final Permissions O_RDWR = new Permissions(02, "Read/Write");
     public static final Permissions O_NOCTTY = new Permissions(0400, "No Control terminal device");
-    public static final Permissions O_NONBLOCK = new Permissions(04000, "");
+    public static final Permissions O_NONBLOCK = new Permissions(04000, "Terminal non block");
 
-    private final int value;
-    private final String description;
+    private int value;
+    private String description;
 
-    private Permissions(final int value, final String description) {
+    protected Permissions(final int value, final String description) {
         this.value = value;
         this.description = description;
     }
     
     public static final Permissions createCustomPermissions(final int value, final String description) {
         return new Permissions(value, description);
+    }
+
+    public Permissions append(final Permissions permissions) {
+        this.value |= permissions.getValue();
+        this.description += "-" + permissions.getDescription();
+        return this;
+    }
+
+    public Permissions append(final Permissions...permissions) {
+        for (int i = 0; i < permissions.length; i++) {
+            append(permissions[i]);
+        }
+        return this;
     }
 
     public int getValue() {

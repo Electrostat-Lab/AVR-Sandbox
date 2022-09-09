@@ -29,20 +29,31 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.serial4j.core.serial.throwable;
+package com.serial4j.core.serial.control;
 
-import java.lang.RuntimeException;
-import com.serial4j.core.errno.Errno;
-import com.serial4j.core.serial.throwable.SerialThrowable;
+/**
+ * Provides Unix [c_iflag] termios bits.
+ * 
+ * @author pavl_g.
+ */
+public final class TerminalInputFlag extends TerminalFlag {
 
-public final class NoResultException extends RuntimeException implements SerialThrowable {
+    public static final TerminalInputFlag EMPTY_INSTANCE = new TerminalInputFlag(0);
+    public static final TerminalInputFlag BRKINT = new TerminalInputFlag(0000002);
+    public static final TerminalInputFlag ICRNL = new TerminalInputFlag(0000400);
+    public static final TerminalInputFlag IGNBRK = new TerminalInputFlag(0000001);
+    public static final TerminalInputFlag IGNCR = new TerminalInputFlag(0000200);
+    public static final TerminalInputFlag IMAXBEL = new TerminalInputFlag(0020000);
+    public static final TerminalInputFlag INLCR = new TerminalInputFlag(0000100);
+    public static final TerminalInputFlag INPCK = new TerminalInputFlag(0000020);
+    public static final TerminalInputFlag ISTRIP = new TerminalInputFlag(0000040);
+    public static final TerminalInputFlag IUTF8 = new TerminalInputFlag(0040000);
+    public static final TerminalInputFlag IXANY = new TerminalInputFlag(0004000);
+    public static final TerminalInputFlag IXOFF = new TerminalInputFlag(0010000);
+    public static final TerminalInputFlag IXON = new TerminalInputFlag(0002000);
+    public static final TerminalInputFlag PARMRK = new TerminalInputFlag(0000010);
 
-    public NoResultException(final String additionalText) {
-        super(Errno.ENO_RESULT.getDescription() + "\n" + additionalText);
-    }
-    
-    @Override
-    public Errno getCausingErrno() {
-        return Errno.ENO_RESULT;
+    protected TerminalInputFlag(final long value) {
+        super(value);
     }
 }

@@ -2,7 +2,8 @@
  * @file Serial.h
  * @author pavl_g.
  * @brief Represents the serial port devices control and operation for POSIX systems.
- * @version 0.1
+ * @note This is the base [HAL] (Hardware abstraction layer) for the Serial4j api.
+ * @version 0.1[]
  * @date 2022-08-24
  * 
  * @copyright 
@@ -47,7 +48,6 @@
 #include<fcntl.h>
 #include<errno.h>
 #include<dirent.h>
-#include<sys/stat.h>
 
 #include<DynamicBuffer.h>
 #include<SerialUtils.h>
@@ -57,7 +57,10 @@
 #define READ_CONFIG_SIZE (2)
 #define DEVICES_DIR ((const char*) "/dev/")
 
+/** The default flags for the base file api */
 #define DEFAULT_FLAGS (O_RDWR | O_NONBLOCK | O_NOCTTY)
+
+typedef unsigned short int TerminalFlag;
 
 namespace Terminal {
 
@@ -78,23 +81,38 @@ namespace Terminal {
         /** Serial Ports buffer */
         struct DynamicBuffer serialPorts;
 
+        /**
+         * @brief Sets the IO flags for the <fcntl.h> [open] base api, default value is 
+         * [O_RDWR | O_NONBLOCK | O_NOCTTY].
+         * @note Requires <fcntl.h> for different types of flags.
+         * 
+         * @param flags the IO flags, e.g: [O_RDWR], [O_RDONLY], [O_WRONLY],....
+         */
         void setIOFlags(int* flags) {
             this->flags = *flags;
         }
 
+        /**
+         * @brief Gets the IO flags for the file base api.
+         * 
+         * @return int* a pointer points at the flags variable, default value is [O_RDWR | O_NONBLOCK | O_NOCTTY].
+         */
         int* getIOFlags() {
             return &flags;
         }
 
         /**
          * @brief Fetches serial port devices on "/dev/" into [serialPorts] buffer.
+         * @note Uses <dirent.h>, <SerialUtils.h>, <BufferUtils.h>, <DynamicBuffer.h> and <ErrnoUtils.h>.
          * 
-         * @return int (1) for success, (0) for no result.
+         * @return int (-3) if the directory ["/dev"] is invalid, (-4) if there are no tty 
+         * devices available at the ["/dev"] directory, (1) if operation succeeded.
          */
         int fetchSerialPorts();
 
         /**
          * @brief Opens a serial port device with a name.
+         * @note Uses <fcntl.h> Unix file base api and <ErrnoUtils.h>.
          * 
          * @param port the path for the serial port device.
          * @return int* a memory reference for the port file descriptor.
@@ -102,12 +120,82 @@ namespace Terminal {
         int* openPort(const char* port);
 
         /**
-         * @brief Initializes the default terminal with the following charachteristics: 
+         * @brief Initializes the default terminal for this device with the following default charachteristics: 
+         * -----------
+         * # c_cflag: for control mode flags.
+         * *** Enable these bits:
+         * - [CREAD]: Allow input to be received.
+         * - [CS8]: For charachter size 8-bit, you can use the bit mask CSIZE to read this value.
+         * - [CLOCAL]: Ignore modem status lines (dont check carrier signal).
+         * -----------
+         * # c_lflag: for local mode flags.
+         * ***Disable these bits:
+         * - [ICANON]: Canonical mode (line-by-line) input.
+         * - [ECHO]: Echo input characters.
+         * - [ECHOE]: Perform ERASE visually.
+         * - [ECHOK]: Echo KILL visually.
+         * - [ECHOKE]: Dont output a newline after echoed KILL.
+         * - [ECHONL]: Echo NL (in canonical mode) even if echoing is disabled.
+         * - [ECHOPRT]: Echo deleted characters backward (between \ and / ).
+         * - [ECHOCTL]: Echo control characters visually (e.g., ^L ).
+         * - [ISIG]: Enable signal-generating characters (INTR, QUIT, SUSP).
+         * - [IEXTEN]: Enable extended processing of input characters.
+         * -----------
+         * # c_oflag: for output mode flags.
+         * ***Disable these bits:
+         * - [OPOST]: Perform output postprocessing.
+         * - [ONLCR]: Map NL to CR-NL on output.
+         * -----------
+         * # c_iflag: for input mode flags.
+         * ***Disable all input bit masks.
+         * -----------
+         * # c_cc: For control characters.
+         * ***Sets to BLOCKING READ ONE CHAR AT A TIME MODE.
+         * -----------
          * 
-         * 
-         * @return int (1) for success, (-1) for failure, (-2) for invalid port.
+         * @return int (-1) for failure, (-2) for invalid port or (1) for success.
          */
         int initTermios();
+        
+        /**
+         * @brief Sets the Terminal Control Flag [c_cflag] for the [termios] variable.
+         * 
+         * @param flag bits to set, concatenate the flags using bitwise OR [|].
+         * @return int (-1) for failure, (-2) for invalid port or (1) for success.
+         */
+        int setTerminalControlFlag(TerminalFlag flag);
+
+        /**
+         * @brief Sets the Terminal Local Flag [c_lflag] for the [termios] variable.
+         * 
+         * @param flag bits to set, concatenate the flags using bitwise OR [|].
+         * @return int (-1) for failure, (-2) for invalid port or (1) for success. 
+         */
+        int setTerminalLocalFlag(TerminalFlag flag);
+
+        /**
+         * @brief Sets the Terminal Output Flag [c_oflag] for the [termios] variable.
+         * 
+         * @param flag bits to set, concatenate the flags using bitwise OR [|].
+         * @return int (-1) for failure, (-2) for invalid port or (1) for success. 
+         */
+        int setTerminalOutputFlag(TerminalFlag flag);
+
+        /**
+         * @brief Sets the Terminal Input Flag [c_iflag] for the [termios] variable.
+         * 
+         * @param flags bits to set, concatenate the flags using bitwise OR [|].
+         * @return int (-1) for failure, (-2) for invalid port or (1) for success. 
+         */
+        int setTerminalInputFlag(TerminalFlag flag);
+
+        TerminalFlag getTerminalControlFlag();
+
+        TerminalFlag getTerminalLocalFlag();
+
+        TerminalFlag getTerminalInputFlag();
+
+        TerminalFlag getTerminalOutputFlag();
 
         /**
          * @brief Sets the Read Configuration Mode using a ReadConfiguration with a
@@ -124,9 +212,9 @@ namespace Terminal {
         int setReadConfigurationMode(const cc_t* readConfig, const int VTIME_VALUE, const int VMIN_VALUE);
         
         /**
-         * @brief Get the Read Configuration Mode object
+         * @brief Get the Read Configuration Mode in a new pointer.
          * 
-         * @return int* 
+         * @return int* a memory reference to the new read configuration instance holding the VTIME and VMIN.
          */
         cc_t* getReadConfigurationMode();
         
@@ -165,16 +253,20 @@ namespace Terminal {
         speed_t getBaudRate();
 
         /**
-         * @brief Writes data to the serial port device.
+         * @brief Writes a data to the serial port device from a buffer.
          * 
-         * @return ssize_t the number of bytes written to the serial device.
+         * @param buffer a buffer to write to the file.
+         * @param length the number of charachters to write from the buffer.
+         * @return ssize_t the number of bytes written to the serial device, (-1) for failure, (-2) for invalid port.
          */
         ssize_t writeData(const void* buffer, int length);
 
         /**
-         * @brief Reads data from the serial port device.
+         * @brief Reads data from the serial port device and saves it to a buffer.
          * 
-         * @return ssize_t the number of bytes read from the terminal.
+         * @param buffer a buffer to read from the file to it.
+         * @param length the number of the charachters to read by this buffer.
+         * @return ssize_t the number of bytes read from the terminal, (-1) for failure, (-2) for invalid port.
          */
         ssize_t readData(void* buffer, int length);
 
@@ -193,7 +285,7 @@ namespace Terminal {
         int* getPortFileDescriptor();
 
         /**
-         * @brief Gets the Errno object
+         * @brief Gets the Errno object.
          * 
          * @return int* a memory reference to the generated errno.
          */

@@ -37,7 +37,7 @@ import com.serial4j.core.serial.throwable.SerialThrowable;
 public class NoAvailableTtyDevicesException extends RuntimeException implements SerialThrowable {
     
     public NoAvailableTtyDevicesException(final String additionalText) {
-        super(Errno.ERR_NO_AVAILABLE_TTY_DEVICES.getDescription() + " " + additionalText);
+        super(Errno.ERR_NO_AVAILABLE_TTY_DEVICES.getDescription() + "\n" + additionalText);
     }
     
     @Override

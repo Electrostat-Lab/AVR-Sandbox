@@ -38,7 +38,7 @@ import com.serial4j.core.serial.throwable.SerialThrowable;
 public final class BrokenPipeException extends IOException implements SerialThrowable {
 
     public BrokenPipeException(final String additionalText) {
-        super(Errno.EPIPE.getDescription() + " " + additionalText);
+        super(Errno.EPIPE.getDescription() + "\n" + additionalText);
     }
 
     @Override

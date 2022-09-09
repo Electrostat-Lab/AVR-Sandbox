@@ -43,6 +43,7 @@
 #include<DynamicBuffer.h>
 
 struct Terminal::TerminalDevice terminalDevice;
+struct Terminal::TerminalDevice terminalDevice0;
 /** Define read buffers for different types of read [BLOCK_READ] and [SINGLE_CHAR_READ] */
 const char** strBuffer = (const char**) calloc(1, sizeof(const char*));
 int* intBuffer = (int*) calloc(1, sizeof(int));
@@ -62,6 +63,45 @@ JNIEXPORT void JNICALL Java_com_serial4j_core_serial_NativeTerminalDevice_setLog
     Logger::setLoggingDisabled();
 }
 
+JNIEXPORT jint JNICALL Java_com_serial4j_core_serial_NativeTerminalDevice_setTerminalControlFlag
+  (JNIEnv* env, jobject object, jlong flag) {
+    return terminalDevice.setTerminalControlFlag((jlong) flag);
+}
+
+JNIEXPORT jint JNICALL Java_com_serial4j_core_serial_NativeTerminalDevice_setTerminalLocalFlag
+  (JNIEnv* env, jobject object, jlong flag) {
+    return terminalDevice.setTerminalLocalFlag((jlong) flag);
+}
+
+JNIEXPORT jint JNICALL Java_com_serial4j_core_serial_NativeTerminalDevice_setTerminalInputFlag
+  (JNIEnv* env, jobject object, jlong flag) {
+    return terminalDevice.setTerminalInputFlag((jlong) flag);
+}
+
+JNIEXPORT jint JNICALL Java_com_serial4j_core_serial_NativeTerminalDevice_setTerminalOutputFlag
+  (JNIEnv* env, jobject object, jlong flag) {
+    return terminalDevice.setTerminalOutputFlag((jlong) flag);
+}
+
+JNIEXPORT jlong JNICALL Java_com_serial4j_core_serial_NativeTerminalDevice_getTerminalControlFlag
+  (JNIEnv* env, jobject object) {
+    return (jlong) terminalDevice.getTerminalControlFlag();
+}
+
+JNIEXPORT jlong JNICALL Java_com_serial4j_core_serial_NativeTerminalDevice_getTerminalLocalFlag
+  (JNIEnv* env, jobject object) {
+    return (jlong) terminalDevice.getTerminalLocalFlag();
+} 
+
+JNIEXPORT jlong JNICALL Java_com_serial4j_core_serial_NativeTerminalDevice_getTerminalInputFlag
+  (JNIEnv* env, jobject object) {
+    return (jlong) terminalDevice.getTerminalInputFlag();
+}
+
+JNIEXPORT jlong JNICALL Java_com_serial4j_core_serial_NativeTerminalDevice_getTerminalOutputFlag
+  (JNIEnv* env, jobject object) {
+    return (jlong) terminalDevice.getTerminalOutputFlag();
+}
 
 JNIEXPORT jint JNICALL Java_com_serial4j_core_serial_NativeTerminalDevice_setReadConfigurationMode0
   (JNIEnv* env, jobject object, jintArray mode, jint timeoutValue, jint minimumBytes) {

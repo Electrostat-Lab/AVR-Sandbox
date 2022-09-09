@@ -33,6 +33,70 @@ JNIEXPORT jint JNICALL Java_com_serial4j_core_serial_NativeTerminalDevice_getIOF
 
 /*
  * Class:     com_serial4j_core_serial_NativeTerminalDevice
+ * Method:    setTerminalControlFlag
+ * Signature: (J)I
+ */
+JNIEXPORT jint JNICALL Java_com_serial4j_core_serial_NativeTerminalDevice_setTerminalControlFlag
+  (JNIEnv *, jobject, jlong);
+
+/*
+ * Class:     com_serial4j_core_serial_NativeTerminalDevice
+ * Method:    setTerminalLocalFlag
+ * Signature: (J)I
+ */
+JNIEXPORT jint JNICALL Java_com_serial4j_core_serial_NativeTerminalDevice_setTerminalLocalFlag
+  (JNIEnv *, jobject, jlong);
+
+/*
+ * Class:     com_serial4j_core_serial_NativeTerminalDevice
+ * Method:    setTerminalInputFlag
+ * Signature: (J)I
+ */
+JNIEXPORT jint JNICALL Java_com_serial4j_core_serial_NativeTerminalDevice_setTerminalInputFlag
+  (JNIEnv *, jobject, jlong);
+
+/*
+ * Class:     com_serial4j_core_serial_NativeTerminalDevice
+ * Method:    setTerminalOutputFlag
+ * Signature: (J)I
+ */
+JNIEXPORT jint JNICALL Java_com_serial4j_core_serial_NativeTerminalDevice_setTerminalOutputFlag
+  (JNIEnv *, jobject, jlong);
+
+/*
+ * Class:     com_serial4j_core_serial_NativeTerminalDevice
+ * Method:    getTerminalControlFlag
+ * Signature: ()J
+ */
+JNIEXPORT jlong JNICALL Java_com_serial4j_core_serial_NativeTerminalDevice_getTerminalControlFlag
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     com_serial4j_core_serial_NativeTerminalDevice
+ * Method:    getTerminalLocalFlag
+ * Signature: ()J
+ */
+JNIEXPORT jlong JNICALL Java_com_serial4j_core_serial_NativeTerminalDevice_getTerminalLocalFlag
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     com_serial4j_core_serial_NativeTerminalDevice
+ * Method:    getTerminalInputFlag
+ * Signature: ()J
+ */
+JNIEXPORT jlong JNICALL Java_com_serial4j_core_serial_NativeTerminalDevice_getTerminalInputFlag
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     com_serial4j_core_serial_NativeTerminalDevice
+ * Method:    getTerminalOutputFlag
+ * Signature: ()J
+ */
+JNIEXPORT jlong JNICALL Java_com_serial4j_core_serial_NativeTerminalDevice_getTerminalOutputFlag
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     com_serial4j_core_serial_NativeTerminalDevice
  * Method:    setReadConfigurationMode0
  * Signature: ([III)I
  */

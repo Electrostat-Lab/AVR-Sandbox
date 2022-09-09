@@ -39,7 +39,7 @@ import com.serial4j.core.serial.throwable.SerialThrowable;
 public final class NoSuchDeviceException extends NoSuchFileException implements SerialThrowable {
 
     public NoSuchDeviceException(final String additionalText) {
-        super(Errno.ENOENT.getDescription() + " " + additionalText);
+        super(Errno.ENOENT.getDescription() + "\n" + additionalText);
     }
     
     @Override
