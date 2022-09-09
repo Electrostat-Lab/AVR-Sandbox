@@ -156,27 +156,93 @@ public final class TerminalDevice {
                                                                             NoResultException,
                                                                             OperationFailedException,
                                                                             NoAvailableTtyDevicesException {
-
+        final long errno = nativeTerminalDevice.setTerminalLocalFlag(flag.getValue());
+        /* Warning: Force cast the errno to (int) */
+        ErrnoToException.throwFromErrno((int) errno, getSerialPort().getName());                                                        
     }
 
-    public void setTerminalInputFlag(final TerminalInputFlag flag)throws NoSuchDeviceException,
+    public void setTerminalInputFlag(final TerminalInputFlag flag) throws NoSuchDeviceException,
                                                                             PermissionDeniedException,
                                                                             BrokenPipeException,
                                                                             InvalidPortException,
                                                                             NoResultException,
                                                                             OperationFailedException,
                                                                             NoAvailableTtyDevicesException {
-
+        final long errno = nativeTerminalDevice.setTerminalInputFlag(flag.getValue());
+        /* Warning: Force cast the errno to (int) */
+        ErrnoToException.throwFromErrno((int) errno, getSerialPort().getName());                                                                                  
     }
 
-    public void setTerminalOutputFlag(final TerminalOutputFlag flag)throws NoSuchDeviceException,
+    public void setTerminalOutputFlag(final TerminalOutputFlag flag) throws NoSuchDeviceException,
                                                                             PermissionDeniedException,
                                                                             BrokenPipeException,
                                                                             InvalidPortException,
                                                                             NoResultException,
                                                                             OperationFailedException,
                                                                             NoAvailableTtyDevicesException {
+        final long errno = nativeTerminalDevice.setTerminalOutputFlag(flag.getValue());
+        /* Warning: Force cast the errno to (int) */
+        ErrnoToException.throwFromErrno((int) errno, getSerialPort().getName()); 
+    }
 
+    public TerminalControlFlag getTerminalControlFlag() throws NoSuchDeviceException,
+                                                PermissionDeniedException,
+                                                BrokenPipeException,
+                                                InvalidPortException,
+                                                NoResultException,
+                                                OperationFailedException,
+                                                NoAvailableTtyDevicesException {
+        final TerminalControlFlag TCF = TerminalControlFlag.EMPTY_INSTANCE;                                            
+        final long value = nativeTerminalDevice.getTerminalControlFlag();
+        /* Warning: Force cast the errno to (int) */
+        ErrnoToException.throwFromErrno((int) value, getSerialPort().getName()); 
+        TCF.setValue(value);
+        return TCF;                                        
+    }
+
+    public TerminalLocalFlag getTerminalLocalFlag() throws NoSuchDeviceException,
+                                                PermissionDeniedException,
+                                                BrokenPipeException,
+                                                InvalidPortException,
+                                                NoResultException,
+                                                OperationFailedException,
+                                                NoAvailableTtyDevicesException {
+        final TerminalLocalFlag TLF = TerminalLocalFlag.EMPTY_INSTANCE;                                            
+        final long value = nativeTerminalDevice.getTerminalLocalFlag();
+        /* Warning: Force cast the errno to (int) */
+        ErrnoToException.throwFromErrno((int) value, getSerialPort().getName()); 
+        TLF.setValue(value);
+        return TLF;                                        
+    }
+
+    public TerminalInputFlag getTerminalInputFlag() throws NoSuchDeviceException,
+                                                PermissionDeniedException,
+                                                BrokenPipeException,
+                                                InvalidPortException,
+                                                NoResultException,
+                                                OperationFailedException,
+                                                NoAvailableTtyDevicesException {
+        final TerminalInputFlag TIF = TerminalInputFlag.EMPTY_INSTANCE;
+        final long value = nativeTerminalDevice.getTerminalInputFlag();
+        /* Warning: Force cast the errno to (int) */
+        ErrnoToException.throwFromErrno((int) value, getSerialPort().getName()); 
+        TIF.setValue(value);
+        return TIF;                                        
+    }
+
+    public TerminalOutputFlag getTerminalOutputFlag() throws NoSuchDeviceException,
+                                                PermissionDeniedException,
+                                                BrokenPipeException,
+                                                InvalidPortException,
+                                                NoResultException,
+                                                OperationFailedException,
+                                                NoAvailableTtyDevicesException {
+        final TerminalOutputFlag TOF = TerminalOutputFlag.EMPTY_INSTANCE;
+        final long value = nativeTerminalDevice.getTerminalOutputFlag();
+        /* Warning: Force cast the errno to (int) */
+        ErrnoToException.throwFromErrno((int) value, getSerialPort().getName()); 
+        TOF.setValue(value);
+        return TOF;                                        
     }
 
     public void setPermissions(final Permissions permissions) {

@@ -956,6 +956,11 @@
  getValue(); 
  descriptor: 
  ()J 
+ public 
+ void 
+ setValue(long); 
+ descriptor: 
+ (J)V 
  } 
  Compiled 
  from 
@@ -1098,6 +1103,58 @@
  com.serial4j.core.serial.throwable.NoAvailableTtyDevicesException; 
  descriptor: 
  (Lcom/serial4j/core/serial/control/TerminalOutputFlag;)V 
+ public 
+ com.serial4j.core.serial.control.TerminalControlFlag 
+ getTerminalControlFlag() 
+ throws 
+ com.serial4j.core.serial.throwable.NoSuchDeviceException, 
+ com.serial4j.core.serial.throwable.PermissionDeniedException, 
+ com.serial4j.core.serial.throwable.BrokenPipeException, 
+ com.serial4j.core.serial.throwable.InvalidPortException, 
+ com.serial4j.core.serial.throwable.NoResultException, 
+ com.serial4j.core.serial.throwable.OperationFailedException, 
+ com.serial4j.core.serial.throwable.NoAvailableTtyDevicesException; 
+ descriptor: 
+ ()Lcom/serial4j/core/serial/control/TerminalControlFlag; 
+ public 
+ com.serial4j.core.serial.control.TerminalLocalFlag 
+ getTerminalLocalFlag() 
+ throws 
+ com.serial4j.core.serial.throwable.NoSuchDeviceException, 
+ com.serial4j.core.serial.throwable.PermissionDeniedException, 
+ com.serial4j.core.serial.throwable.BrokenPipeException, 
+ com.serial4j.core.serial.throwable.InvalidPortException, 
+ com.serial4j.core.serial.throwable.NoResultException, 
+ com.serial4j.core.serial.throwable.OperationFailedException, 
+ com.serial4j.core.serial.throwable.NoAvailableTtyDevicesException; 
+ descriptor: 
+ ()Lcom/serial4j/core/serial/control/TerminalLocalFlag; 
+ public 
+ com.serial4j.core.serial.control.TerminalInputFlag 
+ getTerminalInputFlag() 
+ throws 
+ com.serial4j.core.serial.throwable.NoSuchDeviceException, 
+ com.serial4j.core.serial.throwable.PermissionDeniedException, 
+ com.serial4j.core.serial.throwable.BrokenPipeException, 
+ com.serial4j.core.serial.throwable.InvalidPortException, 
+ com.serial4j.core.serial.throwable.NoResultException, 
+ com.serial4j.core.serial.throwable.OperationFailedException, 
+ com.serial4j.core.serial.throwable.NoAvailableTtyDevicesException; 
+ descriptor: 
+ ()Lcom/serial4j/core/serial/control/TerminalInputFlag; 
+ public 
+ com.serial4j.core.serial.control.TerminalOutputFlag 
+ getTerminalOutputFlag() 
+ throws 
+ com.serial4j.core.serial.throwable.NoSuchDeviceException, 
+ com.serial4j.core.serial.throwable.PermissionDeniedException, 
+ com.serial4j.core.serial.throwable.BrokenPipeException, 
+ com.serial4j.core.serial.throwable.InvalidPortException, 
+ com.serial4j.core.serial.throwable.NoResultException, 
+ com.serial4j.core.serial.throwable.OperationFailedException, 
+ com.serial4j.core.serial.throwable.NoAvailableTtyDevicesException; 
+ descriptor: 
+ ()Lcom/serial4j/core/serial/control/TerminalOutputFlag; 
  public 
  void 
  setPermissions(com.serial4j.core.serial.Permissions); 

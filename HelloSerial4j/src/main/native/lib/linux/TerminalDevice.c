@@ -83,7 +83,7 @@ int Terminal::TerminalDevice::setTerminalControlFlag(TerminalFlag flag) {
     }
     /* retrieve the current terminal settings from the file descriptor */
     tcgetattr(this->portFileDescriptor, &(this->tty));
-    this->tty.c_cflag |= flag;
+    this->tty.c_cflag = flag;
     /* sets the new terminal settings to the file descriptor with flushing any output */
     return tcsetattr(this->portFileDescriptor, TCSAFLUSH, &(this->tty));
 }
@@ -93,7 +93,7 @@ int Terminal::TerminalDevice::setTerminalLocalFlag(TerminalFlag flag) {
         return ERR_INVALID_PORT;
     }
     tcgetattr(this->portFileDescriptor, &(this->tty));
-    this->tty.c_lflag |= flag;
+    this->tty.c_lflag = flag;
     return tcsetattr(this->portFileDescriptor, TCSAFLUSH, &(this->tty));
 }
 
@@ -102,7 +102,7 @@ int Terminal::TerminalDevice::setTerminalInputFlag(TerminalFlag flag) {
         return ERR_INVALID_PORT;
     }
     tcgetattr(this->portFileDescriptor, &(this->tty));
-    this->tty.c_iflag |= flag;
+    this->tty.c_iflag = flag;
     return tcsetattr(this->portFileDescriptor, TCSAFLUSH, &(this->tty));
 }
 
@@ -111,7 +111,7 @@ int Terminal::TerminalDevice::setTerminalOutputFlag(TerminalFlag flag) {
         return ERR_INVALID_PORT;
     }
     tcgetattr(this->portFileDescriptor, &(this->tty));
-    this->tty.c_oflag |= flag;
+    this->tty.c_oflag = flag;
     return tcsetattr(this->portFileDescriptor, TCSAFLUSH, &(this->tty));
 }
 

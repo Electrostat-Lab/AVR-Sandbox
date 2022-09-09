@@ -52,9 +52,9 @@ import com.serial4j.core.serial.throwable.NoResultException;
 import com.serial4j.core.serial.throwable.OperationFailedException;
 
 /**
- * An example for Serial4j showing Native terminal control and 
+ * An example for Serial4j showing Native terminal control and
  * native file io on a serial port.
- * 
+ *
  * @author pavl_g.
  */
 public final class HelloNativeSerial4J {
@@ -64,7 +64,7 @@ public final class HelloNativeSerial4J {
 												  InvalidPortException,
 												  NoResultException,
 												  OperationFailedException,
-												  FileNotFoundException {		
+												  FileNotFoundException {
 		System.out.println("Started native io example: ");
 		final TerminalDevice ttyDevice = new TerminalDevice();
 		final Permissions permissions = Permissions.O_RDWR.append(Permissions.O_NOCTTY)
@@ -81,11 +81,13 @@ public final class HelloNativeSerial4J {
 		final TerminalOutputFlag TOF_VALUE = (TerminalOutputFlag) TerminalOutputFlag.EMPTY_INSTANCE
 													           .disable(TerminalOutputFlag.OPOST, TerminalOutputFlag.ONLCR);
 		final TerminalInputFlag TIF_VALUE = (TerminalInputFlag) TerminalInputFlag.EMPTY_INSTANCE.disableAll();
-		ttyDevice.openPort(new SerialPort("/dev/ttyUSB0"));		
+		ttyDevice.openPort(new SerialPort("/dev/ttyUSB0"));
+		System.out.println(ttyDevice.getTerminalControlFlag().getValue());
 		ttyDevice.setTerminalControlFlag(TCF_VALUE);
 		ttyDevice.setTerminalLocalFlag(TLF_VALUE);
 		ttyDevice.setTerminalOutputFlag(TOF_VALUE);
 		ttyDevice.setTerminalInputFlag(TIF_VALUE);
+		System.out.println(ttyDevice.getTerminalControlFlag().getValue());
 		ttyDevice.setSerial4jLoggingEnabled(true);
 		ttyDevice.setNativeLoggingEnabled();
 		if (ttyDevice.getSerialPort().getFd() > 0) {
@@ -108,10 +110,10 @@ public final class HelloNativeSerial4J {
 						if (ttyDevice.readData() > 0) {
 							System.out.println((char) ttyDevice.getReadBuffer());
 						}
-					}	
+					}
 				} catch(Exception e) {
 					e.printStackTrace();
-				}		
+				}
 			}
 		}).start();
 	}
@@ -131,4 +133,3 @@ public final class HelloNativeSerial4J {
 		}).start();
 	}
 }
-

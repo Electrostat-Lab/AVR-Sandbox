@@ -126,4 +126,13 @@ public abstract class TerminalFlag {
     public long getValue() {
         return value;
     }
+
+    /**
+     * Adjusts the value of the specified termios flag.
+     * 
+     * @param value the value of the terminal flag.
+     */
+    public void setValue(final long value) {
+        this.value = value;
+    }
 }
