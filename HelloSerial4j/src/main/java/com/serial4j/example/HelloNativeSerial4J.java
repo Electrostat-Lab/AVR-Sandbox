@@ -57,51 +57,58 @@ import com.serial4j.core.serial.throwable.OperationFailedException;
  *
  * @author pavl_g.
  */
-public final class HelloNativeSerial4J {
-	public static void main(String args[]) throws NoSuchDeviceException,
-												  PermissionDeniedException,
-												  BrokenPipeException,
-												  InvalidPortException,
-												  NoResultException,
-												  OperationFailedException,
-												  FileNotFoundException {
-		System.out.println("Started native io example: ");
-		final TerminalDevice ttyDevice = new TerminalDevice();
-		final Permissions permissions = Permissions.O_RDWR.append(Permissions.O_NOCTTY)
-														  .append(Permissions.O_NONBLOCK);
-		ttyDevice.setPermissions(permissions);
-		final TerminalControlFlag TCF_VALUE = (TerminalControlFlag) TerminalControlFlag.CLOCAL
-														   .append(TerminalControlFlag.CS8, TerminalControlFlag.CREAD);
-		final TerminalLocalFlag TLF_VALUE = (TerminalLocalFlag) TerminalLocalFlag.EMPTY_INSTANCE
-															 .disable(TerminalLocalFlag.ECHO, TerminalLocalFlag.ECHOK,
-															 		  TerminalLocalFlag.ECHOE, TerminalLocalFlag.ECHOKE,
-																	  TerminalLocalFlag.ECHONL, TerminalLocalFlag.ECHOPRT,
-																	  TerminalLocalFlag.ECHOCTL, TerminalLocalFlag.ISIG,
-																	  TerminalLocalFlag.IEXTEN, TerminalLocalFlag.ICANON);
-		final TerminalOutputFlag TOF_VALUE = (TerminalOutputFlag) TerminalOutputFlag.EMPTY_INSTANCE
-													           .disable(TerminalOutputFlag.OPOST, TerminalOutputFlag.ONLCR);
-		final TerminalInputFlag TIF_VALUE = (TerminalInputFlag) TerminalInputFlag.EMPTY_INSTANCE.disableAll();
-		ttyDevice.openPort(new SerialPort("/dev/ttyUSB0"));
-		System.out.println(ttyDevice.getTerminalControlFlag().getValue());
-		ttyDevice.setTerminalControlFlag(TCF_VALUE);
-		ttyDevice.setTerminalLocalFlag(TLF_VALUE);
-		ttyDevice.setTerminalOutputFlag(TOF_VALUE);
-		ttyDevice.setTerminalInputFlag(TIF_VALUE);
-		System.out.println(ttyDevice.getTerminalControlFlag().getValue());
-		ttyDevice.setSerial4jLoggingEnabled(true);
-		ttyDevice.setNativeLoggingEnabled();
-		if (ttyDevice.getSerialPort().getFd() > 0) {
-			System.out.println("Port Opened with " + ttyDevice.getSerialPort().getFd());
+public final class HelloNativeSerial4J extends Thread {
+
+	private final TerminalDevice ttyDevice = new TerminalDevice();
+	
+	@Override
+	public void run() {
+		try {
+			System.out.println("Started native io example: ");
+			ttyDevice.setNativeLoggingEnabled();
+			final Permissions permissions = Permissions.O_RDWR.append(Permissions.O_NOCTTY)
+															.append(Permissions.O_NONBLOCK);
+			ttyDevice.setPermissions(permissions);
+			final TerminalControlFlag TCF_VALUE = (TerminalControlFlag) TerminalControlFlag.CLOCAL
+															.append(TerminalControlFlag.CS8, TerminalControlFlag.CREAD);
+			final TerminalLocalFlag TLF_VALUE = (TerminalLocalFlag) TerminalLocalFlag.EMPTY_INSTANCE
+																.disable(TerminalLocalFlag.ECHO, TerminalLocalFlag.ECHOK,
+																		TerminalLocalFlag.ECHOE, TerminalLocalFlag.ECHOKE,
+																		TerminalLocalFlag.ECHONL, TerminalLocalFlag.ECHOPRT,
+																		TerminalLocalFlag.ECHOCTL, TerminalLocalFlag.ISIG,
+																		TerminalLocalFlag.IEXTEN, TerminalLocalFlag.ICANON);
+			final TerminalOutputFlag TOF_VALUE = (TerminalOutputFlag) TerminalOutputFlag.EMPTY_INSTANCE
+																.disable(TerminalOutputFlag.OPOST, TerminalOutputFlag.ONLCR);
+			final TerminalInputFlag TIF_VALUE = (TerminalInputFlag) TerminalInputFlag.EMPTY_INSTANCE.disableAll();
+			ttyDevice.openPort(new SerialPort("/dev/ttyUSB0"));
+			System.out.println(ttyDevice.getTerminalControlFlag().getValue());
+			ttyDevice.setTerminalControlFlag(TCF_VALUE);
+			ttyDevice.setTerminalLocalFlag(TLF_VALUE);
+			ttyDevice.setTerminalOutputFlag(TOF_VALUE);
+			ttyDevice.setTerminalInputFlag(TIF_VALUE);
+			System.out.println(ttyDevice.getTerminalControlFlag().getValue());
+			if (ttyDevice.getSerialPort().getFd() > 0) {
+				System.out.println("Port Opened with " + ttyDevice.getSerialPort().getFd());
+			}
+			ttyDevice.initTermios();
+			ttyDevice.setBaudRate(BaudRate.B57600);
+			ttyDevice.setReadConfigurationMode(ReadConfiguration.READ_WITH_INTERBYTE_TIMEOUT, 5, 510);
+			System.out.println(Arrays.toString(ttyDevice.getSerialPorts()) + " " + ttyDevice.getSerialPorts().length);
+			startReadThread(ttyDevice, 0);
+			startWriteThread(ttyDevice, 2000);
+		} catch(NoSuchDeviceException |
+				PermissionDeniedException |
+				BrokenPipeException |
+				InvalidPortException |
+				NoResultException |
+				OperationFailedException |
+				FileNotFoundException e) {
+			e.printStackTrace();
 		}
-		ttyDevice.initTermios();
-		ttyDevice.setBaudRate(BaudRate.B57600);
-        ttyDevice.setReadConfigurationMode(ReadConfiguration.READ_WITH_INTERBYTE_TIMEOUT, 5, 510);
-		System.out.println(Arrays.toString(ttyDevice.getSerialPorts()) + " " + ttyDevice.getSerialPorts().length);
-		startReadThread(ttyDevice, 0);
-		startWriteThread(ttyDevice, 2500);
+		
 	}
 
-	private static void startReadThread(final TerminalDevice ttyDevice, final long millis) {
+	private void startReadThread(final TerminalDevice ttyDevice, final long millis) {
 		new Thread(new Runnable() {
 			public void run() {
 				try {
@@ -118,14 +125,15 @@ public final class HelloNativeSerial4J {
 		}).start();
 	}
 
-	private static void startWriteThread(final TerminalDevice ttyDevice, final long millis) {
+	private void startWriteThread(final TerminalDevice ttyDevice, final long millis) {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
 				try {
 					Thread.sleep(millis);
 					ttyDevice.writeBuffer("AB");
-					// ttyDevice.closePort();
+					Thread.sleep(millis / 2);
+					ttyDevice.closePort();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

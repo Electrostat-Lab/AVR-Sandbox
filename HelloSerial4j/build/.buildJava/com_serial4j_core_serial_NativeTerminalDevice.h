@@ -17,14 +17,6 @@ JNIEXPORT jint JNICALL Java_com_serial4j_core_serial_NativeTerminalDevice_setupJ
 
 /*
  * Class:     com_serial4j_core_serial_NativeTerminalDevice
- * Method:    attachNativeThread0
- * Signature: ()I
- */
-JNIEXPORT jint JNICALL Java_com_serial4j_core_serial_NativeTerminalDevice_attachNativeThread0
-  (JNIEnv *, jclass);
-
-/*
- * Class:     com_serial4j_core_serial_NativeTerminalDevice
  * Method:    setIOFlags
  * Signature: (I)V
  */

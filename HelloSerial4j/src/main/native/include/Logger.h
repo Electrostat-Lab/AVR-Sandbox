@@ -17,48 +17,48 @@ typedef const char* AlertType;
 
 #define LOGGER_FORMAT ((const char*) "%s::%s: %s \n\r")
 
-namespace Logger {
+struct Logger {
 
-    static int loggingEnabled = 0;
+    int loggingEnabled = 0;
 
-    static inline void setLoggingEnabled() {
-        Logger::loggingEnabled = 1;
+    void setLoggingEnabled() {
+        this->loggingEnabled = 1;
     }
 
-    static inline void setLoggingDisabled() {
-        Logger::loggingEnabled = 0;
+    void setLoggingDisabled() {
+        this->loggingEnabled = 0;
     }
 
-    static inline int* isLoggingEnabled() {
-        return &loggingEnabled;
+    int* isLoggingEnabled() {
+        return &(this->loggingEnabled);
     }
 
-    static inline int LOG(const char* API_LABEL, AlertType ALERT_TYPE, const char* MSG) {
-        if (!*(isLoggingEnabled())) {
+    int LOG(const char* API_LABEL, AlertType ALERT_TYPE, const char* MSG) {
+        if (!*(this->isLoggingEnabled())) {
             return LOGGER_DISABLED;
         }
         return printf(LOGGER_FORMAT, API_LABEL, ALERT_TYPE, MSG);
     }
 
-    static inline int LOGI(const char* API_LABEL, const char* MSG) {
+    int LOGI(const char* API_LABEL, const char* MSG) {
         return LOG(API_LABEL, INFO, MSG);
     }
 
-    static inline int LOGW(const char* API_LABEL, const char* MSG) {
+    int LOGW(const char* API_LABEL, const char* MSG) {
         return LOG(API_LABEL, WARNING, MSG);
     }
 
-    static inline int LOGF(const char* API_LABEL, const char* MSG) {
+    int LOGF(const char* API_LABEL, const char* MSG) {
         return LOG(API_LABEL, FAILURE, MSG);
     }  
 
-    static inline int LOGS(const char* API_LABEL, const char* MSG) {
+    int LOGS(const char* API_LABEL, const char* MSG) {
         return LOG(API_LABEL, SUCCESS, MSG);
     }   
  
-    static inline int LOG_OK(const char* API_LABEL, const char* MSG) {
+    int LOG_OK(const char* API_LABEL, const char* MSG) {
         return LOG(API_LABEL, OK, MSG);
     }
-}
+};
 
 #endif

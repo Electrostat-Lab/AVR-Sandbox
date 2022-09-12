@@ -60,28 +60,51 @@
 #define java_io_FileOutputStream ((const char*) "java/io/FileOutputStream")
 
 namespace JniUtils {
+
     static JNIEnv* env;
+    static JavaVM* jvm;
+    static jint version;
+    static struct JavaVMAttachArgs* jvmArgs;
 
     /**
      * @brief Sets the Jni Env pointer for jni functions.
      * 
      * @param env the environment pointer to use.
      */
-    static inline int setJniEnv(JNIEnv* env) {
+    static inline int setupJavaEnvironment(JNIEnv* env, jint version) {
         if (env == NULL) {
             return OPERATION_FAILED;
         }
-        JniUtils::env = env;
+        env->GetJavaVM(&JniUtils::jvm);
+        JniUtils::version = version;
         return OPERATION_SUCCEEDED;
     }
 
+    static inline JavaVM* getJavaVM() {
+        return JniUtils::jvm;
+    }
+
     /**
-     * @brief Gets the Jni Env pointer.
+     * @brief Gets the Jni Env pointer from the jvm.
      * 
      * @return JNIEnv* the namespace env pointer.
      */
-    static inline JNIEnv* getJniEnv() {
-        return JniUtils::env;
+    static inline JNIEnv** getJniEnv() {
+        JniUtils::jvm->GetEnv((void**) &JniUtils::env, version);
+        return &JniUtils::env;
+    }
+
+    static inline struct JavaVMAttachArgs* getJVMAttachArgs(jint jreVersion, char* threadName, jobject threadGroupObj) {
+        jvmArgs->version = jreVersion;
+        jvmArgs->name = threadName;
+        jvmArgs->group = threadGroupObj;
+        return jvmArgs;
+    }
+    
+    static inline jint attachNativeThread(char* threadName, jobject threadGroupObj) {
+        void** jniEnvPointer = (void**) JniUtils::getJniEnv();
+        struct JavaVMAttachArgs* jvmArgs = getJVMAttachArgs(JniUtils::version, threadName, threadGroupObj);
+        return JniUtils::getJavaVM()->AttachCurrentThread(jniEnvPointer, jvmArgs);
     }
 
     /**
@@ -92,7 +115,7 @@ namespace JniUtils {
      * @return jclass the reflected java class.
      */
     static inline jclass getClassFromString(const char* clazzName) {
-        return JniUtils::getJniEnv()->FindClass(clazzName);
+        return (*JniUtils::getJniEnv())->FindClass(clazzName);
     }
 
     /**
@@ -105,7 +128,7 @@ namespace JniUtils {
      * @return jmethodID a new method id for the requested method.
      */
     static inline jmethodID getClassMethod(const char* clazzName, const char* methodName, const char* sig) {
-        return JniUtils::getJniEnv()->GetMethodID(getClassFromString(clazzName), methodName, sig);
+        return (*JniUtils::getJniEnv())->GetMethodID(getClassFromString(clazzName), methodName, sig);
     }
 
     /**
@@ -145,9 +168,9 @@ namespace JniUtils {
         jclass clazz = JniUtils::getClassFromString(clazzName);
         jmethodID mid = JniUtils::getClassMethod(clazzName, methodName, sig);
         if (args == NULL) {
-            JniUtils::getJniEnv()->CallVoidMethod(clazz, mid);
+            (*JniUtils::getJniEnv())->CallVoidMethod(clazz, mid);
         } else {
-            JniUtils::getJniEnv()->CallVoidMethod(clazz, mid, args);
+            (*JniUtils::getJniEnv())->CallVoidMethod(clazz, mid, args);
         }
     }
 
@@ -179,11 +202,11 @@ namespace JniUtils {
     }
 
     static inline jobject getObjectFromClass0(const char* clazzName) {
-        return JniUtils::getJniEnv()->AllocObject(JniUtils::getClassFromString(clazzName));
+        return (*JniUtils::getJniEnv())->AllocObject(JniUtils::getClassFromString(clazzName));
     }
 
     static inline jobject getObjectFromClass1(const char* clazzName, jmethodID constructor) {
-        return JniUtils::getJniEnv()->NewObject(JniUtils::getClassFromString(clazzName), constructor);
+        return (*JniUtils::getJniEnv())->NewObject(JniUtils::getClassFromString(clazzName), constructor);
     }
 
     static inline jobject getObjectFromClass2(const char* clazzName) {
@@ -191,46 +214,46 @@ namespace JniUtils {
     }
 
     static inline jobjectArray createNewArrayFromBuffer(const char* clazzName, jsize length) {
-        jobject initialElement = JniUtils::getJniEnv()->NewStringUTF("");
+        jobject initialElement = (*JniUtils::getJniEnv())->NewStringUTF("");
 
         jclass clazz = JniUtils::getClassFromString(clazzName);
-        jobjectArray array = JniUtils::getJniEnv()->NewObjectArray(length, clazz, initialElement);
+        jobjectArray array = (*JniUtils::getJniEnv())->NewObjectArray(length, clazz, initialElement);
         return array;
     }
 
     static inline jobject* getObjectBufferFromString(const char** buffer, int length) {
         jobject* objectBuffer = (jobject*) calloc(length, sizeof(jobject));
         for (int i = 0; i < length; i++) {
-            objectBuffer[i] = JniUtils::getJniEnv()->NewStringUTF(buffer[i]);
+            objectBuffer[i] = (*JniUtils::getJniEnv())->NewStringUTF(buffer[i]);
         }
         return objectBuffer;
     } 
 
     static inline const char* getBufferFromString(jstring string) {
-        return JniUtils::getJniEnv()->GetStringUTFChars(string, 0);
+        return (*JniUtils::getJniEnv())->GetStringUTFChars(string, 0);
     }
 
     static inline jstring getStringFromBuffer(const char* buffer) {
-        return JniUtils::getJniEnv()->NewStringUTF(buffer);
+        return (*JniUtils::getJniEnv())->NewStringUTF(buffer);
     }
 
     static inline void setArrayElements(jobjectArray array, jsize length, jobject* buffer) {
         for (int i = 0; i < length; i++) {
-            JniUtils::getJniEnv()->SetObjectArrayElement(array, i, buffer[i]);
+            (*JniUtils::getJniEnv())->SetObjectArrayElement(array, i, buffer[i]);
         }
     }
 
     static inline jobject getArrayElement(jobjectArray array, jsize index) {
-        return JniUtils::getJniEnv()->GetObjectArrayElement(array, index);
+        return (*JniUtils::getJniEnv())->GetObjectArrayElement(array, index);
     } 
 
     static inline jint getIntArrayElement(jintArray array, jsize index) {
-        return JniUtils::getJniEnv()->GetIntArrayElements(array, 0)[index];
+        return (*JniUtils::getJniEnv())->GetIntArrayElements(array, 0)[index];
     }
 
     static inline jintArray getIntArrayFromBuffer(int* buffer, int length) {
-        jintArray intArray = JniUtils::getJniEnv()->NewIntArray(length);
-        JniUtils::getJniEnv()->SetIntArrayRegion(intArray, 0, length, buffer);
+        jintArray intArray = (*JniUtils::getJniEnv())->NewIntArray(length);
+        (*JniUtils::getJniEnv())->SetIntArrayRegion(intArray, 0, length, buffer);
         return intArray;
     }
 }

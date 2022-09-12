@@ -1,5 +1,29 @@
  Compiled 
  from 
+ "NativeEnvironment.java" 
+ public 
+ final 
+ class 
+ com.serial4j.core.serial.NativeEnvironment 
+ { 
+ protected 
+ com.serial4j.core.serial.NativeEnvironment(); 
+ descriptor: 
+ ()V 
+ protected 
+ static 
+ native 
+ int 
+ setupJniEnvironment0(); 
+ descriptor: 
+ ()I 
+ static 
+ {}; 
+ descriptor: 
+ ()V 
+ } 
+ Compiled 
+ from 
  "NativeTerminalDevice.java" 
  public 
  final 
@@ -637,120 +661,6 @@
  } 
  Compiled 
  from 
- "OutputFlags.java" 
- public 
- final 
- class 
- OutputFlags 
- extends 
- java.lang.Enum<OutputFlags> 
- { 
- private 
- static 
- final 
- OutputFlags[] 
- $VALUES; 
- descriptor: 
- [LOutputFlags; 
- public 
- static 
- OutputFlags[] 
- values(); 
- descriptor: 
- ()[LOutputFlags; 
- public 
- static 
- OutputFlags 
- valueOf(java.lang.String); 
- descriptor: 
- (Ljava/lang/String;)LOutputFlags; 
- private 
- OutputFlags(); 
- descriptor: 
- (Ljava/lang/String;I)V 
- static 
- {}; 
- descriptor: 
- ()V 
- } 
- Compiled 
- from 
- "LocalFlags.java" 
- public 
- final 
- class 
- LocalFlags 
- extends 
- java.lang.Enum<LocalFlags> 
- { 
- private 
- static 
- final 
- LocalFlags[] 
- $VALUES; 
- descriptor: 
- [LLocalFlags; 
- public 
- static 
- LocalFlags[] 
- values(); 
- descriptor: 
- ()[LLocalFlags; 
- public 
- static 
- LocalFlags 
- valueOf(java.lang.String); 
- descriptor: 
- (Ljava/lang/String;)LLocalFlags; 
- private 
- LocalFlags(); 
- descriptor: 
- (Ljava/lang/String;I)V 
- static 
- {}; 
- descriptor: 
- ()V 
- } 
- Compiled 
- from 
- "ControlFlags.java" 
- public 
- final 
- class 
- com.serial4j.core.serial.control.ControlFlags 
- extends 
- java.lang.Enum<com.serial4j.core.serial.control.ControlFlags> 
- { 
- private 
- static 
- final 
- com.serial4j.core.serial.control.ControlFlags[] 
- $VALUES; 
- descriptor: 
- [Lcom/serial4j/core/serial/control/ControlFlags; 
- public 
- static 
- com.serial4j.core.serial.control.ControlFlags[] 
- values(); 
- descriptor: 
- ()[Lcom/serial4j/core/serial/control/ControlFlags; 
- public 
- static 
- com.serial4j.core.serial.control.ControlFlags 
- valueOf(java.lang.String); 
- descriptor: 
- (Ljava/lang/String;)Lcom/serial4j/core/serial/control/ControlFlags; 
- private 
- com.serial4j.core.serial.control.ControlFlags(); 
- descriptor: 
- (Ljava/lang/String;I)V 
- static 
- {}; 
- descriptor: 
- ()V 
- } 
- Compiled 
- from 
  "TerminalControlFlag.java" 
  public 
  final 
@@ -861,44 +771,6 @@
  com.serial4j.core.serial.control.TerminalControlFlag(long); 
  descriptor: 
  (J)V 
- static 
- {}; 
- descriptor: 
- ()V 
- } 
- Compiled 
- from 
- "InputFlags.java" 
- public 
- final 
- class 
- InputFlags 
- extends 
- java.lang.Enum<InputFlags> 
- { 
- private 
- static 
- final 
- InputFlags[] 
- $VALUES; 
- descriptor: 
- [LInputFlags; 
- public 
- static 
- InputFlags[] 
- values(); 
- descriptor: 
- ()[LInputFlags; 
- public 
- static 
- InputFlags 
- valueOf(java.lang.String); 
- descriptor: 
- (Ljava/lang/String;)LInputFlags; 
- private 
- InputFlags(); 
- descriptor: 
- (Ljava/lang/String;I)V 
  static 
  {}; 
  descriptor: 
@@ -2667,7 +2539,6 @@
  Compiled 
  from 
  "HelloNativeSerial4J.java" 
- final 
  class 
  com.serial4j.example.HelloNativeSerial4J$2 
  implements 
@@ -2683,10 +2554,16 @@
  val$ttyDevice; 
  descriptor: 
  Lcom/serial4j/core/serial/TerminalDevice; 
- com.serial4j.example.HelloNativeSerial4J$2(long, 
+ final 
+ com.serial4j.example.HelloNativeSerial4J 
+ this$0; 
+ descriptor: 
+ Lcom/serial4j/example/HelloNativeSerial4J; 
+ com.serial4j.example.HelloNativeSerial4J$2(com.serial4j.example.HelloNativeSerial4J, 
+ long, 
  com.serial4j.core.serial.TerminalDevice); 
  descriptor: 
- (JLcom/serial4j/core/serial/TerminalDevice;)V 
+ (Lcom/serial4j/example/HelloNativeSerial4J;JLcom/serial4j/core/serial/TerminalDevice;)V 
  public 
  void 
  run(); 
@@ -2725,7 +2602,6 @@
  Compiled 
  from 
  "HelloNativeSerial4J.java" 
- final 
  class 
  com.serial4j.example.HelloNativeSerial4J$1 
  implements 
@@ -2741,10 +2617,16 @@
  val$ttyDevice; 
  descriptor: 
  Lcom/serial4j/core/serial/TerminalDevice; 
- com.serial4j.example.HelloNativeSerial4J$1(long, 
+ final 
+ com.serial4j.example.HelloNativeSerial4J 
+ this$0; 
+ descriptor: 
+ Lcom/serial4j/example/HelloNativeSerial4J; 
+ com.serial4j.example.HelloNativeSerial4J$1(com.serial4j.example.HelloNativeSerial4J, 
+ long, 
  com.serial4j.core.serial.TerminalDevice); 
  descriptor: 
- (JLcom/serial4j/core/serial/TerminalDevice;)V 
+ (Lcom/serial4j/example/HelloNativeSerial4J;JLcom/serial4j/core/serial/TerminalDevice;)V 
  public 
  void 
  run(); 
@@ -2829,34 +2711,31 @@
  final 
  class 
  com.serial4j.example.HelloNativeSerial4J 
+ extends 
+ java.lang.Thread 
  { 
+ private 
+ final 
+ com.serial4j.core.serial.TerminalDevice 
+ ttyDevice; 
+ descriptor: 
+ Lcom/serial4j/core/serial/TerminalDevice; 
  public 
  com.serial4j.example.HelloNativeSerial4J(); 
  descriptor: 
  ()V 
  public 
- static 
  void 
- main(java.lang.String[]) 
- throws 
- com.serial4j.core.serial.throwable.NoSuchDeviceException, 
- com.serial4j.core.serial.throwable.PermissionDeniedException, 
- com.serial4j.core.serial.throwable.BrokenPipeException, 
- com.serial4j.core.serial.throwable.InvalidPortException, 
- com.serial4j.core.serial.throwable.NoResultException, 
- com.serial4j.core.serial.throwable.OperationFailedException, 
- java.io.FileNotFoundException; 
+ run(); 
  descriptor: 
- ([Ljava/lang/String;)V 
+ ()V 
  private 
- static 
  void 
  startReadThread(com.serial4j.core.serial.TerminalDevice, 
  long); 
  descriptor: 
  (Lcom/serial4j/core/serial/TerminalDevice;J)V 
  private 
- static 
  void 
  startWriteThread(com.serial4j.core.serial.TerminalDevice, 
  long); 

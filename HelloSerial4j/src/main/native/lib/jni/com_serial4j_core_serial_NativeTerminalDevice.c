@@ -36,31 +36,31 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 #include<jni/com_serial4j_core_serial_NativeTerminalDevice.h>
+#include<pthread.h>
 #include<TerminalDevice.h>
 #include<stdlib.h>
-#include<Logger.h>
 #include<JniUtils.h>
 #include<DynamicBuffer.h>
 
 struct Terminal::TerminalDevice terminalDevice;
-struct Terminal::TerminalDevice terminalDevice0;
+
 /** Define read buffers for different types of read [BLOCK_READ] and [SINGLE_CHAR_READ] */
 const char** strBuffer = (const char**) calloc(1, sizeof(const char*));
 int* intBuffer = (int*) calloc(1, sizeof(int));
 
 JNIEXPORT jint JNICALL Java_com_serial4j_core_serial_NativeTerminalDevice_setupJniEnvironment0
   (JNIEnv* env, jclass clazz) {
-      return JniUtils::setJniEnv(env);
+    return JniUtils::setupJavaEnvironment(env, JNI_VERSION_1_8);
 }
 
 JNIEXPORT void JNICALL Java_com_serial4j_core_serial_NativeTerminalDevice_setLoggingEnabled0
   (JNIEnv* env, jobject object) {
-    Logger::setLoggingEnabled();
+    terminalDevice.logger.setLoggingEnabled();
 }
 
 JNIEXPORT void JNICALL Java_com_serial4j_core_serial_NativeTerminalDevice_setLoggingDisabled0
   (JNIEnv* env, jobject object) {
-    Logger::setLoggingDisabled();
+    terminalDevice.logger.setLoggingDisabled();
 }
 
 JNIEXPORT jint JNICALL Java_com_serial4j_core_serial_NativeTerminalDevice_setTerminalControlFlag
@@ -130,7 +130,7 @@ JNIEXPORT jintArray JNICALL Java_com_serial4j_core_serial_NativeTerminalDevice_g
 
 JNIEXPORT jobjectArray JNICALL Java_com_serial4j_core_serial_NativeTerminalDevice_getSerialPorts0
   (JNIEnv* env, jobject object) {
-    JniUtils::setJniEnv(env);
+
     int length = *(terminalDevice.getDynamicBuffer()->getItemsCount());
 
     jobjectArray objectArray = JniUtils::createNewArrayFromBuffer(
@@ -202,7 +202,7 @@ JNIEXPORT jint JNICALL Java_com_serial4j_core_serial_NativeTerminalDevice_initTe
 
 JNIEXPORT jint JNICALL Java_com_serial4j_core_serial_NativeTerminalDevice_openPort0
   (JNIEnv* env, jobject object, jstring strBuffer) {
-    return *(terminalDevice.openPort(env->GetStringUTFChars(strBuffer, 0)));
+    return *(terminalDevice.openPort((*JniUtils::getJniEnv())->GetStringUTFChars(strBuffer, 0)));
 }
 
 JNIEXPORT jint JNICALL Java_com_serial4j_core_serial_NativeTerminalDevice_closePort0

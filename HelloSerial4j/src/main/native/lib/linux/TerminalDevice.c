@@ -3,15 +3,15 @@
 int* Terminal::TerminalDevice::openPort(const char* port) {
     this->portFileDescriptor = open(port, flags);
     if (this->portFileDescriptor > 0) {
-        Logger::LOGS(SERIAL, "Serial Port Opened.");
+        this->logger.LOGS(SERIAL, "Serial Port Opened.");
     } else {
-        Logger::LOGS(SERIAL, "Serial Port isn't available.");
+        this->logger.LOGS(SERIAL, "Serial Port isn't available.");
     }
     return &(this->portFileDescriptor);
 }
 
 int Terminal::TerminalDevice::fetchSerialPorts() {
-    Logger::LOGS(SERIAL, "Fetching serial devices.");
+    this->logger.LOGS(SERIAL, "Fetching serial devices.");
 
     DIR* dirp = opendir(DEVICES_DIR);
     
@@ -201,8 +201,10 @@ ssize_t Terminal::TerminalDevice::readData(void* buffer, int length) {
 
 int Terminal::TerminalDevice::closePort() {
     if (this->portFileDescriptor <= 0) {
+        this->logger.LOGS(SERIAL, "Invalid Serial Port.");
         return ERR_INVALID_PORT;
     }
+    this->logger.LOGS(SERIAL, "Serial Port Closed.");
     return close(this->portFileDescriptor);
 } 
 

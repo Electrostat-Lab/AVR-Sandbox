@@ -3,7 +3,7 @@
  * @author pavl_g.
  * @brief Represents the serial port devices control and operation for POSIX systems.
  * @note This is the base [HAL] (Hardware abstraction layer) for the Serial4j api.
- * @version 0.1[]
+ * @version 0.1
  * @date 2022-08-24
  *
  * @copyright
@@ -66,6 +66,8 @@ namespace Terminal {
 
     struct TerminalDevice {
 
+        struct Logger logger;
+
         /** terminal attrs */
         struct termios tty;
         int flags = DEFAULT_FLAGS;
@@ -80,6 +82,18 @@ namespace Terminal {
 
         /** Serial Ports buffer */
         struct DynamicBuffer serialPorts;
+
+        void setLoggingEnabled() {
+            this->logger.setLoggingEnabled();
+        }
+
+        void setLoggingDisabled() {
+            this->logger.setLoggingEnabled();
+        }
+
+        int isLoggingEnabled() {
+            return *(this->logger.isLoggingEnabled());
+        }
 
         /**
          * @brief Sets the IO flags for the <fcntl.h> [open] base api, default value is

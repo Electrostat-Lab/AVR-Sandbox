@@ -38,9 +38,9 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import com.serial4j.core.util.natives.NativeImageLoader;
 import com.serial4j.core.serial.Permissions;
 import com.serial4j.core.errno.ErrnoToException;
-import com.serial4j.core.util.natives.NativeImageLoader;
 import com.serial4j.core.serial.SerialPort;
 import com.serial4j.core.serial.NativeTerminalDevice;
 import com.serial4j.core.serial.ReadConfiguration;
@@ -67,6 +67,7 @@ public final class TerminalDevice {
      * Static initializer for loading and setting up the native image.
      */
     static {
+        NativeImageLoader.loadLibrary();
         setupJniEnvironment();
     }
 
