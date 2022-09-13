@@ -174,6 +174,9 @@ int Terminal::TerminalDevice::setBaudRate(int baudRate) {
     if (this->portFileDescriptor <= 0) {
         return ERR_INVALID_PORT;
     }
+    /* update the termios struct pointer with the data from the port descriptor */
+    tcgetattr(this->portFileDescriptor, &(this->tty));
+    /* update the baud rate of the termios */
     cfsetspeed(&(this->tty), baudRate);
     return tcsetattr(this->portFileDescriptor, TCSAFLUSH, &(this->tty));
 }
@@ -182,6 +185,8 @@ speed_t Terminal::TerminalDevice::getBaudRate() {
     if (this->portFileDescriptor <= 0) {
         return ERR_INVALID_PORT;
     }
+    /* update the termios struct pointer with the data from the port descriptor */
+    tcgetattr(this->portFileDescriptor, &(this->tty));
     return cfgetospeed(&(this->tty));
 }
 

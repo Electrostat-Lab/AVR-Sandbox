@@ -2601,6 +2601,27 @@
  } 
  Compiled 
  from 
+ "Launcher.java" 
+ public 
+ final 
+ class 
+ com.serial4j.example.Launcher 
+ { 
+ public 
+ com.serial4j.example.Launcher(); 
+ descriptor: 
+ ()V 
+ public 
+ static 
+ void 
+ main(java.lang.String[]) 
+ throws 
+ java.lang.InterruptedException; 
+ descriptor: 
+ ([Ljava/lang/String;)V 
+ } 
+ Compiled 
+ from 
  "HelloNativeSerial4J.java" 
  class 
  com.serial4j.example.HelloNativeSerial4J$1 
@@ -2640,26 +2661,24 @@
  final 
  class 
  com.serial4j.example.HelloSerial4jIO 
+ extends 
+ java.lang.Thread 
  { 
+ protected 
+ final 
+ com.serial4j.core.serial.TerminalDevice 
+ ttyDevice; 
+ descriptor: 
+ Lcom/serial4j/core/serial/TerminalDevice; 
  public 
  com.serial4j.example.HelloSerial4jIO(); 
  descriptor: 
  ()V 
  public 
- static 
  void 
- main(java.lang.String[]) 
- throws 
- com.serial4j.core.serial.throwable.NoSuchDeviceException, 
- com.serial4j.core.serial.throwable.PermissionDeniedException, 
- com.serial4j.core.serial.throwable.BrokenPipeException, 
- com.serial4j.core.serial.throwable.InvalidPortException, 
- com.serial4j.core.serial.throwable.NoResultException, 
- com.serial4j.core.serial.throwable.OperationFailedException, 
- java.io.FileNotFoundException, 
- java.lang.InterruptedException; 
+ run(); 
  descriptor: 
- ([Ljava/lang/String;)V 
+ ()V 
  private 
  static 
  void 
@@ -2714,7 +2733,7 @@
  extends 
  java.lang.Thread 
  { 
- private 
+ protected 
  final 
  com.serial4j.core.serial.TerminalDevice 
  ttyDevice; 

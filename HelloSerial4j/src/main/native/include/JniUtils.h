@@ -85,7 +85,7 @@ namespace JniUtils {
     }
 
     /**
-     * @brief Gets the Jni Env pointer from the jvm.
+     * @brief Gets the Jni Env pointer from the jvm with multithreading support.
      * 
      * @return JNIEnv* the namespace env pointer.
      */
