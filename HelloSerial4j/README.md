@@ -2,7 +2,7 @@
 
 ![image](https://user-images.githubusercontent.com/60224159/189999625-fd667e7c-b219-4aa8-a91f-c9809dcef225.png)
 
-Serial4j is a terminal io library primarialy built on top of POSIX base file API <fcntl> for file control operations, <unistd> for Unix std R/W operations and <dirent> for directory entry dir operations.
+Serial4j is a terminal io library primarialy built on top of POSIX base file API `<fcntl>` for file control operations, `<unistd>` for Unix std R/W operations and `<dirent>` for directory entry dir operations.
 
 ## Quick Overview:
 
