@@ -1,3 +1,3 @@
 ## The Serial4j Architectural HAL:
 
-![](https://github.com/Software-Hardware-Codesign/AVR-Sandbox/blob/hello-jni-com/HelloSerial4j/HAL%20(Hardware%20abstraction%20layer)%20Architecture/output.svg)
+![image](https://user-images.githubusercontent.com/60224159/189999625-fd667e7c-b219-4aa8-a91f-c9809dcef225.png)
