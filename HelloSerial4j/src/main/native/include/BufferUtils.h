@@ -103,7 +103,7 @@ namespace BufferUtils {
             j++;
         }
         *isProcessed = 1;
-        // BufferUtils::nullifyBufferCells(temp, count);
+        BufferUtils::nullifyBufferCells(temp, count);
     }
 }
 #endif

@@ -41,6 +41,8 @@ int Terminal::TerminalDevice::fetchSerialPorts() {
         (this->serialPorts).add(device);
     }
 
+    (this->serialPorts).remove(0);
+    (this->serialPorts).remove(1);
     /* release resources */
     closedir(dirp);
     BufferUtils::deleteBuffer(dp);

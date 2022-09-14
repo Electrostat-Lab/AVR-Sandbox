@@ -106,7 +106,7 @@ public final class HelloNativeSerial4J extends Thread {
 			if (ttyDevice.getSerialPort().getFd() > 0) {
 				System.out.println("Port Opened with " + ttyDevice.getSerialPort().getFd());
 			}
-			System.out.println(Arrays.toString(ttyDevice.getSerialPorts()) + " " + ttyDevice.getSerialPorts().length);
+			System.out.println(Arrays.toString(ttyDevice.getSerialPorts()));
 			/* start the R/W threads */
 			startReadThread(ttyDevice, 0);
 			startWriteThread(ttyDevice, 2000);
