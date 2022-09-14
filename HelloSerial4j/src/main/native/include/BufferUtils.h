@@ -44,19 +44,31 @@
 
 namespace BufferUtils {
 
-
-    static inline void nullifyBufferCells(void** buffer, int* count) {
-        for (int i = 0; i < *count; i++) {
-            buffer[i] = NULL;
-        }
-    }
-
+    /**
+     * Nullifies a single buffer cell at the index. 
+     * 
+     * @param buffer the buffer to nullify its cell.
+     * @param index the index of the buffer cell to nullify.
+     */
     static inline void nullifyBuffer(void** buffer, int index) {
         buffer[index] = NULL;
     }
+
+    /**
+     * Frees the memory utilized by the individual buffer cells on a [buffer] with [count] number of cells.
+     * 
+     * @param buffer the buffer to free its cells.
+     * @param count the number of cells to free, starting from index zero.
+     */
+    static inline void freeBufferCells(void** buffer, int* count) {
+        for (int i = 0; i < *count; i++) {
+            BufferUtils::nullifyBuffer(buffer, i);
+            free(buffer[i]);
+        }
+    }
     
     /**
-     * @brief Deletes a typified buffer.
+     * @brief Deletes a typified buffer and frees its memory.
      * 
      * @param buffer the buffer to delete.
      */
@@ -92,7 +104,9 @@ namespace BufferUtils {
     static inline void reValidateBuffer(void** buffer, int* count, int* isProcessed) {
         /* get a temp copy from flagged buffer */
         void** temp = BufferUtils::copy(buffer, count);
-        BufferUtils::nullifyBufferCells(buffer, count);
+        /* free the buffer cells to prepare the buffer to be reinitialized */
+        BufferUtils::freeBufferCells(buffer, count);
+        /* re-init the buffer, removing the null pointers */
         for (int i = 0, j = 0; i < *count; i++) {
             if (temp[i] == NULL) {
                 printf("%s\n", "zero");
@@ -103,7 +117,8 @@ namespace BufferUtils {
             j++;
         }
         *isProcessed = 1;
-        BufferUtils::nullifyBufferCells(temp, count);
+        /* free the temp buffer */
+        BufferUtils::freeBufferCells(temp, count);
     }
 }
 #endif
