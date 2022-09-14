@@ -8,11 +8,14 @@ int DynamicBuffer::add(void* item) {
 } 
 
 int DynamicBuffer::remove(int index) {
-    buffer[index] = 0;
-    BufferUtils::reValidateBuffer(buffer, getItemsCount());
-
+    BufferUtils::nullifyBuffer(buffer, index);
+    BufferUtils::reValidateBuffer(buffer, getItemsCount(), &(this->isProcessed));
+    
+    while (!this->isProcessed);
+    this->isProcessed = 0;
+    
     count--;
-    return 0;
+    return OPERATION_SUCCEEDED;
 }
 
 void* DynamicBuffer::getItem(int index) {

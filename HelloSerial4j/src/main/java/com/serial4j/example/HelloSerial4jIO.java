@@ -77,7 +77,7 @@ public final class HelloSerial4jIO extends Thread {
             ttyDevice.initTermios();
             /* set and apply the baud rate to determine transmission speed */
             ttyDevice.setBaudRate(BaudRate.B57600);
-            System.out.println("Available serial ports: " + Arrays.toString(ttyDevice.getSerialPorts()));
+            System.out.println("Available serial ports: " + Arrays.toString(ttyDevice.getSerialPorts()) + " " + ttyDevice.getSerialPorts().length);
             /* start R/W threads */
             startReadThread(ttyDevice, 0);
             startWriteThread(ttyDevice, 2000);

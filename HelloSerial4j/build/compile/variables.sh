@@ -5,7 +5,7 @@
 #*#
 
 # constant independent
-clibName=('libSerial4j.so')
+clibName=('libserial4j.so')
 
 # android tool-chain constants
 min_android_sdk=21

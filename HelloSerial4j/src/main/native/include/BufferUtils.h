@@ -44,16 +44,27 @@
 
 namespace BufferUtils {
 
+
+    static inline void nullifyBufferCells(void** buffer, int* count) {
+        for (int i = 0; i < *count; i++) {
+            buffer[i] = NULL;
+        }
+    }
+
+    static inline void nullifyBuffer(void** buffer, int index) {
+        buffer[index] = NULL;
+    }
+    
     /**
      * @brief Deletes a typified buffer.
      * 
      * @param buffer the buffer to delete.
      */
     static inline void deleteBuffer(void* buffer) {
-        free(buffer);
-        buffer = NULL;
+       free(buffer);
+       BufferUtils::nullifyBuffer(&buffer, 0);
     }
-    
+
     /**
      * @brief Deeply copies the data of the [src] buffer into a new
      * buffer and returns it.
@@ -62,9 +73,10 @@ namespace BufferUtils {
      * @param count the count length of the buffer.
      * @return void** a new buffer with the same data as the source.
      */
-    static inline void** copy(void** src, int count) {
-        void** copy = (void**) calloc(1, sizeof(void*));
-        for (int i = 0; i < count; i++) {
+    static inline void** copy(void** src, int* count) {
+        void** copy = (void**) calloc(1, sizeof(void**));
+        for (int i = 0; i < *count; i++) {
+            /* add new memory on the next array block */
             copy[i] = (void*) calloc(1, sizeof(void*));
             copy[i] = src[i];
         }
@@ -77,17 +89,21 @@ namespace BufferUtils {
      * @param buffer the buffer to re-validate.
      * @param count the pointers count.
      */
-    static inline void reValidateBuffer(void** buffer, int* count) {
+    static inline void reValidateBuffer(void** buffer, int* count, int* isProcessed) {
         /* get a temp copy from flagged buffer */
-        void** temp = BufferUtils::copy(buffer, *count);
+        void** temp = BufferUtils::copy(buffer, count);
+        BufferUtils::nullifyBufferCells(buffer, count);
         for (int i = 0, j = 0; i < *count; i++) {
-            if (temp[i] == 0) {
+            if (temp[i] == NULL) {
+                printf("%s\n", "zero");
                 continue;
             }
+            buffer[j] = (void*) calloc(1, sizeof(void*));
             buffer[j] = temp[i];
             j++;
         }
-        BufferUtils::deleteBuffer(*temp);
+        *isProcessed = 1;
+        // BufferUtils::nullifyBufferCells(temp, count);
     }
 }
 #endif

@@ -53,10 +53,10 @@ public final class NativeImageLoader {
      * Represents an image domain.
      */
     public enum NativeImage {
-        LINUX_x86_x64("native/Linux/linux-x86-x64/libSerial4j.so"),
-        LINUX_x86_x86("native/Linux/linux-x86-x86/libSerial4j.so"),
-        MAC_x86_x64("native/OSX/mac-x86-x64/libSerial4j.dylb"),
-        WIN_x86_x64("native/Windows/win-x86-x64/libSerial4j.dll");
+        LINUX_x86_x64("native/Linux/linux-x86-x64/libserial4j.so"),
+        LINUX_x86_x86("native/Linux/linux-x86-x86/libserial4j.so"),
+        MAC_x86_x64("native/OSX/mac-x86-x64/libserial4j.dylb"),
+        WIN_x86_x64("native/Windows/win-x86-x64/libserial4j.dll");
 
         private final String image;
 
@@ -163,14 +163,14 @@ public final class NativeImageLoader {
         try {
             final InputStream nativeImageIS = NativeImageLoader.class.getClassLoader().getResourceAsStream(image.getImage());
             final byte[] buffer = new byte[nativeImageIS.available()];
-            final FileOutputStream fos = new FileOutputStream(workingDirectory + "/libSerial4j.so");  
+            final FileOutputStream fos = new FileOutputStream(workingDirectory + "/libserial4j.so");  
             int result = 0;
             while ((result = nativeImageIS.read(buffer)) != -1) {
                 fos.write(buffer, 0, buffer.length);
             }
             nativeImageIS.close();
             fos.close();
-            System.load(workingDirectory + "/libSerial4j.so");
+            System.load(workingDirectory + "/libserial4j.so");
         } catch(final Exception exception) {
             exception.printStackTrace();
         }

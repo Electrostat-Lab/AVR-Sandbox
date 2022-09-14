@@ -46,7 +46,8 @@
 struct DynamicBuffer {
 
     int count = 0;
-    void** buffer = (void**) calloc(1, sizeof(void*));
+    int isProcessed = 0;
+    void** buffer = (void**) calloc(1, sizeof(void**));
 
     void** getBuffer() {
         return buffer;
