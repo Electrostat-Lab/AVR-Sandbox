@@ -47,24 +47,96 @@ struct DynamicBuffer {
 
     int count = 0;
     int isProcessed = 0;
+
+    /**
+     * Declares and initializes a pointer that points to 
+     * other void* buffers starting from index zero. 
+     * 
+     * @note The pointer is of single size of a type.
+     * @note The pointer points to only and only one buffer at a time.
+     * @note New buffers can be added to this pointer by dereferencing it and adding one to the memory address to move 
+     * it to a new cell block.
+     * e.g: 
+     * 1) First way of adding a new buffer to this pointer using the deep copy:
+     *     buffer[index] = (void*) calloc(1, sizeof(void*));
+     *     buffer[index] = item;
+     * 
+     * 2) Second way of adding a new buffer to this pointer (the one used here):
+     *     *(buffer += count) = (void*) calloc(1, sizeof(void*));
+     *     *buffer = item;
+     *     buffer -= count;
+     * 
+     * 3) The superficial copy example:
+     *     buffer[index] = item;
+     */
     void** buffer = (void**) calloc(1, sizeof(void**));
 
+    /**
+     * Retrieves the pointer to this dynamic buffer.
+     * 
+     * @return a pointer to this array of buffers.
+     */
     void** getBuffer() {
         return buffer;
     }
 
+    /**
+     * Retrieves this structure size.
+     * 
+     * @return an integer representing this struct in bytes.
+     */
+    size_t getBufferSize() {
+        return sizeof(struct DynamicBuffer);
+    }
+
+    /**
+     * Resets the pointer value back to zero.
+     */
     void resetDataPointer() {
         this->count = 0;
     }
 
+    /**
+     * Gets the memory address to the integer of the items count.
+     * 
+     * @return a pointer referring to the memory address of the integer that represents the item counts.
+     */
     int* getItemsCount();
 
-    int add(void* item);
+    /**
+     * Adds a new buffer to this pointer in a new index.
+     * 
+     * @param item a void* buffer to add.
+     */
+    void add(void* item);
 
-    int remove(int index);
+    /**
+     * Frees a buffer from the memory at a particular index.
+     * @warning this method call is expensive as it removes and revalidates the whole buffer from NULL pointers.
+     * 
+     * @param index the index of the buffer to remove.
+     */
+    void removeAt(int index);
 
+    /**
+     * Frees all the buffers of this pointer from the memory.
+     */
+    void removeAll();
+
+    /**
+     * Retrieves a buffer index.
+     * 
+     * @param item the buffer to get its index.
+     * @return the buffer index in an integer format.
+     */
     int getItemIndex(void* item);
 
+    /**
+     * Retrieves a buffer from this pointer using its index.
+     * 
+     * @param index the index where the buffer is located in this pointer.
+     * @return the buffer corresponding to this index.
+     */
     void* getItem(int index);
 };
 

@@ -39,7 +39,7 @@ int Terminal::TerminalDevice::fetchSerialPorts() {
 
         /* add the device to the serial ports major buffer and count up */
         (this->serialPorts).add(device);
-    }
+    } 
 
     /* release resources */
     closedir(dirp);

@@ -1,13 +1,19 @@
 #include<DynamicBuffer.h>
 
-int DynamicBuffer::add(void* item) {
-    buffer[count] = (void*) calloc(1, sizeof(void*));
-    buffer[count] = item;
+void DynamicBuffer::add(void* item) {
+  
+    /* move the pointer to point to the last item */
+    /* then, obtain a superficial copy */
+    void** copy = (buffer += count);
+    /* dereference and evalute using the superficial copy */
+    *copy = (void*) calloc(1, sizeof(void*));
+    *copy = item;
+    /* move the pointer back to the start of the buffer (first item) */
+    buffer -= count;
     count++;
-    return 1;
 } 
 
-int DynamicBuffer::remove(int index) {
+void DynamicBuffer::removeAt(int index) {
     BufferUtils::nullifyBuffer(buffer, index);
     BufferUtils::reValidateBuffer(buffer, getItemsCount(), &(this->isProcessed));
     
@@ -15,7 +21,19 @@ int DynamicBuffer::remove(int index) {
     this->isProcessed = 0;
     
     count--;
-    return OPERATION_SUCCEEDED;
+}
+
+void DynamicBuffer::removeAll() {
+    for (int i = 0; i < *(this->getItemsCount()); i++) {
+        BufferUtils::nullifyBuffer(buffer, i);
+    }
+
+    BufferUtils::reValidateBuffer(buffer, getItemsCount(), &(this->isProcessed));
+    
+    while (!this->isProcessed);
+    this->isProcessed = 0;
+
+    this->resetDataPointer();
 }
 
 void* DynamicBuffer::getItem(int index) {
