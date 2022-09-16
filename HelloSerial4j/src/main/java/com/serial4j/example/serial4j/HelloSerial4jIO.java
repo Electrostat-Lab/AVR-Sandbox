@@ -29,7 +29,7 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.serial4j.example;
+package com.serial4j.example.serial4j;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -46,6 +46,7 @@ import com.serial4j.core.serial.throwable.NoSuchDeviceException;
 import com.serial4j.core.serial.throwable.InvalidPortException;
 import com.serial4j.core.serial.throwable.NoResultException;
 import com.serial4j.core.serial.throwable.OperationFailedException;
+import com.serial4j.core.serial.Permissions;
 
 /**
  * An example showing serial and terminal io using java.io API.
@@ -64,7 +65,6 @@ public final class HelloSerial4jIO extends Thread {
         try {
             System.out.println("Started java io example: ");
             /* disable native logger */
-            ttyDevice.setNativeLoggingDisabled();
             /* enable java logger */
             ttyDevice.setSerial4jLoggingEnabled(true);
             ttyDevice.openPort(new SerialPort(ttyDevice.getSerialPorts()[0]));
@@ -80,7 +80,7 @@ public final class HelloSerial4jIO extends Thread {
             System.out.println("Available serial ports: " + Arrays.toString(ttyDevice.getSerialPorts()) + " " + ttyDevice.getSerialPorts().length);
             /* start R/W threads */
             startReadThread(ttyDevice, 0);
-            startWriteThread(ttyDevice, 2000);
+            startWriteThread(ttyDevice, 1000);
         } catch(NoSuchDeviceException |
 				PermissionDeniedException |
 				BrokenPipeException |
@@ -129,7 +129,7 @@ public final class HelloSerial4jIO extends Thread {
                     while(true) {
                         /* check for the number of the available charachters to read */
                         if (ttyDevice.getInputStream().available() > 0) {
-                            System.out.println((char) ttyDevice.getInputStream().read());
+                            System.out.print((char) ttyDevice.getInputStream().read());
                         }
                     }
                 } catch (IOException | InterruptedException e) {

@@ -29,7 +29,7 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.serial4j.example;
+package com.serial4j.example.serial4j;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -68,7 +68,6 @@ public final class HelloNativeSerial4J extends Thread {
 	public void run() {
 		try {
 			System.out.println("Started native io example: ");
-			ttyDevice.setNativeLoggingEnabled();
 			/* set port permissions */
 			final Permissions permissions = Permissions.O_RDWR.append(Permissions.O_NOCTTY)
 															  .append(Permissions.O_NONBLOCK);
@@ -86,7 +85,7 @@ public final class HelloNativeSerial4J extends Thread {
 																.disable(TerminalOutputFlag.OPOST, TerminalOutputFlag.ONLCR);
 			final TerminalInputFlag TIF_VALUE = (TerminalInputFlag) TerminalInputFlag.EMPTY_INSTANCE.disableAll();
 			/* open the serial port using the path or the name */
-			ttyDevice.openPort(new SerialPort("/dev/ttyUSB0"));
+			ttyDevice.openPort(new SerialPort(ttyDevice.getSerialPorts()[0]));
 			/* initialize the terminal IO with the default terminal flags */
 			ttyDevice.initTermios();
 			/* print the initial terminal control flags as long value */
@@ -106,10 +105,10 @@ public final class HelloNativeSerial4J extends Thread {
 			if (ttyDevice.getSerialPort().getFd() > 0) {
 				System.out.println("Port Opened with " + ttyDevice.getSerialPort().getFd());
 			}
-			System.out.println(Arrays.toString(ttyDevice.getSerialPorts()));
-			/* start the R/W threads */
+			System.out.println(Arrays.toString(ttyDevice.getSerialPorts()) + " " + ttyDevice.getSerialPorts().length);
+			// /* start the R/W threads */
 			startReadThread(ttyDevice, 0);
-			startWriteThread(ttyDevice, 2000);
+			startWriteThread(ttyDevice, 20000);
 		} catch(NoSuchDeviceException |
 				PermissionDeniedException |
 				BrokenPipeException |
@@ -137,7 +136,7 @@ public final class HelloNativeSerial4J extends Thread {
 					while(true) {
 						/* read data and get the buffer */
 						if (ttyDevice.readData() > 0) {
-							System.out.println((char) ttyDevice.getReadBuffer());
+							System.out.println((char) ttyDevice.getReadData());
 						}
 					}
 				} catch(Exception e) {

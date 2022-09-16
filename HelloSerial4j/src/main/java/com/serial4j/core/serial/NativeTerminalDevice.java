@@ -31,6 +31,7 @@
  */
 package com.serial4j.core.serial;
 
+import com.serial4j.core.serial.SerialPort;
 import com.serial4j.core.util.natives.NativeImageLoader;
 
 /**
@@ -47,7 +48,27 @@ public final class NativeTerminalDevice {
         NativeImageLoader.loadLibrary();
     }
 
+    private SerialPort serialPort;
+    private String[] serialPorts;
+    private int readData;
+
     protected NativeTerminalDevice() {
+    }
+
+    public void setSerialPort(final SerialPort serialPort) {
+        this.serialPort = serialPort;
+    }
+
+    public final SerialPort getSerialPort() {
+        return this.serialPort;
+    }
+
+    public final String[] getSerialPorts() {
+        return this.serialPorts;
+    }
+
+    public final int getReadData() {
+        return this.readData;
     }
 
     /**
@@ -55,11 +76,7 @@ public final class NativeTerminalDevice {
      * 
      * @return (-1) if the jni env pointer is NULL, (1) for successful initialization.
      */
-    protected static native int setupJniEnvironment0();
-
-    protected native void setIOFlags(final int flags);
-
-    protected native int getIOFlags();
+    protected static native int setupJniEnvironment0(); 
 
     protected native int setTerminalControlFlag(final long flag);
 
@@ -81,19 +98,11 @@ public final class NativeTerminalDevice {
 
     protected native int[] getReadConfigurationMode0();
 
-    protected native void setLoggingEnabled0();
-
-    protected native void setLoggingDisabled0();
-
-    protected native String[] getSerialPorts0();
+    protected native int getErrno0();
 
     protected native int fetchSerialPorts0();
 
     protected native int getBaudRate0();
-
-    protected native int getReadBuffer0();
-
-    protected native int getFileDescriptor0();
 
     protected native long writeData0(final int data);
 
@@ -103,13 +112,11 @@ public final class NativeTerminalDevice {
 
     protected native String readBuffer0();
 
-    protected native int getErrno0();
-
     protected native int initTermios0();
 
     protected native int setBaudRate0(int baudRate);
 
-    protected native int openPort0(final String port);
+    protected native int openPort0(final String port, final int flag);
 
     protected native int closePort0();
 }

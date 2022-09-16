@@ -1,17 +1,10 @@
 #include<TerminalDevice.h>
 
-int* Terminal::TerminalDevice::openPort(const char* port) {
-    this->portFileDescriptor = open(port, flags);
-    if (this->portFileDescriptor > 0) {
-        this->logger.LOGS(SERIAL, "Serial Port Opened.");
-    } else {
-        this->logger.LOGS(SERIAL, "Serial Port isn't available.");
-    }
-    return &(this->portFileDescriptor);
+int TerminalDevice::openPort(const char* port, int flag) {
+    return open(port, flag);
 }
 
-int Terminal::TerminalDevice::fetchSerialPorts() {
-    this->logger.LOGS(SERIAL, "Fetching serial devices.");
+int TerminalDevice::fetchSerialPorts(struct DynamicBuffer* serialPorts) {
 
     DIR* dirp = opendir(DEVICES_DIR);
     
@@ -20,15 +13,15 @@ int Terminal::TerminalDevice::fetchSerialPorts() {
         return ERR_INVALID_DIR;
     }
 
-    struct dirent* dp = (struct dirent*) calloc(1, sizeof(struct dp*));
+    struct dirent* dp = (struct dirent*) calloc(1, sizeof(struct dirent));
 
     /* start at the beginning of the buffer to override last data */
-    this->serialPorts.resetDataPointer();
+    serialPorts->resetDataPointer();
 
     /* start reading available ports */
     while ((dp = readdir(dirp)) != NULL) {
         
-        char* device = (char*) calloc(1, sizeof(char*));
+        char* device = (char*) calloc(1, sizeof(char));
         device = SerialUtils::concatIntoDevice(device, dp->d_name, DEVICES_DIR);
         
         /* delete the device buffer if it's not a serial port */
@@ -38,7 +31,7 @@ int Terminal::TerminalDevice::fetchSerialPorts() {
         }
 
         /* add the device to the serial ports major buffer and count up */
-        (this->serialPorts).add(device);
+        serialPorts->add(device);
     } 
 
     /* release resources */
@@ -46,177 +39,212 @@ int Terminal::TerminalDevice::fetchSerialPorts() {
     BufferUtils::deleteBuffer(dp);
 
     /* throws error indicating the availability issues */
-    if ((this->serialPorts).getItem(0) == NULL) {
+    if (serialPorts->getItem(0) == NULL) {
         return ERR_NO_AVAILABLE_TTY_DEVICES;
     }
-
     return OPERATION_SUCCEEDED;
 }
 
-int Terminal::TerminalDevice::initTermios() {
-    if (this->portFileDescriptor <= 0) {
+int TerminalDevice::initTermios(int* fd) {
+    if (*fd <= 0) {
         return ERR_INVALID_PORT;
     }
+    
+    struct termios* tty = (struct termios*) calloc(1, sizeof(struct termios));
 
     /* initialize the teletype terminal port */
-    tcgetattr(this->portFileDescriptor, &(this->tty));
+    tcgetattr(*fd, tty);
 
     /* setup tty attributes */
-    this->tty.c_cflag &= ~(CBAUDEX | CBAUD); /* clear BAUDs */
-    this->tty.c_cflag |= (CREAD | CS8 | CLOCAL); /* set flags */
-    this->tty.c_lflag &= ~(ICANON | ECHO | ECHOE | ECHOK | ECHOKE | ECHONL | ECHOPRT | ECHOCTL | ISIG | IEXTEN);
-    this->tty.c_oflag &= ~(OPOST | ONLCR);
-    this->tty.c_iflag = 0x00;
+    tty->c_cflag &= ~(CBAUDEX | CBAUD); /* clear BAUDs */
+    tty->c_cflag |= (CREAD | CS8 | CLOCAL); /* set flags */
+    tty->c_lflag &= ~(ICANON | ECHO | ECHOE | ECHOK | ECHOKE | ECHONL | ECHOPRT | ECHOCTL | ISIG | IEXTEN);
+    tty->c_oflag &= ~(OPOST | ONLCR);
+    tty->c_iflag = 0x00;
 
     /* define default read mode as blocking read on char at a time */
-    this->tty.c_cc[VTIME] = BLOCKING_READ_ONE_CHAR[0];
-    this->tty.c_cc[VMIN] = BLOCKING_READ_ONE_CHAR[1];
+    tty->c_cc[VTIME] = BLOCKING_READ_ONE_CHAR[0];
+    tty->c_cc[VMIN] = BLOCKING_READ_ONE_CHAR[1];
 
     /* apply attriutes flag bits */
+    int state = tcsetattr(*fd, TCSAFLUSH, tty);
+    BufferUtils::deleteBuffer(tty);
 
-    return tcsetattr(this->portFileDescriptor, TCSAFLUSH, &(this->tty));
+    return state;
 }
 
-int Terminal::TerminalDevice::setTerminalControlFlag(TerminalFlag flag) {
-    if (this->portFileDescriptor <= 0) {
+int TerminalDevice::setTerminalControlFlag(TerminalFlag flag, int* fd) {
+    if (*fd <= 0) {
         return ERR_INVALID_PORT;
     }
+    
+    struct termios* tty = (struct termios*) calloc(1, sizeof(struct termios));
+
     /* retrieve the current terminal settings from the file descriptor */
-    tcgetattr(this->portFileDescriptor, &(this->tty));
-    this->tty.c_cflag = flag;
+    tcgetattr(*fd, tty);
+    tty->c_cflag = flag;
     /* sets the new terminal settings to the file descriptor with flushing any output */
-    return tcsetattr(this->portFileDescriptor, TCSAFLUSH, &(this->tty));
+    int state = tcsetattr(*fd, TCSAFLUSH, tty);
+    BufferUtils::deleteBuffer(tty);
+
+    return state;
 }
 
-int Terminal::TerminalDevice::setTerminalLocalFlag(TerminalFlag flag) {
-    if (this->portFileDescriptor <= 0) {
-        return ERR_INVALID_PORT;
-    }
-    tcgetattr(this->portFileDescriptor, &(this->tty));
-    this->tty.c_lflag = flag;
-    return tcsetattr(this->portFileDescriptor, TCSAFLUSH, &(this->tty));
-}
-
-int Terminal::TerminalDevice::setTerminalInputFlag(TerminalFlag flag) {
-    if (this->portFileDescriptor <= 0) {
-        return ERR_INVALID_PORT;
-    }
-    tcgetattr(this->portFileDescriptor, &(this->tty));
-    this->tty.c_iflag = flag;
-    return tcsetattr(this->portFileDescriptor, TCSAFLUSH, &(this->tty));
-}
-
-int Terminal::TerminalDevice::setTerminalOutputFlag(TerminalFlag flag) {
-    if (this->portFileDescriptor <= 0) {
-        return ERR_INVALID_PORT;
-    }
-    tcgetattr(this->portFileDescriptor, &(this->tty));
-    this->tty.c_oflag = flag;
-    return tcsetattr(this->portFileDescriptor, TCSAFLUSH, &(this->tty));
-}
-
-TerminalFlag Terminal::TerminalDevice::getTerminalControlFlag() {
-    if (this->portFileDescriptor <= 0) {
-        return ERR_INVALID_PORT;
-    }
-    tcgetattr(this->portFileDescriptor, &(this->tty));
-    return this->tty.c_cflag;
-}
-
-TerminalFlag Terminal::TerminalDevice::getTerminalLocalFlag() {
-    if (this->portFileDescriptor <= 0) {
-        return ERR_INVALID_PORT;
-    }
-    tcgetattr(this->portFileDescriptor, &(this->tty));
-    return this->tty.c_lflag;
-}
-
-TerminalFlag Terminal::TerminalDevice::getTerminalInputFlag() {
-    if (this->portFileDescriptor <= 0) {
-        return ERR_INVALID_PORT;
-    }
-    tcgetattr(this->portFileDescriptor, &(this->tty));
-    return this->tty.c_iflag;
-}
-
-TerminalFlag Terminal::TerminalDevice::getTerminalOutputFlag() {
-    if (this->portFileDescriptor <= 0) {
-        return ERR_INVALID_PORT;
-    }
-    tcgetattr(this->portFileDescriptor, &(this->tty));
-    return this->tty.c_oflag;
-}
-
-int Terminal::TerminalDevice::setReadConfigurationMode(const cc_t* readConfig, const int VTIME_VALUE, const int VMIN_VALUE) {
-    if (this->portFileDescriptor <= 0) {
+int TerminalDevice::setTerminalLocalFlag(TerminalFlag flag, int* fd) {
+    if (*fd <= 0) {
         return ERR_INVALID_PORT;
     }
 
-    this->tty.c_cc[VTIME] = readConfig[0] * VTIME_VALUE;
-    this->tty.c_cc[VMIN] = readConfig[1] * VMIN_VALUE;
+    struct termios* tty = (struct termios*) calloc(1, sizeof(struct termios));
 
-    return tcsetattr(this->portFileDescriptor, TCSAFLUSH, &(this->tty));
+    tcgetattr(*fd, tty);
+    tty->c_lflag = flag;
+    int state = tcsetattr(*fd, TCSAFLUSH, tty);
+    BufferUtils::deleteBuffer(tty);
+
+    return state;
 }
 
-cc_t* Terminal::TerminalDevice::getReadConfigurationMode() {
+int TerminalDevice::setTerminalInputFlag(TerminalFlag flag, int* fd) {
+    if (*fd <= 0) {
+        return ERR_INVALID_PORT;
+    }
+    struct termios* tty = (struct termios*) calloc(1, sizeof(struct termios));
+
+    tcgetattr(*fd, tty);
+    tty->c_iflag = flag;
+    int state = tcsetattr(*fd, TCSAFLUSH, tty);
+    BufferUtils::deleteBuffer(tty);
+
+    return state;
+}
+
+int TerminalDevice::setTerminalOutputFlag(TerminalFlag flag, int* fd) {
+    if (*fd <= 0) {
+        return ERR_INVALID_PORT;
+    }
+    struct termios* tty = (struct termios*) calloc(1, sizeof(struct termios));
+
+    tcgetattr(*fd, tty);
+    tty->c_oflag = flag;
+    int state = tcsetattr(*fd, TCSAFLUSH, tty);
+    BufferUtils::deleteBuffer(tty);
+
+    return state;
+}
+
+TerminalFlag TerminalDevice::getTerminalControlFlag(int* fd) {
+    if (*fd <= 0) {
+        return ERR_INVALID_PORT;
+    }
+    struct termios* tty = (struct termios*) calloc(1, sizeof(struct termios));
+    tcgetattr(*fd, tty);
+
+    return tty->c_cflag;
+}
+
+TerminalFlag TerminalDevice::getTerminalLocalFlag(int* fd) {
+    if (*fd <= 0) {
+        return ERR_INVALID_PORT;
+    }
+    struct termios* tty = (struct termios*) calloc(1, sizeof(struct termios*));
+    tcgetattr(*fd, tty);
+
+    return tty->c_lflag;
+}
+
+TerminalFlag TerminalDevice::getTerminalInputFlag(int* fd) {
+    if (*fd <= 0) {
+        return ERR_INVALID_PORT;
+    }
+    struct termios* tty = (struct termios*) calloc(1, sizeof(struct termios));
+    tcgetattr(*fd, tty);
+    return tty->c_iflag;
+}
+
+TerminalFlag TerminalDevice::getTerminalOutputFlag(int* fd) {
+    if (*fd <= 0) {
+        return ERR_INVALID_PORT;
+    }
+    struct termios* tty = (struct termios*) calloc(1, sizeof(struct termios));
+    tcgetattr(*fd, tty);
+    return tty->c_oflag;
+}
+
+int TerminalDevice::setReadConfigurationMode(const cc_t* readConfig, const int VTIME_VALUE, const int VMIN_VALUE, int* fd) {
+    if (*fd <= 0) {
+        return ERR_INVALID_PORT;
+    }
+    struct termios* tty = (struct termios*) calloc(1, sizeof(struct termios));
+    tty->c_cc[VTIME] = readConfig[0] * VTIME_VALUE;
+    tty->c_cc[VMIN] = readConfig[1] * VMIN_VALUE;
+    int state = tcsetattr(*fd, TCSAFLUSH, tty);
+    BufferUtils::deleteBuffer(tty);
+
+    return state;
+}
+
+cc_t* TerminalDevice::getReadConfigurationMode(int* fd) {
     cc_t* readConfig = (cc_t*) calloc(2, sizeof(int));
-    if (this->portFileDescriptor <= 0) {
+    if (*fd <= 0) {
         readConfig[0] = ERR_INVALID_PORT;
         readConfig[1] = ERR_INVALID_PORT;
         return readConfig;
     }
-    readConfig[0] = this->tty.c_cc[VTIME];
-    readConfig[1] = this->tty.c_cc[VMIN];
+    struct termios* tty = (struct termios*) calloc(1, sizeof(struct termios));
+    tcgetattr(*fd, tty);
+    readConfig[0] = tty->c_cc[VTIME];
+    readConfig[1] = tty->c_cc[VMIN];
+    BufferUtils::deleteBuffer(tty);
+
     return readConfig;
 }
 
-int Terminal::TerminalDevice::setBaudRate(int baudRate) {
-    if (this->portFileDescriptor <= 0) {
+int TerminalDevice::setBaudRate(int baudRate, int* fd) {
+    if (*fd <= 0) {
         return ERR_INVALID_PORT;
     }
+    struct termios* tty = (struct termios*) calloc(1, sizeof(struct termios));
     /* update the termios struct pointer with the data from the port descriptor */
-    tcgetattr(this->portFileDescriptor, &(this->tty));
+    tcgetattr(*fd, tty);
     /* update the baud rate of the termios */
-    cfsetspeed(&(this->tty), baudRate);
-    return tcsetattr(this->portFileDescriptor, TCSAFLUSH, &(this->tty));
+    cfsetspeed(tty, baudRate);
+    int state = tcsetattr(*fd, TCSAFLUSH, tty);
+    BufferUtils::deleteBuffer(tty);
+
+    return state;
 }
 
-speed_t Terminal::TerminalDevice::getBaudRate() {
-    if (this->portFileDescriptor <= 0) {
+speed_t TerminalDevice::getBaudRate(int* fd) {
+    if (*fd <= 0) {
         return ERR_INVALID_PORT;
     }
+    struct termios* tty = (struct termios*) calloc(1, sizeof(struct termios));
     /* update the termios struct pointer with the data from the port descriptor */
-    tcgetattr(this->portFileDescriptor, &(this->tty));
-    return cfgetospeed(&(this->tty));
+    tcgetattr(*fd, tty);
+    int speed = cfgetospeed(tty);
+    BufferUtils::deleteBuffer(tty);
+
+    return speed;
 }
 
-ssize_t Terminal::TerminalDevice::writeData(const void* buffer, int length) {
-    if (this->portFileDescriptor <= 0) {
+ssize_t TerminalDevice::writeData(const void* buffer, int length, int* fd) {
+    if (*fd <= 0) {
         return ERR_INVALID_PORT;
     }
-    return write(this->portFileDescriptor, buffer, length);
+    return write(*fd, buffer, length);
 }
 
-ssize_t Terminal::TerminalDevice::readData(void* buffer, int length) {
-    if (this->portFileDescriptor <= 0) {
+ssize_t TerminalDevice::readData(void* buffer, int length, int* fd) {
+    if (*fd <= 0) {
         return ERR_INVALID_PORT;
     }
-    return read(this->portFileDescriptor, buffer, length);
+    return read(*fd, buffer, length);
 }
 
-int Terminal::TerminalDevice::closePort() {
-    if (this->portFileDescriptor <= 0) {
-        this->logger.LOGS(SERIAL, "Invalid Serial Port.");
+int TerminalDevice::closePort(int* fd) {
+    if (*fd <= 0) {
         return ERR_INVALID_PORT;
     }
-    this->logger.LOGS(SERIAL, "Serial Port Closed.");
-    return close(this->portFileDescriptor);
+    return close(*fd);
 } 
-
-int* Terminal::TerminalDevice::getPortFileDescriptor() {
-    return &(this->portFileDescriptor);
-}
-
-int* Terminal::TerminalDevice::getErrno() {
-    return &errno;
-}

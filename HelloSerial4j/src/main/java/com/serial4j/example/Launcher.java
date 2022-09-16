@@ -31,6 +31,10 @@
  */
 package com.serial4j.example;
 
+import com.serial4j.example.serial4j.HelloSerial4jIO;
+import com.serial4j.example.serial4j.HelloNativeSerial4J;
+import com.serial4j.example.monitor.HelloSerialMonitor;
+
 /**
  * Starts the applications test cases.
  * 
@@ -40,11 +44,11 @@ public final class Launcher {
 
     public static void main(String args[]) throws InterruptedException {
         /* starts the native fctnl io example */
-        final HelloNativeSerial4J nativeIO = new HelloNativeSerial4J();
-        nativeIO.start();
-        Thread.sleep(8000);
-        /* starts the java.io example */
-        final HelloSerial4jIO serial4jIO = new HelloSerial4jIO();
-        serial4jIO.start();
+        // final HelloNativeSerial4J nativeIO = new HelloNativeSerial4J();
+        // nativeIO.start();
+        // Thread.sleep(8000);
+        // /* starts the java.io example */
+        final HelloSerialMonitor serial4jIO = new HelloSerialMonitor();
+        serial4jIO.run();
     }
 }

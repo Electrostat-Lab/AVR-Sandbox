@@ -52,7 +52,6 @@
 #include<DynamicBuffer.h>
 #include<SerialUtils.h>
 #include<ErrnoUtils.h>
-#include<Logger.h>
 
 #define READ_CONFIG_SIZE (2)
 #define DEVICES_DIR ((const char*) "/dev/")
@@ -62,270 +61,191 @@
 
 typedef unsigned short int TerminalFlag;
 
-namespace Terminal {
+namespace TerminalDevice {
 
-    struct TerminalDevice {
+    /** Param@0 = VTIME, Param@1 = VMIN */
+    const cc_t POLLING_READ[READ_CONFIG_SIZE] = {0, 0};
+    const cc_t BLOCKING_READ_ONE_CHAR[READ_CONFIG_SIZE] = {0, 1};
+    const cc_t READ_WITH_TIMEOUT[READ_CONFIG_SIZE] = {1, 0};
+    const cc_t READ_WITH_INTERBYTE_TIMEOUT[READ_CONFIG_SIZE] = {1, 1};
 
-        struct Logger logger;
+    /**
+     * @brief Fetches serial port devices on "/dev/" into [serialPorts] buffer.
+     * @note Uses <dirent.h>, <SerialUtils.h>, <BufferUtils.h>, <DynamicBuffer.h> and <ErrnoUtils.h>.
+     *
+     * @return int (-3) if the directory ["/dev"] is invalid, (-4) if there are no tty
+     * devices available at the ["/dev"] directory, (1) if operation succeeded.
+     */
+    int fetchSerialPorts(struct DynamicBuffer* serialPorts);
 
-        /** terminal attrs */
-        struct termios tty;
-        int flags = DEFAULT_FLAGS;
-        int portFileDescriptor;
-        int baudRate;
+    /**
+     * @brief Opens a serial port device with a name.
+     * @note Uses <fcntl.h> Unix file base api and <ErrnoUtils.h>.
+     *
+     * @param port the path for the serial port device.
+     * @return int* a memory reference for the port file descriptor.
+     */
+    int openPort(const char* port, int flag);
 
-        /** Param@0 = VTIME, Param@1 = VMIN */
-        const cc_t POLLING_READ[READ_CONFIG_SIZE] = {0, 0};
-        const cc_t BLOCKING_READ_ONE_CHAR[READ_CONFIG_SIZE] = {0, 1};
-        const cc_t READ_WITH_TIMEOUT[READ_CONFIG_SIZE] = {1, 0};
-        const cc_t READ_WITH_INTERBYTE_TIMEOUT[READ_CONFIG_SIZE] = {1, 1};
+    /**
+     * @brief Initializes the default terminal for this device with the following default charachteristics:
+     * -----------
+     * # c_cflag: for control mode flags.
+     * *** Enable these bits:
+     * - [CREAD]: Allow input to be received.
+     * - [CS8]: For charachter size 8-bit, you can use the bit mask CSIZE to read this value.
+     * - [CLOCAL]: Ignore modem status lines (dont check carrier signal).
+     * -----------
+     * # c_lflag: for local mode flags.
+     * ***Disable these bits:
+     * - [ICANON]: Canonical mode (line-by-line) input.
+     * - [ECHO]: Echo input characters.
+     * - [ECHOE]: Perform ERASE visually.
+     * - [ECHOK]: Echo KILL visually.
+     * - [ECHOKE]: Dont output a newline after echoed KILL.
+     * - [ECHONL]: Echo NL (in canonical mode) even if echoing is disabled.
+     * - [ECHOPRT]: Echo deleted characters backward (between \ and / ).
+     * - [ECHOCTL]: Echo control characters visually (e.g., ^L ).
+     * - [ISIG]: Enable signal-generating characters (INTR, QUIT, SUSP).
+     * - [IEXTEN]: Enable extended processing of input characters.
+     * -----------
+     * # c_oflag: for output mode flags.
+     * ***Disable these bits:
+     * - [OPOST]: Perform output postprocessing.
+     * - [ONLCR]: Map NL to CR-NL on output.
+     * -----------
+     * # c_iflag: for input mode flags.
+     * ***Disable all input bit masks.
+     * -----------
+     * # c_cc: For control characters.
+     * ***Sets to BLOCKING READ ONE CHAR AT A TIME MODE.
+     * -----------
+     *
+     * @return int (-1) for failure, (-2) for invalid port or (1) for success.
+     */
+    int initTermios(int* fd);
 
-        /** Serial Ports buffer */
-        struct DynamicBuffer serialPorts;
+    /**
+     * @brief Sets the Terminal Control Flag [c_cflag] for the [termios] variable.
+     *
+     * @param flag bits to set, concatenate the flags using bitwise OR [|].
+     * @return int (-1) for failure, (-2) for invalid port or (1) for success.
+     */
+    int setTerminalControlFlag(TerminalFlag flag, int* fd);
 
-        void setLoggingEnabled() {
-            this->logger.setLoggingEnabled();
-        }
+    /**
+     * @brief Sets the Terminal Local Flag [c_lflag] for the [termios] variable.
+     *
+     * @param flag bits to set, concatenate the flags using bitwise OR [|].
+     * @return int (-1) for failure, (-2) for invalid port or (1) for success.
+     */
+    int setTerminalLocalFlag(TerminalFlag flag, int* fd);
 
-        void setLoggingDisabled() {
-            this->logger.setLoggingEnabled();
-        }
+    /**
+     * @brief Sets the Terminal Output Flag [c_oflag] for the [termios] variable.
+     *
+     * @param flag bits to set, concatenate the flags using bitwise OR [|].
+     * @return int (-1) for failure, (-2) for invalid port or (1) for success.
+     */
+    int setTerminalOutputFlag(TerminalFlag flag, int* fd);
 
-        int isLoggingEnabled() {
-            return *(this->logger.isLoggingEnabled());
-        }
+    /**
+     * @brief Sets the Terminal Input Flag [c_iflag] for the [termios] variable.
+     *
+     * @param flags bits to set, concatenate the flags using bitwise OR [|].
+     * @return int (-1) for failure, (-2) for invalid port or (1) for success.
+     */
+    int setTerminalInputFlag(TerminalFlag flag, int* fd);
 
-        /**
-         * @brief Sets the IO flags for the <fcntl.h> [open] base api, default value is
-         * [O_RDWR | O_NONBLOCK | O_NOCTTY].
-         * @note Requires <fcntl.h> for different types of flags.
-         *
-         * @param flags the IO flags, e.g: [O_RDWR], [O_RDONLY], [O_WRONLY],....
-         */
-        void setIOFlags(int* flags) {
-            this->flags = *flags;
-        }
+    /**
+     * @brief Gets the Terminal Control Flag defined by the termios attributes for this serial device.
+     * 
+     * @return TerminalFlag the terminal control flag in [unsigned short int].
+     */
+    TerminalFlag getTerminalControlFlag(int* fd);
 
-        /**
-         * @brief Gets the IO flags for the file base api.
-         *
-         * @return int* a pointer points at the flags variable, default value is [O_RDWR | O_NONBLOCK | O_NOCTTY].
-         */
-        int* getIOFlags() {
-            return &flags;
-        }
+    /**
+     * @brief Gets the Terminal Local Flag defined by the termios attributes for this serial device.
+     * 
+     * @return TerminalFlag the terminal local flag in [unsigned short int].
+     */
+    TerminalFlag getTerminalLocalFlag(int* fd);
 
-        /**
-         * @brief Fetches serial port devices on "/dev/" into [serialPorts] buffer.
-         * @note Uses <dirent.h>, <SerialUtils.h>, <BufferUtils.h>, <DynamicBuffer.h> and <ErrnoUtils.h>.
-         *
-         * @return int (-3) if the directory ["/dev"] is invalid, (-4) if there are no tty
-         * devices available at the ["/dev"] directory, (1) if operation succeeded.
-         */
-        int fetchSerialPorts();
+    /**
+     * @brief Gets the Terminal Input Flag defined by the termios attributes for this serial device.
+     * 
+     * @return TerminalFlag the terminal input flag in [unsigned short int].
+     */
+    TerminalFlag getTerminalInputFlag(int* fd);
 
-        /**
-         * @brief Opens a serial port device with a name.
-         * @note Uses <fcntl.h> Unix file base api and <ErrnoUtils.h>.
-         *
-         * @param port the path for the serial port device.
-         * @return int* a memory reference for the port file descriptor.
-         */
-        int* openPort(const char* port);
+    /**
+     * @brief Gets the Terminal Output Flag defined by the termios attributes for this serial device.
+     * 
+     * @return TerminalFlag the terminal output flag in [unsigned short int].
+     */
+    TerminalFlag getTerminalOutputFlag(int* fd);
 
-        /**
-         * @brief Initializes the default terminal for this device with the following default charachteristics:
-         * -----------
-         * # c_cflag: for control mode flags.
-         * *** Enable these bits:
-         * - [CREAD]: Allow input to be received.
-         * - [CS8]: For charachter size 8-bit, you can use the bit mask CSIZE to read this value.
-         * - [CLOCAL]: Ignore modem status lines (dont check carrier signal).
-         * -----------
-         * # c_lflag: for local mode flags.
-         * ***Disable these bits:
-         * - [ICANON]: Canonical mode (line-by-line) input.
-         * - [ECHO]: Echo input characters.
-         * - [ECHOE]: Perform ERASE visually.
-         * - [ECHOK]: Echo KILL visually.
-         * - [ECHOKE]: Dont output a newline after echoed KILL.
-         * - [ECHONL]: Echo NL (in canonical mode) even if echoing is disabled.
-         * - [ECHOPRT]: Echo deleted characters backward (between \ and / ).
-         * - [ECHOCTL]: Echo control characters visually (e.g., ^L ).
-         * - [ISIG]: Enable signal-generating characters (INTR, QUIT, SUSP).
-         * - [IEXTEN]: Enable extended processing of input characters.
-         * -----------
-         * # c_oflag: for output mode flags.
-         * ***Disable these bits:
-         * - [OPOST]: Perform output postprocessing.
-         * - [ONLCR]: Map NL to CR-NL on output.
-         * -----------
-         * # c_iflag: for input mode flags.
-         * ***Disable all input bit masks.
-         * -----------
-         * # c_cc: For control characters.
-         * ***Sets to BLOCKING READ ONE CHAR AT A TIME MODE.
-         * -----------
-         *
-         * @return int (-1) for failure, (-2) for invalid port or (1) for success.
-         */
-        int initTermios();
+    /**
+     * @brief Sets the Read Configuration Mode using a ReadConfiguration with a
+     * VMIN_VALUE for lesser bytes to read and VTIME_VALUE for the elapsed time to
+     * set if the ReadConfiguration mode provides a timeout.
+     *
+     * @param readConfig the read configuration, either POLLING_READ, BLOCKING_READ_ONE_CHAR,
+     * READ_WITH_TIMEOUT or READ_WITH_INTERBYTE_TIMEOUT.
+     * @param VTIME_VALUE the value of the read timeout elapsed time, the timer starts
+     * with this value after read() is called.
+     * @param VMIN_VALUE the value of the minimum number of bytes to read.
+     * @return int (ERR_INVALID_PORT = -2) if port isn't available, (0) otherwise.
+     */
+    int setReadConfigurationMode(const cc_t* readConfig, const int VTIME_VALUE, const int VMIN_VALUE, int* fd);
 
-        /**
-         * @brief Sets the Terminal Control Flag [c_cflag] for the [termios] variable.
-         *
-         * @param flag bits to set, concatenate the flags using bitwise OR [|].
-         * @return int (-1) for failure, (-2) for invalid port or (1) for success.
-         */
-        int setTerminalControlFlag(TerminalFlag flag);
+    /**
+     * @brief Get the Read Configuration Mode in a new pointer.
+     *
+     * @return int* a memory reference to the new read configuration instance holding the VTIME and VMIN.
+     */
+    cc_t* getReadConfigurationMode(int* fd);
 
-        /**
-         * @brief Sets the Terminal Local Flag [c_lflag] for the [termios] variable.
-         *
-         * @param flag bits to set, concatenate the flags using bitwise OR [|].
-         * @return int (-1) for failure, (-2) for invalid port or (1) for success.
-         */
-        int setTerminalLocalFlag(TerminalFlag flag);
+    /**
+     * @brief Sets the Baud Rate object for the terminal io.
+     *
+     * @param baudRate the baud rate (bits/seconds).
+     * @return int (1) for success, (-1) for failure, (-2) for invalid port.
+     */
+    int setBaudRate(int baudRate, int* fd);
 
-        /**
-         * @brief Sets the Terminal Output Flag [c_oflag] for the [termios] variable.
-         *
-         * @param flag bits to set, concatenate the flags using bitwise OR [|].
-         * @return int (-1) for failure, (-2) for invalid port or (1) for success.
-         */
-        int setTerminalOutputFlag(TerminalFlag flag);
+    /**
+     * @brief Gets the Baud Rate object.
+     *
+     * @return speed_t baud rate in integers.
+     */
+    speed_t getBaudRate(int* fd);
 
-        /**
-         * @brief Sets the Terminal Input Flag [c_iflag] for the [termios] variable.
-         *
-         * @param flags bits to set, concatenate the flags using bitwise OR [|].
-         * @return int (-1) for failure, (-2) for invalid port or (1) for success.
-         */
-        int setTerminalInputFlag(TerminalFlag flag);
+    /**
+     * @brief Writes a data to the serial port device from a buffer.
+     *
+     * @param buffer a buffer to write to the file.
+     * @param length the number of charachters to write from the buffer.
+     * @return ssize_t the number of bytes written to the serial device, (-1) for failure, (-2) for invalid port.
+     */
+    ssize_t writeData(const void* buffer, int length, int* fd);
 
-        /**
-         * @brief Gets the Terminal Control Flag defined by the termios attributes for this serial device.
-         * 
-         * @return TerminalFlag the terminal control flag in [unsigned short int].
-         */
-        TerminalFlag getTerminalControlFlag();
+    /**
+     * @brief Reads data from the serial port device and saves it to a buffer.
+     *
+     * @param buffer a buffer to read from the file to it.
+     * @param length the number of the charachters to read by this buffer.
+     * @return ssize_t the number of bytes read from the terminal, (-1) for failure, (-2) for invalid port.
+     */
+    ssize_t readData(void* buffer, int length, int* fd);
 
-        /**
-         * @brief Gets the Terminal Local Flag defined by the termios attributes for this serial device.
-         * 
-         * @return TerminalFlag the terminal local flag in [unsigned short int].
-         */
-        TerminalFlag getTerminalLocalFlag();
+    /**
+     * @brief Closes the serial port device.
+     *
+     * @return int (1) for success, (-1) for failure, (-2) for invalid port.
+     */
+    int closePort(int* fd);
 
-        /**
-         * @brief Gets the Terminal Input Flag defined by the termios attributes for this serial device.
-         * 
-         * @return TerminalFlag the terminal input flag in [unsigned short int].
-         */
-        TerminalFlag getTerminalInputFlag();
-
-        /**
-         * @brief Gets the Terminal Output Flag defined by the termios attributes for this serial device.
-         * 
-         * @return TerminalFlag the terminal output flag in [unsigned short int].
-         */
-        TerminalFlag getTerminalOutputFlag();
-
-        /**
-         * @brief Sets the Read Configuration Mode using a ReadConfiguration with a
-         * VMIN_VALUE for lesser bytes to read and VTIME_VALUE for the elapsed time to
-         * set if the ReadConfiguration mode provides a timeout.
-         *
-         * @param readConfig the read configuration, either POLLING_READ, BLOCKING_READ_ONE_CHAR,
-         * READ_WITH_TIMEOUT or READ_WITH_INTERBYTE_TIMEOUT.
-         * @param VTIME_VALUE the value of the read timeout elapsed time, the timer starts
-         * with this value after read() is called.
-         * @param VMIN_VALUE the value of the minimum number of bytes to read.
-         * @return int (ERR_INVALID_PORT = -2) if port isn't available, (0) otherwise.
-         */
-        int setReadConfigurationMode(const cc_t* readConfig, const int VTIME_VALUE, const int VMIN_VALUE);
-
-        /**
-         * @brief Get the Read Configuration Mode in a new pointer.
-         *
-         * @return int* a memory reference to the new read configuration instance holding the VTIME and VMIN.
-         */
-        cc_t* getReadConfigurationMode();
-
-        /**
-         * @brief Get the Serial Ports in a string array format.
-         *
-         * @return const char** the serial ports in a string array format.
-         */
-        const char** getSerialPorts() {
-            return (const char**) serialPorts.getBuffer();
-        }
-
-        /**
-         * @brief Gets the Dynamic Buffer list containing the serial
-         * devices.
-         *
-         * @return struct DynamicBuffer* a buffer representing a list for serial ports.
-         */
-        struct DynamicBuffer* getDynamicBuffer() {
-            return &serialPorts;
-        }
-
-        /**
-         * @brief Sets the Baud Rate object for the terminal io.
-         *
-         * @param baudRate the baud rate (bits/seconds).
-         * @return int (1) for success, (-1) for failure, (-2) for invalid port.
-         */
-        int setBaudRate(int baudRate);
-
-        /**
-         * @brief Gets the Baud Rate object.
-         *
-         * @return speed_t baud rate in integers.
-         */
-        speed_t getBaudRate();
-
-        /**
-         * @brief Writes a data to the serial port device from a buffer.
-         *
-         * @param buffer a buffer to write to the file.
-         * @param length the number of charachters to write from the buffer.
-         * @return ssize_t the number of bytes written to the serial device, (-1) for failure, (-2) for invalid port.
-         */
-        ssize_t writeData(const void* buffer, int length);
-
-        /**
-         * @brief Reads data from the serial port device and saves it to a buffer.
-         *
-         * @param buffer a buffer to read from the file to it.
-         * @param length the number of the charachters to read by this buffer.
-         * @return ssize_t the number of bytes read from the terminal, (-1) for failure, (-2) for invalid port.
-         */
-        ssize_t readData(void* buffer, int length);
-
-        /**
-         * @brief Closes the serial port device.
-         *
-         * @return int (1) for success, (-1) for failure, (-2) for invalid port.
-         */
-        int closePort();
-
-        /**
-         * @brief Gets the Port File Descriptor object.
-         *
-         * @return int* a memory reference to the file descriptor of the serial port device.
-         */
-        int* getPortFileDescriptor();
-
-        /**
-         * @brief Gets the Errno object.
-         *
-         * @return int* a memory reference to the generated errno.
-         */
-        int* getErrno();
-
-    };
 }
 
 

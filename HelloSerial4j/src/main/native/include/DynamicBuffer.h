@@ -69,7 +69,11 @@ struct DynamicBuffer {
      * 3) The superficial copy example:
      *     buffer[index] = item;
      */
-    void** buffer = (void**) calloc(1, sizeof(void**));
+    void** buffer = (void**) calloc(1, sizeof(void**));;
+
+    static inline struct DynamicBuffer* createNewInstance() {
+        return (struct DynamicBuffer*) calloc(1, sizeof(struct DynamicBuffer));
+    }
 
     /**
      * Retrieves the pointer to this dynamic buffer.
@@ -109,6 +113,14 @@ struct DynamicBuffer {
      * @param item a void* buffer to add.
      */
     void add(void* item);
+
+    /**
+     * Adds a new buffer on a particular location in this pointer replacing an old one if exists.
+     * 
+     * @param index the index where the new buffer will be located in this pointer.
+     * @param item the buffer to add.
+     */
+    void add(int index, void* item);
 
     /**
      * Frees a buffer from the memory at a particular index.

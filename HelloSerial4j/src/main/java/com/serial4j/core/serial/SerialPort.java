@@ -39,6 +39,7 @@ package com.serial4j.core.serial;
 public final class SerialPort {
 
    private String name;
+   private int portOpened;
    private int fd;
 
    public SerialPort(final String name) {
@@ -59,5 +60,9 @@ public final class SerialPort {
 
    public int getFd() {
        return fd;
+   }
+
+   public boolean isPortOpened() {
+       return this.portOpened == 1;
    }
 }

@@ -30,27 +30,53 @@
  class 
  com.serial4j.core.serial.NativeTerminalDevice 
  { 
+ private 
+ com.serial4j.core.serial.SerialPort 
+ serialPort; 
+ descriptor: 
+ Lcom/serial4j/core/serial/SerialPort; 
+ private 
+ java.lang.String[] 
+ serialPorts; 
+ descriptor: 
+ [Ljava/lang/String; 
+ private 
+ int 
+ readData; 
+ descriptor: 
+ I 
  protected 
  com.serial4j.core.serial.NativeTerminalDevice(); 
  descriptor: 
  ()V 
+ public 
+ void 
+ setSerialPort(com.serial4j.core.serial.SerialPort); 
+ descriptor: 
+ (Lcom/serial4j/core/serial/SerialPort;)V 
+ public 
+ final 
+ com.serial4j.core.serial.SerialPort 
+ getSerialPort(); 
+ descriptor: 
+ ()Lcom/serial4j/core/serial/SerialPort; 
+ public 
+ final 
+ java.lang.String[] 
+ getSerialPorts(); 
+ descriptor: 
+ ()[Ljava/lang/String; 
+ public 
+ final 
+ int 
+ getReadData(); 
+ descriptor: 
+ ()I 
  protected 
  static 
  native 
  int 
  setupJniEnvironment0(); 
- descriptor: 
- ()I 
- protected 
- native 
- void 
- setIOFlags(int); 
- descriptor: 
- (I)V 
- protected 
- native 
- int 
- getIOFlags(); 
  descriptor: 
  ()I 
  protected 
@@ -117,22 +143,10 @@
  ()[I 
  protected 
  native 
- void 
- setLoggingEnabled0(); 
+ int 
+ getErrno0(); 
  descriptor: 
- ()V 
- protected 
- native 
- void 
- setLoggingDisabled0(); 
- descriptor: 
- ()V 
- protected 
- native 
- java.lang.String[] 
- getSerialPorts0(); 
- descriptor: 
- ()[Ljava/lang/String; 
+ ()I 
  protected 
  native 
  int 
@@ -143,18 +157,6 @@
  native 
  int 
  getBaudRate0(); 
- descriptor: 
- ()I 
- protected 
- native 
- int 
- getReadBuffer0(); 
- descriptor: 
- ()I 
- protected 
- native 
- int 
- getFileDescriptor0(); 
  descriptor: 
  ()I 
  protected 
@@ -185,12 +187,6 @@
  protected 
  native 
  int 
- getErrno0(); 
- descriptor: 
- ()I 
- protected 
- native 
- int 
  initTermios0(); 
  descriptor: 
  ()I 
@@ -203,9 +199,10 @@
  protected 
  native 
  int 
- openPort0(java.lang.String); 
+ openPort0(java.lang.String, 
+ int); 
  descriptor: 
- (Ljava/lang/String;)I 
+ (Ljava/lang/String;I)I 
  protected 
  native 
  int 
@@ -856,10 +853,10 @@
  descriptor: 
  Lcom/serial4j/core/serial/NativeTerminalDevice; 
  private 
- com.serial4j.core.serial.SerialPort 
- serialPort; 
+ com.serial4j.core.serial.Permissions 
+ permissions; 
  descriptor: 
- Lcom/serial4j/core/serial/SerialPort; 
+ Lcom/serial4j/core/serial/Permissions; 
  private 
  com.serial4j.core.serial.ReadConfiguration 
  readConfiguration; 
@@ -1180,19 +1177,9 @@
  public 
  final 
  int 
- getReadBuffer(); 
+ getReadData(); 
  descriptor: 
  ()I 
- public 
- void 
- setNativeLoggingEnabled(); 
- descriptor: 
- ()V 
- public 
- void 
- setNativeLoggingDisabled(); 
- descriptor: 
- ()V 
  public 
  final 
  java.io.InputStream 
@@ -1211,20 +1198,6 @@
  getSerialPort(); 
  descriptor: 
  ()Lcom/serial4j/core/serial/SerialPort; 
- private 
- final 
- int 
- getPortDescriptor() 
- throws 
- com.serial4j.core.serial.throwable.NoSuchDeviceException, 
- com.serial4j.core.serial.throwable.PermissionDeniedException, 
- com.serial4j.core.serial.throwable.BrokenPipeException, 
- com.serial4j.core.serial.throwable.InvalidPortException, 
- com.serial4j.core.serial.throwable.NoResultException, 
- com.serial4j.core.serial.throwable.OperationFailedException, 
- com.serial4j.core.serial.throwable.NoAvailableTtyDevicesException; 
- descriptor: 
- ()I 
  private 
  void 
  fetchSerialPorts() 
@@ -1245,6 +1218,232 @@
  } 
  Compiled 
  from 
+ "SerialMonitorException.java" 
+ public 
+ class 
+ com.serial4j.core.serial.monitor.SerialMonitorException 
+ extends 
+ java.lang.IllegalStateException 
+ { 
+ public 
+ static 
+ final 
+ java.lang.String 
+ DEFAULT_MSG; 
+ descriptor: 
+ Ljava/lang/String; 
+ public 
+ com.serial4j.core.serial.monitor.SerialMonitorException(java.lang.String); 
+ descriptor: 
+ (Ljava/lang/String;)V 
+ } 
+ Compiled 
+ from 
+ "SerialDataListener.java" 
+ public 
+ interface 
+ com.serial4j.core.serial.monitor.SerialDataListener 
+ { 
+ public 
+ abstract 
+ void 
+ onDataReceived(int); 
+ descriptor: 
+ (I)V 
+ public 
+ abstract 
+ void 
+ onDataTransmitted(int); 
+ descriptor: 
+ (I)V 
+ public 
+ abstract 
+ void 
+ onDataReceived(java.lang.String); 
+ descriptor: 
+ (Ljava/lang/String;)V 
+ } 
+ Compiled 
+ from 
+ "SerialMonitor.java" 
+ public 
+ final 
+ class 
+ com.serial4j.core.serial.monitor.SerialMonitor 
+ extends 
+ java.lang.ThreadGroup 
+ { 
+ private 
+ final 
+ java.util.ArrayList<com.serial4j.core.serial.monitor.SerialDataListener> 
+ serialDataListeners; 
+ descriptor: 
+ Ljava/util/ArrayList; 
+ public 
+ volatile 
+ com.serial4j.core.serial.entity.EntityStatus<com.serial4j.core.serial.entity.impl.SerialReadEntity> 
+ serialReadEntityEntityStatus; 
+ descriptor: 
+ Lcom/serial4j/core/serial/entity/EntityStatus; 
+ public 
+ volatile 
+ com.serial4j.core.serial.entity.EntityStatus<com.serial4j.core.serial.entity.impl.SerialWriteEntity> 
+ serialWriteEntityEntityStatus; 
+ descriptor: 
+ Lcom/serial4j/core/serial/entity/EntityStatus; 
+ public 
+ volatile 
+ boolean 
+ isReadSerialEntityInitialized; 
+ descriptor: 
+ Z 
+ public 
+ volatile 
+ boolean 
+ isWriteSerialEntityInitialized; 
+ descriptor: 
+ Z 
+ public 
+ volatile 
+ boolean 
+ isMonitoringStarted; 
+ descriptor: 
+ Z 
+ public 
+ volatile 
+ boolean 
+ useReturnCarriage; 
+ descriptor: 
+ Z 
+ private 
+ volatile 
+ java.io.InputStream 
+ readEntityStream; 
+ descriptor: 
+ Ljava/io/InputStream; 
+ private 
+ volatile 
+ java.io.OutputStream 
+ writeEntityStream; 
+ descriptor: 
+ Ljava/io/OutputStream; 
+ private 
+ volatile 
+ com.serial4j.core.serial.TerminalDevice 
+ terminalDevice; 
+ descriptor: 
+ Lcom/serial4j/core/serial/TerminalDevice; 
+ private 
+ volatile 
+ boolean 
+ terminate; 
+ descriptor: 
+ Z 
+ private 
+ volatile 
+ com.serial4j.core.serial.entity.impl.SerialReadEntity 
+ serialReadEntity; 
+ descriptor: 
+ Lcom/serial4j/core/serial/entity/impl/SerialReadEntity; 
+ private 
+ volatile 
+ com.serial4j.core.serial.entity.impl.SerialWriteEntity 
+ serialWriteEntity; 
+ descriptor: 
+ Lcom/serial4j/core/serial/entity/impl/SerialWriteEntity; 
+ public 
+ com.serial4j.core.serial.monitor.SerialMonitor(java.lang.String); 
+ descriptor: 
+ (Ljava/lang/String;)V 
+ public 
+ void 
+ startDataMonitoring(java.lang.String, 
+ com.serial4j.core.serial.BaudRate, 
+ com.serial4j.core.serial.Permissions) 
+ throws 
+ com.serial4j.core.serial.throwable.NoSuchDeviceException, 
+ com.serial4j.core.serial.throwable.PermissionDeniedException, 
+ com.serial4j.core.serial.throwable.BrokenPipeException, 
+ com.serial4j.core.serial.throwable.InvalidPortException, 
+ com.serial4j.core.serial.throwable.NoResultException, 
+ com.serial4j.core.serial.throwable.OperationFailedException, 
+ com.serial4j.core.serial.throwable.NoAvailableTtyDevicesException, 
+ java.io.FileNotFoundException; 
+ descriptor: 
+ (Ljava/lang/String;Lcom/serial4j/core/serial/BaudRate;Lcom/serial4j/core/serial/Permissions;)V 
+ public 
+ boolean 
+ isTerminate(); 
+ descriptor: 
+ ()Z 
+ public 
+ void 
+ setTerminate(); 
+ descriptor: 
+ ()V 
+ public 
+ java.io.InputStream 
+ getReadEntityStream(); 
+ descriptor: 
+ ()Ljava/io/InputStream; 
+ public 
+ com.serial4j.core.serial.TerminalDevice 
+ getTerminalDevice(); 
+ descriptor: 
+ ()Lcom/serial4j/core/serial/TerminalDevice; 
+ public 
+ java.io.OutputStream 
+ getWriteEntityStream(); 
+ descriptor: 
+ ()Ljava/io/OutputStream; 
+ public 
+ com.serial4j.core.serial.entity.impl.SerialReadEntity 
+ getSerialReadEntity(); 
+ descriptor: 
+ ()Lcom/serial4j/core/serial/entity/impl/SerialReadEntity; 
+ public 
+ com.serial4j.core.serial.entity.impl.SerialWriteEntity 
+ getSerialWriteEntity(); 
+ descriptor: 
+ ()Lcom/serial4j/core/serial/entity/impl/SerialWriteEntity; 
+ public 
+ void 
+ addSerialDataListener(com.serial4j.core.serial.monitor.SerialDataListener); 
+ descriptor: 
+ (Lcom/serial4j/core/serial/monitor/SerialDataListener;)V 
+ public 
+ void 
+ removeSerialDataListener(com.serial4j.core.serial.monitor.SerialDataListener); 
+ descriptor: 
+ (Lcom/serial4j/core/serial/monitor/SerialDataListener;)V 
+ public 
+ void 
+ setReadEntityListener(com.serial4j.core.serial.entity.EntityStatus<com.serial4j.core.serial.entity.impl.SerialReadEntity>); 
+ descriptor: 
+ (Lcom/serial4j/core/serial/entity/EntityStatus;)V 
+ public 
+ void 
+ setWriteEntityStatus(com.serial4j.core.serial.entity.EntityStatus<com.serial4j.core.serial.entity.impl.SerialWriteEntity>); 
+ descriptor: 
+ (Lcom/serial4j/core/serial/entity/EntityStatus;)V 
+ public 
+ boolean 
+ isUsingReturnCarriage(); 
+ descriptor: 
+ ()Z 
+ public 
+ void 
+ setUseReturnCarriage(boolean); 
+ descriptor: 
+ (Z)V 
+ public 
+ java.util.ArrayList<com.serial4j.core.serial.monitor.SerialDataListener> 
+ getSerialDataListeners(); 
+ descriptor: 
+ ()Ljava/util/ArrayList; 
+ } 
+ Compiled 
+ from 
  "SerialPort.java" 
  public 
  final 
@@ -1256,6 +1455,11 @@
  name; 
  descriptor: 
  Ljava/lang/String; 
+ private 
+ int 
+ portOpened; 
+ descriptor: 
+ I 
  private 
  int 
  fd; 
@@ -1285,6 +1489,11 @@
  getFd(); 
  descriptor: 
  ()I 
+ public 
+ boolean 
+ isPortOpened(); 
+ descriptor: 
+ ()Z 
  } 
  Compiled 
  from 
@@ -1827,6 +2036,292 @@
  getCausingErrno(); 
  descriptor: 
  ()Lcom/serial4j/core/errno/Errno; 
+ } 
+ Compiled 
+ from 
+ "SerialMonitorEntity.java" 
+ public 
+ abstract 
+ class 
+ com.serial4j.core.serial.entity.SerialMonitorEntity 
+ extends 
+ java.lang.Thread 
+ { 
+ public 
+ com.serial4j.core.serial.entity.SerialMonitorEntity(com.serial4j.core.serial.monitor.SerialMonitor, 
+ java.lang.String); 
+ descriptor: 
+ (Lcom/serial4j/core/serial/monitor/SerialMonitor;Ljava/lang/String;)V 
+ public 
+ void 
+ run(); 
+ descriptor: 
+ ()V 
+ protected 
+ void 
+ terminate(); 
+ descriptor: 
+ ()V 
+ protected 
+ boolean 
+ isUsingReturnCarriage(); 
+ descriptor: 
+ ()Z 
+ protected 
+ boolean 
+ isMonitoringStarted(); 
+ descriptor: 
+ ()Z 
+ protected 
+ void 
+ setMonitoringStarted(boolean); 
+ descriptor: 
+ (Z)V 
+ public 
+ com.serial4j.core.serial.monitor.SerialMonitor 
+ getSerialMonitor(); 
+ descriptor: 
+ ()Lcom/serial4j/core/serial/monitor/SerialMonitor; 
+ protected 
+ com.serial4j.core.serial.TerminalDevice 
+ getTerminalDevice(); 
+ descriptor: 
+ ()Lcom/serial4j/core/serial/TerminalDevice; 
+ protected 
+ java.util.ArrayList<com.serial4j.core.serial.monitor.SerialDataListener> 
+ getSerialDataListeners(); 
+ descriptor: 
+ ()Ljava/util/ArrayList; 
+ protected 
+ boolean 
+ isTerminate(); 
+ descriptor: 
+ ()Z 
+ protected 
+ abstract 
+ void 
+ onDataMonitored(com.serial4j.core.serial.monitor.SerialMonitor); 
+ descriptor: 
+ (Lcom/serial4j/core/serial/monitor/SerialMonitor;)V 
+ protected 
+ abstract 
+ com.serial4j.core.serial.entity.EntityStatus<? 
+ extends 
+ com.serial4j.core.serial.entity.SerialMonitorEntity> 
+ getSerialEntityStatusListener(); 
+ descriptor: 
+ ()Lcom/serial4j/core/serial/entity/EntityStatus; 
+ protected 
+ abstract 
+ boolean 
+ isSerialEntityInitialized(); 
+ descriptor: 
+ ()Z 
+ protected 
+ abstract 
+ void 
+ setSerialEntityInitialized(boolean); 
+ descriptor: 
+ (Z)V 
+ protected 
+ abstract 
+ java.io.Closeable 
+ getEntityStream(); 
+ descriptor: 
+ ()Ljava/io/Closeable; 
+ } 
+ Compiled 
+ from 
+ "SerialReadEntity.java" 
+ public 
+ class 
+ com.serial4j.core.serial.entity.impl.SerialReadEntity 
+ extends 
+ com.serial4j.core.serial.entity.SerialMonitorEntity 
+ { 
+ private 
+ java.lang.StringBuffer 
+ stringBuffer; 
+ descriptor: 
+ Ljava/lang/StringBuffer; 
+ public 
+ com.serial4j.core.serial.entity.impl.SerialReadEntity(com.serial4j.core.serial.monitor.SerialMonitor); 
+ descriptor: 
+ (Lcom/serial4j/core/serial/monitor/SerialMonitor;)V 
+ protected 
+ void 
+ onDataMonitored(com.serial4j.core.serial.monitor.SerialMonitor); 
+ descriptor: 
+ (Lcom/serial4j/core/serial/monitor/SerialMonitor;)V 
+ protected 
+ java.io.InputStream 
+ getEntityStream(); 
+ descriptor: 
+ ()Ljava/io/InputStream; 
+ protected 
+ boolean 
+ isSerialEntityInitialized(); 
+ descriptor: 
+ ()Z 
+ protected 
+ void 
+ setSerialEntityInitialized(boolean); 
+ descriptor: 
+ (Z)V 
+ protected 
+ com.serial4j.core.serial.entity.EntityStatus<com.serial4j.core.serial.entity.impl.SerialReadEntity> 
+ getSerialEntityStatusListener(); 
+ descriptor: 
+ ()Lcom/serial4j/core/serial/entity/EntityStatus; 
+ protected 
+ java.io.Closeable 
+ getEntityStream(); 
+ descriptor: 
+ ()Ljava/io/Closeable; 
+ } 
+ Compiled 
+ from 
+ "SerialWriteEntity.java" 
+ public 
+ class 
+ com.serial4j.core.serial.entity.impl.SerialWriteEntity 
+ extends 
+ com.serial4j.core.serial.entity.SerialMonitorEntity 
+ { 
+ private 
+ final 
+ java.util.ArrayList<com.serial4j.core.serial.entity.impl.WritableCapsule> 
+ writableCapsules; 
+ descriptor: 
+ Ljava/util/ArrayList; 
+ public 
+ com.serial4j.core.serial.entity.impl.SerialWriteEntity(com.serial4j.core.serial.monitor.SerialMonitor); 
+ descriptor: 
+ (Lcom/serial4j/core/serial/monitor/SerialMonitor;)V 
+ protected 
+ void 
+ onDataMonitored(com.serial4j.core.serial.monitor.SerialMonitor); 
+ descriptor: 
+ (Lcom/serial4j/core/serial/monitor/SerialMonitor;)V 
+ protected 
+ java.io.OutputStream 
+ getEntityStream(); 
+ descriptor: 
+ ()Ljava/io/OutputStream; 
+ protected 
+ boolean 
+ isSerialEntityInitialized(); 
+ descriptor: 
+ ()Z 
+ protected 
+ void 
+ setSerialEntityInitialized(boolean); 
+ descriptor: 
+ (Z)V 
+ protected 
+ com.serial4j.core.serial.entity.EntityStatus<com.serial4j.core.serial.entity.impl.SerialWriteEntity> 
+ getSerialEntityStatusListener(); 
+ descriptor: 
+ ()Lcom/serial4j/core/serial/entity/EntityStatus; 
+ public 
+ java.util.ArrayList<com.serial4j.core.serial.entity.impl.WritableCapsule> 
+ getSerialWriteCapsules(); 
+ descriptor: 
+ ()Ljava/util/ArrayList; 
+ public 
+ synchronized 
+ void 
+ addWritableCapsule(com.serial4j.core.serial.entity.impl.WritableCapsule); 
+ descriptor: 
+ (Lcom/serial4j/core/serial/entity/impl/WritableCapsule;)V 
+ public 
+ void 
+ removeWritableCapsule(com.serial4j.core.serial.entity.impl.WritableCapsule); 
+ descriptor: 
+ (Lcom/serial4j/core/serial/entity/impl/WritableCapsule;)V 
+ private 
+ void 
+ sendToUART(int); 
+ descriptor: 
+ (I)V 
+ protected 
+ java.io.Closeable 
+ getEntityStream(); 
+ descriptor: 
+ ()Ljava/io/Closeable; 
+ } 
+ Compiled 
+ from 
+ "WritableCapsule.java" 
+ public 
+ final 
+ class 
+ com.serial4j.core.serial.entity.impl.WritableCapsule 
+ implements 
+ java.lang.Cloneable 
+ { 
+ private 
+ java.lang.String 
+ data; 
+ descriptor: 
+ Ljava/lang/String; 
+ private 
+ boolean 
+ dataWritten; 
+ descriptor: 
+ Z 
+ public 
+ com.serial4j.core.serial.entity.impl.WritableCapsule(); 
+ descriptor: 
+ ()V 
+ public 
+ void 
+ write(java.lang.String); 
+ descriptor: 
+ (Ljava/lang/String;)V 
+ public 
+ java.lang.String 
+ getData(); 
+ descriptor: 
+ ()Ljava/lang/String; 
+ public 
+ boolean 
+ isDataWritten(); 
+ descriptor: 
+ ()Z 
+ public 
+ void 
+ setDataWritten(boolean); 
+ descriptor: 
+ (Z)V 
+ } 
+ Compiled 
+ from 
+ "EntityStatus.java" 
+ public 
+ interface 
+ com.serial4j.core.serial.entity.EntityStatus<T 
+ extends 
+ com.serial4j.core.serial.entity.SerialMonitorEntity> 
+ { 
+ public 
+ abstract 
+ void 
+ onSerialEntityInitialized(T); 
+ descriptor: 
+ (Lcom/serial4j/core/serial/entity/SerialMonitorEntity;)V 
+ public 
+ abstract 
+ void 
+ onSerialEntityTerminated(T); 
+ descriptor: 
+ (Lcom/serial4j/core/serial/entity/SerialMonitorEntity;)V 
+ public 
+ abstract 
+ void 
+ onUpdate(T); 
+ descriptor: 
+ (Lcom/serial4j/core/serial/entity/SerialMonitorEntity;)V 
  } 
  Compiled 
  from 
@@ -2572,6 +3067,88 @@
  } 
  Compiled 
  from 
+ "HelloSerialMonitor.java" 
+ public 
+ class 
+ com.serial4j.example.monitor.HelloSerialMonitor 
+ implements 
+ com.serial4j.core.serial.monitor.SerialDataListener, 
+ com.serial4j.core.serial.entity.EntityStatus<com.serial4j.core.serial.entity.impl.SerialWriteEntity> 
+ { 
+ private 
+ static 
+ boolean 
+ isDataSent; 
+ descriptor: 
+ Z 
+ public 
+ com.serial4j.example.monitor.HelloSerialMonitor(); 
+ descriptor: 
+ ()V 
+ public 
+ void 
+ run(); 
+ descriptor: 
+ ()V 
+ private 
+ void 
+ writeInUARTCapsule(com.serial4j.core.serial.monitor.SerialMonitor, 
+ java.lang.String); 
+ descriptor: 
+ (Lcom/serial4j/core/serial/monitor/SerialMonitor;Ljava/lang/String;)V 
+ private 
+ void 
+ delay(long); 
+ descriptor: 
+ (J)V 
+ public 
+ void 
+ onSerialEntityInitialized(com.serial4j.core.serial.entity.impl.SerialWriteEntity); 
+ descriptor: 
+ (Lcom/serial4j/core/serial/entity/impl/SerialWriteEntity;)V 
+ public 
+ void 
+ onSerialEntityTerminated(com.serial4j.core.serial.entity.impl.SerialWriteEntity); 
+ descriptor: 
+ (Lcom/serial4j/core/serial/entity/impl/SerialWriteEntity;)V 
+ public 
+ void 
+ onUpdate(com.serial4j.core.serial.entity.impl.SerialWriteEntity); 
+ descriptor: 
+ (Lcom/serial4j/core/serial/entity/impl/SerialWriteEntity;)V 
+ public 
+ void 
+ onDataReceived(int); 
+ descriptor: 
+ (I)V 
+ public 
+ void 
+ onDataTransmitted(int); 
+ descriptor: 
+ (I)V 
+ public 
+ void 
+ onDataReceived(java.lang.String); 
+ descriptor: 
+ (Ljava/lang/String;)V 
+ public 
+ void 
+ onUpdate(com.serial4j.core.serial.entity.SerialMonitorEntity); 
+ descriptor: 
+ (Lcom/serial4j/core/serial/entity/SerialMonitorEntity;)V 
+ public 
+ void 
+ onSerialEntityTerminated(com.serial4j.core.serial.entity.SerialMonitorEntity); 
+ descriptor: 
+ (Lcom/serial4j/core/serial/entity/SerialMonitorEntity;)V 
+ public 
+ void 
+ onSerialEntityInitialized(com.serial4j.core.serial.entity.SerialMonitorEntity); 
+ descriptor: 
+ (Lcom/serial4j/core/serial/entity/SerialMonitorEntity;)V 
+ } 
+ Compiled 
+ from 
  "HelloSerial4jIO.java" 
  final 
  class 
@@ -2722,6 +3299,210 @@
  run(); 
  descriptor: 
  ()V 
+ } 
+ Compiled 
+ from 
+ "HelloNativeSerial4J.java" 
+ class 
+ com.serial4j.example.serial4j.HelloNativeSerial4J$2 
+ implements 
+ java.lang.Runnable 
+ { 
+ final 
+ long 
+ val$millis; 
+ descriptor: 
+ J 
+ final 
+ com.serial4j.core.serial.TerminalDevice 
+ val$ttyDevice; 
+ descriptor: 
+ Lcom/serial4j/core/serial/TerminalDevice; 
+ final 
+ com.serial4j.example.serial4j.HelloNativeSerial4J 
+ this$0; 
+ descriptor: 
+ Lcom/serial4j/example/serial4j/HelloNativeSerial4J; 
+ com.serial4j.example.serial4j.HelloNativeSerial4J$2(com.serial4j.example.serial4j.HelloNativeSerial4J, 
+ long, 
+ com.serial4j.core.serial.TerminalDevice); 
+ descriptor: 
+ (Lcom/serial4j/example/serial4j/HelloNativeSerial4J;JLcom/serial4j/core/serial/TerminalDevice;)V 
+ public 
+ void 
+ run(); 
+ descriptor: 
+ ()V 
+ } 
+ Compiled 
+ from 
+ "HelloSerial4jIO.java" 
+ final 
+ class 
+ com.serial4j.example.serial4j.HelloSerial4jIO$1 
+ implements 
+ java.lang.Runnable 
+ { 
+ final 
+ long 
+ val$millis; 
+ descriptor: 
+ J 
+ final 
+ com.serial4j.core.serial.TerminalDevice 
+ val$ttyDevice; 
+ descriptor: 
+ Lcom/serial4j/core/serial/TerminalDevice; 
+ com.serial4j.example.serial4j.HelloSerial4jIO$1(long, 
+ com.serial4j.core.serial.TerminalDevice); 
+ descriptor: 
+ (JLcom/serial4j/core/serial/TerminalDevice;)V 
+ public 
+ void 
+ run(); 
+ descriptor: 
+ ()V 
+ } 
+ Compiled 
+ from 
+ "HelloNativeSerial4J.java" 
+ class 
+ com.serial4j.example.serial4j.HelloNativeSerial4J$1 
+ implements 
+ java.lang.Runnable 
+ { 
+ final 
+ long 
+ val$millis; 
+ descriptor: 
+ J 
+ final 
+ com.serial4j.core.serial.TerminalDevice 
+ val$ttyDevice; 
+ descriptor: 
+ Lcom/serial4j/core/serial/TerminalDevice; 
+ final 
+ com.serial4j.example.serial4j.HelloNativeSerial4J 
+ this$0; 
+ descriptor: 
+ Lcom/serial4j/example/serial4j/HelloNativeSerial4J; 
+ com.serial4j.example.serial4j.HelloNativeSerial4J$1(com.serial4j.example.serial4j.HelloNativeSerial4J, 
+ long, 
+ com.serial4j.core.serial.TerminalDevice); 
+ descriptor: 
+ (Lcom/serial4j/example/serial4j/HelloNativeSerial4J;JLcom/serial4j/core/serial/TerminalDevice;)V 
+ public 
+ void 
+ run(); 
+ descriptor: 
+ ()V 
+ } 
+ Compiled 
+ from 
+ "HelloSerial4jIO.java" 
+ public 
+ final 
+ class 
+ com.serial4j.example.serial4j.HelloSerial4jIO 
+ extends 
+ java.lang.Thread 
+ { 
+ protected 
+ final 
+ com.serial4j.core.serial.TerminalDevice 
+ ttyDevice; 
+ descriptor: 
+ Lcom/serial4j/core/serial/TerminalDevice; 
+ public 
+ com.serial4j.example.serial4j.HelloSerial4jIO(); 
+ descriptor: 
+ ()V 
+ public 
+ void 
+ run(); 
+ descriptor: 
+ ()V 
+ private 
+ static 
+ void 
+ startWriteThread(com.serial4j.core.serial.TerminalDevice, 
+ long); 
+ descriptor: 
+ (Lcom/serial4j/core/serial/TerminalDevice;J)V 
+ private 
+ static 
+ void 
+ startReadThread(com.serial4j.core.serial.TerminalDevice, 
+ long); 
+ descriptor: 
+ (Lcom/serial4j/core/serial/TerminalDevice;J)V 
+ } 
+ Compiled 
+ from 
+ "HelloSerial4jIO.java" 
+ final 
+ class 
+ com.serial4j.example.serial4j.HelloSerial4jIO$2 
+ implements 
+ java.lang.Runnable 
+ { 
+ final 
+ long 
+ val$millis; 
+ descriptor: 
+ J 
+ final 
+ com.serial4j.core.serial.TerminalDevice 
+ val$ttyDevice; 
+ descriptor: 
+ Lcom/serial4j/core/serial/TerminalDevice; 
+ com.serial4j.example.serial4j.HelloSerial4jIO$2(long, 
+ com.serial4j.core.serial.TerminalDevice); 
+ descriptor: 
+ (JLcom/serial4j/core/serial/TerminalDevice;)V 
+ public 
+ void 
+ run(); 
+ descriptor: 
+ ()V 
+ } 
+ Compiled 
+ from 
+ "HelloNativeSerial4J.java" 
+ public 
+ final 
+ class 
+ com.serial4j.example.serial4j.HelloNativeSerial4J 
+ extends 
+ java.lang.Thread 
+ { 
+ protected 
+ final 
+ com.serial4j.core.serial.TerminalDevice 
+ ttyDevice; 
+ descriptor: 
+ Lcom/serial4j/core/serial/TerminalDevice; 
+ public 
+ com.serial4j.example.serial4j.HelloNativeSerial4J(); 
+ descriptor: 
+ ()V 
+ public 
+ void 
+ run(); 
+ descriptor: 
+ ()V 
+ private 
+ void 
+ startReadThread(com.serial4j.core.serial.TerminalDevice, 
+ long); 
+ descriptor: 
+ (Lcom/serial4j/core/serial/TerminalDevice;J)V 
+ private 
+ void 
+ startWriteThread(com.serial4j.core.serial.TerminalDevice, 
+ long); 
+ descriptor: 
+ (Lcom/serial4j/core/serial/TerminalDevice;J)V 
  } 
  Compiled 
  from 

@@ -74,7 +74,8 @@ public final class TerminalDevice {
     private static final Logger LOGGER = Logger.getLogger(SerialPort.class.getName());
     private final NativeTerminalDevice nativeTerminalDevice = new NativeTerminalDevice();
     
-    private SerialPort serialPort;
+    private Permissions permissions = Permissions.O_RDWR.append(Permissions.O_NOCTTY)
+                                                        .append(Permissions.O_NONBLOCK);
     private ReadConfiguration readConfiguration;
     private String permissionsDescription;
     private boolean loggingEnabled;
@@ -85,6 +86,7 @@ public final class TerminalDevice {
      * Instantiates a Unix terminal device object.
      */
     public TerminalDevice() {
+       
     }
 
     private static void setupJniEnvironment() {
@@ -108,14 +110,15 @@ public final class TerminalDevice {
                                                                    InvalidPortException,
                                                                    NoResultException,
                                                                    OperationFailedException,
-                                                                   NoAvailableTtyDevicesException {
+                                                                   NoAvailableTtyDevicesException {                                                           
         if (isSerial4jLoggingEnabled()) {
             LOGGER.log(Level.INFO, "Opening serial device " + serialPort.getName());
         }
-        final int errno = nativeTerminalDevice.openPort0(serialPort.getName());
+        this.nativeTerminalDevice.setSerialPort(serialPort);
+        final int errno = nativeTerminalDevice.openPort0(serialPort.getName(), permissions.getValue());
         ErrnoToException.throwFromErrno(errno, serialPort.getName());
-        this.serialPort = serialPort;
-        this.serialPort.setFd(getPortDescriptor());
+        /* update port data natively */
+        /* ... */
     }
 
     public void initTermios() throws NoSuchDeviceException,
@@ -247,13 +250,11 @@ public final class TerminalDevice {
     }
 
     public void setPermissions(final Permissions permissions) {
-        nativeTerminalDevice.setIOFlags(permissions.getValue());
-        permissionsDescription = permissions.getDescription();
+        this.permissions = permissions;
     }
 
     public final Permissions getPermissions() {
-        final int permissionsValue = nativeTerminalDevice.getIOFlags();
-        return Permissions.createCustomPermissions(permissionsValue, permissionsDescription);
+        return permissions;
     }
 
     public void setBaudRate(final BaudRate baudRate) throws NoSuchDeviceException,
@@ -301,7 +302,7 @@ public final class TerminalDevice {
         if (numberOfWrittenBytes == -1) {
             message = "Write Permission [O_WRONLY] isnot granted, [Permissions: " + permissionsDescription + "]";
         } else {
-            message = "Invalid Port " + serialPort.getName(); 
+            message = "Invalid Port " + nativeTerminalDevice.getSerialPort().getName(); 
         }
         if (numberOfWrittenBytes < 1) {
             ErrnoToException.throwFromErrno((int) numberOfWrittenBytes, message);                                                                        
@@ -321,7 +322,7 @@ public final class TerminalDevice {
         if (numberOfWrittenBytes == -1) {
             message = "Write Permission [O_WRONLY] isnot granted.";
         } else {
-            message = "Invalid Port " + serialPort.getName(); 
+            message = "Invalid Port " + nativeTerminalDevice.getSerialPort().getName(); 
         }
         if (numberOfWrittenBytes < 1) {
             ErrnoToException.throwFromErrno((int) numberOfWrittenBytes, message);                                                                            
@@ -360,7 +361,7 @@ public final class TerminalDevice {
                                                   OperationFailedException,
                                                   NoAvailableTtyDevicesException {
         fetchSerialPorts();
-        return nativeTerminalDevice.getSerialPorts0();
+        return nativeTerminalDevice.getSerialPorts();
     }
 
     public void throwExceptionFromNativeErrno() throws NoSuchDeviceException,
@@ -396,16 +397,8 @@ public final class TerminalDevice {
         return loggingEnabled;
     }
 
-    public final int getReadBuffer() {
-        return nativeTerminalDevice.getReadBuffer0();
-    }
-
-    public void setNativeLoggingEnabled() {
-        nativeTerminalDevice.setLoggingEnabled0();
-    }
-
-    public void setNativeLoggingDisabled() {
-        nativeTerminalDevice.setLoggingDisabled0();
+    public final int getReadData() {
+        return nativeTerminalDevice.getReadData();
     }
 
     public final InputStream getInputStream() {
@@ -417,19 +410,7 @@ public final class TerminalDevice {
     }
 
     public final SerialPort getSerialPort() {
-        return serialPort;
-    }
-
-    private final int getPortDescriptor() throws NoSuchDeviceException,
-                                                 PermissionDeniedException,
-                                                 BrokenPipeException,
-                                                 InvalidPortException,
-                                                 NoResultException,
-                                                 OperationFailedException,
-                                                 NoAvailableTtyDevicesException {
-        final int value = nativeTerminalDevice.getFileDescriptor0();
-        ErrnoToException.throwFromErrno(value, serialPort.getName() + " " + serialPort.getFd());
-        return value;
+        return nativeTerminalDevice.getSerialPort();
     }
 
     private void fetchSerialPorts() throws NoSuchDeviceException,

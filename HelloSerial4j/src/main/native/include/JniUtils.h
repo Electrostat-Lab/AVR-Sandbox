@@ -42,6 +42,7 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<stdint.h>
+#include<TerminalDevice.h>
 #include<ErrnoUtils.h>
 
 #define CONSTRUCTOR ((const char*) "<init>")
@@ -211,6 +212,49 @@ namespace JniUtils {
 
     static inline jobject getObjectFromClass2(const char* clazzName) {
         return JniUtils::getObjectFromClass1(clazzName, JniUtils::getClassConstructor1(clazzName));
+    }
+
+    static inline jclass getObjectClass(jobject* object) {
+        return (*JniUtils::getJniEnv())->GetObjectClass(*object);
+    }
+
+    static inline jfieldID getFieldIDFromObject(jobject* object, const char* fieldName, const char* fieldSig) {
+        return (*JniUtils::getJniEnv())->GetFieldID(getObjectClass(object), fieldName, fieldSig);
+    }
+
+    static inline jobject getObjectFieldFromClass(jobject* object, const char* fieldName, const char* fieldSig) {
+        jfieldID fieldId = getFieldIDFromObject(object, fieldName, fieldSig);
+        return (*JniUtils::getJniEnv())->GetObjectField(*object, fieldId);
+    }
+
+    static inline jint getIntFieldFromClass(jobject* object, const char* fieldName, const char* fieldSig) {
+        jfieldID fieldId = getFieldIDFromObject(object, fieldName, fieldSig);
+        return (*JniUtils::getJniEnv())->GetIntField(*object, fieldId);
+    }
+
+    static inline void setObjectField(jobject* object, const char* fieldName, const char* fieldSig, jobject value) {
+        jfieldID fieldId = getFieldIDFromObject(object, fieldName, fieldSig);
+        (*JniUtils::getJniEnv())->SetObjectField(*object, fieldId, value);
+    }
+
+    static inline void setIntField(jobject* object, const char* fieldName, const char* fieldSig, jint value) {
+        jfieldID fieldId = getFieldIDFromObject(object, fieldName, fieldSig);
+        (*JniUtils::getJniEnv())->SetIntField(*object, fieldId, value);
+    }
+
+    /**
+     * Translates a java TerminalDevice object into a native TerminalDevice object.
+     * 
+     * @param object a pointer referring to the java TerminalDevice object.
+     * @return a native terminal device holding the jdk terminal device's data.
+     */
+    static inline jobject getSerialPortFromTerminalDevice(jobject* object) {
+        return getObjectFieldFromClass(object, "serialPort", "Lcom/serial4j/core/serial/SerialPort;");
+    }
+
+    static inline int getPortDescriptorFromSerialPort(jobject* object) {
+        jobject serialPortObject = getSerialPortFromTerminalDevice(object);
+        return getIntFieldFromClass(&serialPortObject, "fd", "I");
     }
 
     static inline jobjectArray createNewArrayFromBuffer(const char* clazzName, jsize length) {

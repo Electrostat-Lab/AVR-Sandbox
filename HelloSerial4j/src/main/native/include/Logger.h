@@ -6,6 +6,7 @@
 #include<stdint.h>
 #include<stdlib.h>
 #include<ErrnoUtils.h>
+#include<BufferUtils.h>
 
 typedef const char* AlertType;
 
@@ -19,18 +20,26 @@ typedef const char* AlertType;
 
 struct Logger {
 
-    int loggingEnabled = 0;
+    int* loggingEnabled;
+
+    void init() {
+        loggingEnabled = (int*) calloc(1, sizeof(int*));
+    }
+
+    void destroy() {
+        BufferUtils::deleteBuffer(loggingEnabled);
+    }
 
     void setLoggingEnabled() {
-        this->loggingEnabled = 1;
+        *(this->loggingEnabled) = 1;
     }
 
     void setLoggingDisabled() {
-        this->loggingEnabled = 0;
+        *(this->loggingEnabled) = 0;
     }
 
     int* isLoggingEnabled() {
-        return &(this->loggingEnabled);
+        return this->loggingEnabled;
     }
 
     int LOG(const char* API_LABEL, AlertType ALERT_TYPE, const char* MSG) {
