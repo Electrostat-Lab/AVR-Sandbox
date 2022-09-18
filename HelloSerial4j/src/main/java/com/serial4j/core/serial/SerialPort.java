@@ -38,24 +38,24 @@ package com.serial4j.core.serial;
  */
 public final class SerialPort {
 
-   private String name;
+   private String path;
    private int portOpened;
    private int fd;
 
-   public SerialPort(final String name) {
-        this.name = name;
+   public SerialPort(final String path) {
+        this.path = path;
    }
 
    public void setFd(int fd) {
        this.fd = fd;
    }
 
-   public void setName(String name) {
-       this.name = name;
+   public void setPath(String path) {
+       this.path = path;
    }
 
-   public String getName() {
-       return name;
+   public String getPath() {
+       return path;
    }
 
    public int getFd() {

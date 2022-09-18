@@ -82,17 +82,17 @@ JNIEXPORT jlong JNICALL Java_com_serial4j_core_serial_NativeTerminalDevice_getTe
 /*
  * Class:     com_serial4j_core_serial_NativeTerminalDevice
  * Method:    setReadConfigurationMode0
- * Signature: ([III)I
+ * Signature: (BB)I
  */
 JNIEXPORT jint JNICALL Java_com_serial4j_core_serial_NativeTerminalDevice_setReadConfigurationMode0
-  (JNIEnv *, jobject, jintArray, jint, jint);
+  (JNIEnv *, jobject, jbyte, jbyte);
 
 /*
  * Class:     com_serial4j_core_serial_NativeTerminalDevice
  * Method:    getReadConfigurationMode0
- * Signature: ()[I
+ * Signature: ()[B
  */
-JNIEXPORT jintArray JNICALL Java_com_serial4j_core_serial_NativeTerminalDevice_getReadConfigurationMode0
+JNIEXPORT jbyteArray JNICALL Java_com_serial4j_core_serial_NativeTerminalDevice_getReadConfigurationMode0
   (JNIEnv *, jobject);
 
 /*
@@ -146,9 +146,9 @@ JNIEXPORT jlong JNICALL Java_com_serial4j_core_serial_NativeTerminalDevice_write
 /*
  * Class:     com_serial4j_core_serial_NativeTerminalDevice
  * Method:    readBuffer0
- * Signature: ()Ljava/lang/String;
+ * Signature: ()J
  */
-JNIEXPORT jstring JNICALL Java_com_serial4j_core_serial_NativeTerminalDevice_readBuffer0
+JNIEXPORT jlong JNICALL Java_com_serial4j_core_serial_NativeTerminalDevice_readBuffer0
   (JNIEnv *, jobject);
 
 /*

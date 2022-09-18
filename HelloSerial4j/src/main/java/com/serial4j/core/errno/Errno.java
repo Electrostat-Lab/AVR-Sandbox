@@ -43,22 +43,37 @@ public enum Errno {
     EACCES(13, "Permission denied"),
     EPIPE(32, "Broken pipe"),
     EINVALID_PORT(-2, "Invalid Port"),
-    ENO_RESULT(0, "No result"),
     EOPERATION_FAILED(-1, "Operation Failed"),
     ERR_NO_AVAILABLE_TTY_DEVICES(-4, "No available teletype devices");
 
     private final int value;
     private final String description;
 
+    /**
+     * Creates an error code constant with a value and a description.
+     * 
+     * @param value the errno value.
+     * @param description the errno description.
+     */
     Errno(final int value, final String description) {
         this.value = value;
         this.description = description;
     }
 
+    /**
+     * Gets the native error code of the Err.
+     *
+     * @return an integer reference to the error code.
+     */
     public int getValue() {
         return value;
     }
-
+    
+    /**
+     * Gets the native error code descritption.
+     *
+     * @return the error code description in String format.
+     */
     public String getDescription() {
         return description;
     }

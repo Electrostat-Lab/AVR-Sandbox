@@ -48,7 +48,6 @@ import com.serial4j.core.serial.throwable.PermissionDeniedException;
 import com.serial4j.core.serial.throwable.BrokenPipeException;
 import com.serial4j.core.serial.throwable.NoSuchDeviceException;
 import com.serial4j.core.serial.throwable.InvalidPortException;
-import com.serial4j.core.serial.throwable.NoResultException;
 import com.serial4j.core.serial.throwable.OperationFailedException;
 
 /**
@@ -100,11 +99,13 @@ public final class HelloNativeSerial4J extends Thread {
 			/* set the baud rate (bits/second) */
 			ttyDevice.setBaudRate(BaudRate.B57600);
 			/* set the reading mode config to interbyte timeout of delay 510 bytes and delay of 5ms between each charachter */
-			ttyDevice.setReadConfigurationMode(ReadConfiguration.READ_WITH_INTERBYTE_TIMEOUT, 5, 510);
+			ttyDevice.setReadConfigurationMode(ReadConfiguration.BLOCKING_READ_ONE_CHAR, (byte) 0, (byte) 100);
+
 			/* print the port file descriptor */
 			if (ttyDevice.getSerialPort().getFd() > 0) {
 				System.out.println("Port Opened with " + ttyDevice.getSerialPort().getFd());
 			}
+			System.out.println(Arrays.toString(ttyDevice.getReadConfigurationMode()));
 			System.out.println(Arrays.toString(ttyDevice.getSerialPorts()) + " " + ttyDevice.getSerialPorts().length);
 			// /* start the R/W threads */
 			startReadThread(ttyDevice, 0);
@@ -113,7 +114,6 @@ public final class HelloNativeSerial4J extends Thread {
 				PermissionDeniedException |
 				BrokenPipeException |
 				InvalidPortException |
-				NoResultException |
 				OperationFailedException |
 				FileNotFoundException e) {
 			e.printStackTrace();
@@ -133,10 +133,13 @@ public final class HelloNativeSerial4J extends Thread {
 			public void run() {
 				try {
 					Thread.sleep(millis);
+					long read;
 					while(true) {
 						/* read data and get the buffer */
-						if (ttyDevice.readData() > 0) {
-							System.out.println((char) ttyDevice.getReadData());
+						if ((read = ttyDevice.readBuffer()) > 0) {
+							System.out.println(read);
+							System.out.println(ttyDevice.getReadBuffer());
+							// System.exit(0);
 						}
 					}
 				} catch(Exception e) {

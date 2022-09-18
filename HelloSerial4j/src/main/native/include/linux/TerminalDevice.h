@@ -68,6 +68,14 @@ namespace TerminalDevice {
     const cc_t BLOCKING_READ_ONE_CHAR[READ_CONFIG_SIZE] = {0, 1};
     const cc_t READ_WITH_TIMEOUT[READ_CONFIG_SIZE] = {1, 0};
     const cc_t READ_WITH_INTERBYTE_TIMEOUT[READ_CONFIG_SIZE] = {1, 1};
+    
+    /**
+     * Retrieves the termios of this tty device described by the file descriptor (fd).
+     * 
+     * @param fd the virtual file descriptor for this tty device.
+     * @return a memory reference to the termios defining this tty device terminal attributes.
+     */
+    struct termios* getTermiosFromFd(int* fd);
 
     /**
      * @brief Fetches serial port devices on "/dev/" into [serialPorts] buffer.
@@ -190,14 +198,12 @@ namespace TerminalDevice {
      * VMIN_VALUE for lesser bytes to read and VTIME_VALUE for the elapsed time to
      * set if the ReadConfiguration mode provides a timeout.
      *
-     * @param readConfig the read configuration, either POLLING_READ, BLOCKING_READ_ONE_CHAR,
-     * READ_WITH_TIMEOUT or READ_WITH_INTERBYTE_TIMEOUT.
      * @param VTIME_VALUE the value of the read timeout elapsed time, the timer starts
      * with this value after read() is called.
      * @param VMIN_VALUE the value of the minimum number of bytes to read.
      * @return int (ERR_INVALID_PORT = -2) if port isn't available, (0) otherwise.
      */
-    int setReadConfigurationMode(const cc_t* readConfig, const int VTIME_VALUE, const int VMIN_VALUE, int* fd);
+    int setReadConfigurationMode(const int VTIME_VALUE, const int VMIN_VALUE, int* fd);
 
     /**
      * @brief Get the Read Configuration Mode in a new pointer.

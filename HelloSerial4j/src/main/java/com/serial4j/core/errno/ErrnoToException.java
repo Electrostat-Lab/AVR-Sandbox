@@ -35,7 +35,6 @@ import com.serial4j.core.serial.throwable.PermissionDeniedException;
 import com.serial4j.core.serial.throwable.BrokenPipeException;
 import com.serial4j.core.serial.throwable.NoSuchDeviceException;
 import com.serial4j.core.serial.throwable.InvalidPortException;
-import com.serial4j.core.serial.throwable.NoResultException;
 import com.serial4j.core.serial.throwable.OperationFailedException;
 import com.serial4j.core.serial.throwable.NoAvailableTtyDevicesException;
 import com.serial4j.core.errno.Errno;
@@ -50,12 +49,24 @@ public final class ErrnoToException {
     private ErrnoToException() {
     }
 
+    /**
+     * Throws a java exception from a native errno.
+     * 
+     * @param errno the native error code to which the exception will be thrown against.
+     * @param additionalText additional text in string format to be displayed within the throwable message.
+     *
+     * @throws NoSuchDeviceException in case of errno(2).
+     * @throws PermissionDeniedException in case of errno(13).
+     * @throws BrokenPipeException in case of errno(32).
+     * @throws InvalidPortException in case of errno(-2).
+     * @throws OperationFailedException in case of errno(-1).
+     * @throws NoAvailableTtyDevicesException in case of errno(-4).
+     */
     public static void throwFromErrno(final int errno, final String additionalText) 
                                                        throws NoSuchDeviceException,
                                                               PermissionDeniedException,
                                                               BrokenPipeException,
                                                               InvalidPortException,
-                                                              NoResultException,
                                                               OperationFailedException,
                                                               NoAvailableTtyDevicesException {
         if (errno == Errno.ENOENT.getValue()) {

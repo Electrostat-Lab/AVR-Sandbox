@@ -1,5 +1,15 @@
 #include<TerminalDevice.h>
 
+struct termios* TerminalDevice::getTermiosFromFd(int* fd) {
+    if (fd == NULL) {
+        return NULL;
+    }
+    struct termios* tty = (struct termios*) calloc(1, sizeof(struct termios));
+    /* update the termios struct pointer with the data from the port descriptor */
+    tcgetattr(*fd, tty);
+    return tty;
+}
+
 int TerminalDevice::openPort(const char* port, int flag) {
     return open(port, flag);
 }
@@ -50,10 +60,7 @@ int TerminalDevice::initTermios(int* fd) {
         return ERR_INVALID_PORT;
     }
     
-    struct termios* tty = (struct termios*) calloc(1, sizeof(struct termios));
-
-    /* initialize the teletype terminal port */
-    tcgetattr(*fd, tty);
+    struct termios* tty = TerminalDevice::getTermiosFromFd(fd);
 
     /* setup tty attributes */
     tty->c_cflag &= ~(CBAUDEX | CBAUD); /* clear BAUDs */
@@ -78,10 +85,8 @@ int TerminalDevice::setTerminalControlFlag(TerminalFlag flag, int* fd) {
         return ERR_INVALID_PORT;
     }
     
-    struct termios* tty = (struct termios*) calloc(1, sizeof(struct termios));
+    struct termios* tty = TerminalDevice::getTermiosFromFd(fd);
 
-    /* retrieve the current terminal settings from the file descriptor */
-    tcgetattr(*fd, tty);
     tty->c_cflag = flag;
     /* sets the new terminal settings to the file descriptor with flushing any output */
     int state = tcsetattr(*fd, TCSAFLUSH, tty);
@@ -95,9 +100,8 @@ int TerminalDevice::setTerminalLocalFlag(TerminalFlag flag, int* fd) {
         return ERR_INVALID_PORT;
     }
 
-    struct termios* tty = (struct termios*) calloc(1, sizeof(struct termios));
+    struct termios* tty = TerminalDevice::getTermiosFromFd(fd);
 
-    tcgetattr(*fd, tty);
     tty->c_lflag = flag;
     int state = tcsetattr(*fd, TCSAFLUSH, tty);
     BufferUtils::deleteBuffer(tty);
@@ -109,9 +113,8 @@ int TerminalDevice::setTerminalInputFlag(TerminalFlag flag, int* fd) {
     if (*fd <= 0) {
         return ERR_INVALID_PORT;
     }
-    struct termios* tty = (struct termios*) calloc(1, sizeof(struct termios));
+    struct termios* tty = TerminalDevice::getTermiosFromFd(fd);
 
-    tcgetattr(*fd, tty);
     tty->c_iflag = flag;
     int state = tcsetattr(*fd, TCSAFLUSH, tty);
     BufferUtils::deleteBuffer(tty);
@@ -123,9 +126,8 @@ int TerminalDevice::setTerminalOutputFlag(TerminalFlag flag, int* fd) {
     if (*fd <= 0) {
         return ERR_INVALID_PORT;
     }
-    struct termios* tty = (struct termios*) calloc(1, sizeof(struct termios));
+    struct termios* tty = TerminalDevice::getTermiosFromFd(fd);
 
-    tcgetattr(*fd, tty);
     tty->c_oflag = flag;
     int state = tcsetattr(*fd, TCSAFLUSH, tty);
     BufferUtils::deleteBuffer(tty);
@@ -137,8 +139,7 @@ TerminalFlag TerminalDevice::getTerminalControlFlag(int* fd) {
     if (*fd <= 0) {
         return ERR_INVALID_PORT;
     }
-    struct termios* tty = (struct termios*) calloc(1, sizeof(struct termios));
-    tcgetattr(*fd, tty);
+    struct termios* tty = TerminalDevice::getTermiosFromFd(fd);
 
     return tty->c_cflag;
 }
@@ -147,8 +148,7 @@ TerminalFlag TerminalDevice::getTerminalLocalFlag(int* fd) {
     if (*fd <= 0) {
         return ERR_INVALID_PORT;
     }
-    struct termios* tty = (struct termios*) calloc(1, sizeof(struct termios*));
-    tcgetattr(*fd, tty);
+    struct termios* tty = TerminalDevice::getTermiosFromFd(fd);
 
     return tty->c_lflag;
 }
@@ -157,8 +157,8 @@ TerminalFlag TerminalDevice::getTerminalInputFlag(int* fd) {
     if (*fd <= 0) {
         return ERR_INVALID_PORT;
     }
-    struct termios* tty = (struct termios*) calloc(1, sizeof(struct termios));
-    tcgetattr(*fd, tty);
+    struct termios* tty = TerminalDevice::getTermiosFromFd(fd);
+
     return tty->c_iflag;
 }
 
@@ -166,18 +166,19 @@ TerminalFlag TerminalDevice::getTerminalOutputFlag(int* fd) {
     if (*fd <= 0) {
         return ERR_INVALID_PORT;
     }
-    struct termios* tty = (struct termios*) calloc(1, sizeof(struct termios));
-    tcgetattr(*fd, tty);
+    struct termios* tty = TerminalDevice::getTermiosFromFd(fd);
+
     return tty->c_oflag;
 }
 
-int TerminalDevice::setReadConfigurationMode(const cc_t* readConfig, const int VTIME_VALUE, const int VMIN_VALUE, int* fd) {
+int TerminalDevice::setReadConfigurationMode(const int VTIME_VALUE, const int VMIN_VALUE, int* fd) {
     if (*fd <= 0) {
         return ERR_INVALID_PORT;
     }
-    struct termios* tty = (struct termios*) calloc(1, sizeof(struct termios));
-    tty->c_cc[VTIME] = readConfig[0] * VTIME_VALUE;
-    tty->c_cc[VMIN] = readConfig[1] * VMIN_VALUE;
+    struct termios* tty = TerminalDevice::getTermiosFromFd(fd);
+
+    tty->c_cc[VTIME] = VTIME_VALUE;
+    tty->c_cc[VMIN] = VMIN_VALUE;
     int state = tcsetattr(*fd, TCSAFLUSH, tty);
     BufferUtils::deleteBuffer(tty);
 
@@ -185,14 +186,14 @@ int TerminalDevice::setReadConfigurationMode(const cc_t* readConfig, const int V
 }
 
 cc_t* TerminalDevice::getReadConfigurationMode(int* fd) {
-    cc_t* readConfig = (cc_t*) calloc(2, sizeof(int));
+    cc_t* readConfig = (cc_t*) calloc(2, sizeof(unsigned char));
     if (*fd <= 0) {
         readConfig[0] = ERR_INVALID_PORT;
         readConfig[1] = ERR_INVALID_PORT;
         return readConfig;
     }
-    struct termios* tty = (struct termios*) calloc(1, sizeof(struct termios));
-    tcgetattr(*fd, tty);
+    struct termios* tty = TerminalDevice::getTermiosFromFd(fd);
+
     readConfig[0] = tty->c_cc[VTIME];
     readConfig[1] = tty->c_cc[VMIN];
     BufferUtils::deleteBuffer(tty);
@@ -204,9 +205,8 @@ int TerminalDevice::setBaudRate(int baudRate, int* fd) {
     if (*fd <= 0) {
         return ERR_INVALID_PORT;
     }
-    struct termios* tty = (struct termios*) calloc(1, sizeof(struct termios));
-    /* update the termios struct pointer with the data from the port descriptor */
-    tcgetattr(*fd, tty);
+    struct termios* tty = TerminalDevice::getTermiosFromFd(fd);
+
     /* update the baud rate of the termios */
     cfsetspeed(tty, baudRate);
     int state = tcsetattr(*fd, TCSAFLUSH, tty);
@@ -219,9 +219,8 @@ speed_t TerminalDevice::getBaudRate(int* fd) {
     if (*fd <= 0) {
         return ERR_INVALID_PORT;
     }
-    struct termios* tty = (struct termios*) calloc(1, sizeof(struct termios));
-    /* update the termios struct pointer with the data from the port descriptor */
-    tcgetattr(*fd, tty);
+    struct termios* tty = TerminalDevice::getTermiosFromFd(fd);
+
     int speed = cfgetospeed(tty);
     BufferUtils::deleteBuffer(tty);
 

@@ -44,11 +44,11 @@ public final class Launcher {
 
     public static void main(String args[]) throws InterruptedException {
         /* starts the native fctnl io example */
-        // final HelloNativeSerial4J nativeIO = new HelloNativeSerial4J();
-        // nativeIO.start();
+        final HelloNativeSerial4J nativeIO = new HelloNativeSerial4J();
+        nativeIO.start();
         // Thread.sleep(8000);
         // /* starts the java.io example */
-        final HelloSerialMonitor serial4jIO = new HelloSerialMonitor();
-        serial4jIO.run();
+        // final HelloSerialMonitor serial4jIO = new HelloSerialMonitor();
+        // serial4jIO.run();
     }
 }

@@ -45,7 +45,6 @@ import com.serial4j.core.serial.throwable.NoAvailableTtyDevicesException;
 import com.serial4j.core.serial.throwable.BrokenPipeException;
 import com.serial4j.core.serial.throwable.NoSuchDeviceException;
 import com.serial4j.core.serial.throwable.InvalidPortException;
-import com.serial4j.core.serial.throwable.NoResultException;
 import com.serial4j.core.serial.throwable.OperationFailedException;
 import com.serial4j.core.serial.entity.impl.SerialReadEntity;
 import com.serial4j.core.serial.entity.impl.SerialWriteEntity;
@@ -101,7 +100,6 @@ public final class SerialMonitor extends ThreadGroup {
                                                                                                                        PermissionDeniedException,
                                                                                                                        BrokenPipeException,
                                                                                                                        InvalidPortException,
-                                                                                                                       NoResultException,
                                                                                                                        OperationFailedException,
                                                                                                                        NoAvailableTtyDevicesException,
                                                                                                                        FileNotFoundException {  

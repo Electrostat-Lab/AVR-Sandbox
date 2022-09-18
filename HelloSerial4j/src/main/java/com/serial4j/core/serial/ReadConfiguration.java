@@ -42,21 +42,21 @@ import com.serial4j.core.serial.throwable.InvalidPortException;
  * @author pavl_g.
  */
 public enum ReadConfiguration {
-    POLLING_READ(new int[] {0, 0}, "Polling Read"),
-    BLOCKING_READ_ONE_CHAR(new int[] {0, 1}, "Blocking read one charachter at a time"),
-    READ_WITH_TIMEOUT(new int[] {1, 0}, "Polling Read with timeout"),
-    READ_WITH_INTERBYTE_TIMEOUT(new int[] {1, 1}, "Blocking read with timeout"),
-    ERR_INVALID_PORT(new int[] {Errno.EINVALID_PORT.getValue(), Errno.EINVALID_PORT.getValue()}, "Error invalid port");
+    POLLING_READ(new byte[] {0, 0}, "Polling Read"),
+    BLOCKING_READ_ONE_CHAR(new byte[] {0, 1}, "Blocking read one charachter at a time"),
+    READ_WITH_TIMEOUT(new byte[] {1, 0}, "Polling Read with timeout"),
+    READ_WITH_INTERBYTE_TIMEOUT(new byte[] {1, 1}, "Blocking read with timeout"),
+    ERR_INVALID_PORT(new byte[] {(byte) Errno.EINVALID_PORT.getValue(), (byte) Errno.EINVALID_PORT.getValue()}, "Error invalid port");
 
-    private final int[] mode;
+    private final byte[] mode;
     private final String description;
 
-    ReadConfiguration(final int[] mode, final String description) {
+    ReadConfiguration(final byte[] mode, final String description) {
         this.mode = mode;
         this.description = description;
     }
 
-    public int[] getMode() {
+    public byte[] getMode() {
         return mode;
     }
 
@@ -64,7 +64,7 @@ public enum ReadConfiguration {
         return description;
     }
 
-    public static ReadConfiguration getFromNativeReadConfig(final int[] nativeReadConfig) {
+    public static ReadConfiguration getFromNativeReadConfig(final byte[] nativeReadConfig) {
         ReadConfiguration readConfiguration;
         if (nativeReadConfig[0] < 1 && nativeReadConfig[1] >= 1) {
             readConfiguration = ReadConfiguration.BLOCKING_READ_ONE_CHAR;

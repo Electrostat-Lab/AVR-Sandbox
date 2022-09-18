@@ -287,18 +287,34 @@ namespace JniUtils {
         }
     }
 
-    static inline jobject getArrayElement(jobjectArray array, jsize index) {
-        return (*JniUtils::getJniEnv())->GetObjectArrayElement(array, index);
+    static inline jobject getArrayElement(jobjectArray* array, jsize index) {
+        return (*JniUtils::getJniEnv())->GetObjectArrayElement(*array, index);
     } 
 
-    static inline jint getIntArrayElement(jintArray array, jsize index) {
-        return (*JniUtils::getJniEnv())->GetIntArrayElements(array, 0)[index];
+    static inline jint getIntArrayElement(jintArray* array, jsize index) {
+        return (*JniUtils::getJniEnv())->GetIntArrayElements(*array, 0)[index];
+    }
+
+    static inline jbyte* getByteArrayElement(jbyteArray* array, jsize index) {
+        return (*JniUtils::getJniEnv())->GetByteArrayElements(*array, 0);
     }
 
     static inline jintArray getIntArrayFromBuffer(int* buffer, int length) {
         jintArray intArray = (*JniUtils::getJniEnv())->NewIntArray(length);
         (*JniUtils::getJniEnv())->SetIntArrayRegion(intArray, 0, length, buffer);
         return intArray;
+    }
+
+    static inline jbyteArray getByteArrayFromBuffer(signed char* buffer, int length) {
+        jbyteArray byetArray = (*JniUtils::getJniEnv())->NewByteArray(length);
+        (*JniUtils::getJniEnv())->SetByteArrayRegion(byetArray, 0, length, buffer);
+        return byetArray;
+    }
+
+    static inline jcharArray getCharArrayFromBuffer(jchar* buffer, int length) {
+        jcharArray charArray = (*JniUtils::getJniEnv())->NewCharArray(length);
+        (*JniUtils::getJniEnv())->SetCharArrayRegion(charArray, 0, length, buffer);
+        return charArray;
     }
 }
 

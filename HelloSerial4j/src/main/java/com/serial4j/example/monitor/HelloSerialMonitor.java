@@ -56,8 +56,8 @@ public class HelloSerialMonitor implements SerialDataListener, EntityStatus<Seri
             serialMonitor.addSerialDataListener(this);
 
             // /* write data to UART with return-carriage/newline */
-            delay(2000);
-            writeInUARTCapsule(serialMonitor, "0\n\r");
+            // delay(2000);
+            // writeInUARTCapsule(serialMonitor, "0\n\r");
 
             /* terminate after 20 seconds */
             delay(20000);

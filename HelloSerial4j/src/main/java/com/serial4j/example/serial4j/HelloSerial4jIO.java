@@ -44,7 +44,6 @@ import com.serial4j.example.HelloNativeSerial4J;
 import com.serial4j.core.serial.throwable.BrokenPipeException;
 import com.serial4j.core.serial.throwable.NoSuchDeviceException;
 import com.serial4j.core.serial.throwable.InvalidPortException;
-import com.serial4j.core.serial.throwable.NoResultException;
 import com.serial4j.core.serial.throwable.OperationFailedException;
 import com.serial4j.core.serial.Permissions;
 
@@ -85,7 +84,6 @@ public final class HelloSerial4jIO extends Thread {
 				PermissionDeniedException |
 				BrokenPipeException |
 				InvalidPortException |
-				NoResultException |
 				OperationFailedException |
 				FileNotFoundException e) {
 			e.printStackTrace();

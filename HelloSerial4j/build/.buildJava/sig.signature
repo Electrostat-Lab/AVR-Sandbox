@@ -41,37 +41,44 @@
  descriptor: 
  [Ljava/lang/String; 
  private 
- int 
+ char[] 
  readData; 
  descriptor: 
- I 
+ [C 
+ private 
+ java.lang.String 
+ readBuffer; 
+ descriptor: 
+ Ljava/lang/String; 
  protected 
  com.serial4j.core.serial.NativeTerminalDevice(); 
  descriptor: 
  ()V 
- public 
+ protected 
  void 
  setSerialPort(com.serial4j.core.serial.SerialPort); 
  descriptor: 
  (Lcom/serial4j/core/serial/SerialPort;)V 
  public 
- final 
  com.serial4j.core.serial.SerialPort 
  getSerialPort(); 
  descriptor: 
  ()Lcom/serial4j/core/serial/SerialPort; 
  public 
- final 
  java.lang.String[] 
  getSerialPorts(); 
  descriptor: 
  ()[Ljava/lang/String; 
  public 
- final 
- int 
+ char[] 
  getReadData(); 
  descriptor: 
- ()I 
+ ()[C 
+ public 
+ java.lang.String 
+ getReadBuffer(); 
+ descriptor: 
+ ()Ljava/lang/String; 
  protected 
  static 
  native 
@@ -130,17 +137,16 @@
  protected 
  native 
  int 
- setReadConfigurationMode0(int[], 
- int, 
- int); 
+ setReadConfigurationMode0(byte, 
+ byte); 
  descriptor: 
- ([III)I 
+ (BB)I 
  protected 
  native 
- int[] 
+ byte[] 
  getReadConfigurationMode0(); 
  descriptor: 
- ()[I 
+ ()[B 
  protected 
  native 
  int 
@@ -180,10 +186,10 @@
  (Ljava/lang/String;I)J 
  protected 
  native 
- java.lang.String 
+ long 
  readBuffer0(); 
  descriptor: 
- ()Ljava/lang/String; 
+ ()J 
  protected 
  native 
  int 
@@ -901,7 +907,6 @@
  com.serial4j.core.serial.throwable.PermissionDeniedException, 
  com.serial4j.core.serial.throwable.BrokenPipeException, 
  com.serial4j.core.serial.throwable.InvalidPortException, 
- com.serial4j.core.serial.throwable.NoResultException, 
  com.serial4j.core.serial.throwable.OperationFailedException, 
  com.serial4j.core.serial.throwable.NoAvailableTtyDevicesException; 
  descriptor: 
@@ -914,7 +919,6 @@
  com.serial4j.core.serial.throwable.PermissionDeniedException, 
  com.serial4j.core.serial.throwable.BrokenPipeException, 
  com.serial4j.core.serial.throwable.InvalidPortException, 
- com.serial4j.core.serial.throwable.NoResultException, 
  com.serial4j.core.serial.throwable.OperationFailedException, 
  java.io.FileNotFoundException, 
  com.serial4j.core.serial.throwable.NoAvailableTtyDevicesException; 
@@ -928,7 +932,6 @@
  com.serial4j.core.serial.throwable.PermissionDeniedException, 
  com.serial4j.core.serial.throwable.BrokenPipeException, 
  com.serial4j.core.serial.throwable.InvalidPortException, 
- com.serial4j.core.serial.throwable.NoResultException, 
  com.serial4j.core.serial.throwable.OperationFailedException, 
  com.serial4j.core.serial.throwable.NoAvailableTtyDevicesException; 
  descriptor: 
@@ -941,7 +944,6 @@
  com.serial4j.core.serial.throwable.PermissionDeniedException, 
  com.serial4j.core.serial.throwable.BrokenPipeException, 
  com.serial4j.core.serial.throwable.InvalidPortException, 
- com.serial4j.core.serial.throwable.NoResultException, 
  com.serial4j.core.serial.throwable.OperationFailedException, 
  com.serial4j.core.serial.throwable.NoAvailableTtyDevicesException; 
  descriptor: 
@@ -954,7 +956,6 @@
  com.serial4j.core.serial.throwable.PermissionDeniedException, 
  com.serial4j.core.serial.throwable.BrokenPipeException, 
  com.serial4j.core.serial.throwable.InvalidPortException, 
- com.serial4j.core.serial.throwable.NoResultException, 
  com.serial4j.core.serial.throwable.OperationFailedException, 
  com.serial4j.core.serial.throwable.NoAvailableTtyDevicesException; 
  descriptor: 
@@ -967,7 +968,6 @@
  com.serial4j.core.serial.throwable.PermissionDeniedException, 
  com.serial4j.core.serial.throwable.BrokenPipeException, 
  com.serial4j.core.serial.throwable.InvalidPortException, 
- com.serial4j.core.serial.throwable.NoResultException, 
  com.serial4j.core.serial.throwable.OperationFailedException, 
  com.serial4j.core.serial.throwable.NoAvailableTtyDevicesException; 
  descriptor: 
@@ -980,7 +980,6 @@
  com.serial4j.core.serial.throwable.PermissionDeniedException, 
  com.serial4j.core.serial.throwable.BrokenPipeException, 
  com.serial4j.core.serial.throwable.InvalidPortException, 
- com.serial4j.core.serial.throwable.NoResultException, 
  com.serial4j.core.serial.throwable.OperationFailedException, 
  com.serial4j.core.serial.throwable.NoAvailableTtyDevicesException; 
  descriptor: 
@@ -993,7 +992,6 @@
  com.serial4j.core.serial.throwable.PermissionDeniedException, 
  com.serial4j.core.serial.throwable.BrokenPipeException, 
  com.serial4j.core.serial.throwable.InvalidPortException, 
- com.serial4j.core.serial.throwable.NoResultException, 
  com.serial4j.core.serial.throwable.OperationFailedException, 
  com.serial4j.core.serial.throwable.NoAvailableTtyDevicesException; 
  descriptor: 
@@ -1006,7 +1004,6 @@
  com.serial4j.core.serial.throwable.PermissionDeniedException, 
  com.serial4j.core.serial.throwable.BrokenPipeException, 
  com.serial4j.core.serial.throwable.InvalidPortException, 
- com.serial4j.core.serial.throwable.NoResultException, 
  com.serial4j.core.serial.throwable.OperationFailedException, 
  com.serial4j.core.serial.throwable.NoAvailableTtyDevicesException; 
  descriptor: 
@@ -1019,7 +1016,6 @@
  com.serial4j.core.serial.throwable.PermissionDeniedException, 
  com.serial4j.core.serial.throwable.BrokenPipeException, 
  com.serial4j.core.serial.throwable.InvalidPortException, 
- com.serial4j.core.serial.throwable.NoResultException, 
  com.serial4j.core.serial.throwable.OperationFailedException, 
  com.serial4j.core.serial.throwable.NoAvailableTtyDevicesException; 
  descriptor: 
@@ -1043,7 +1039,6 @@
  com.serial4j.core.serial.throwable.PermissionDeniedException, 
  com.serial4j.core.serial.throwable.BrokenPipeException, 
  com.serial4j.core.serial.throwable.InvalidPortException, 
- com.serial4j.core.serial.throwable.NoResultException, 
  com.serial4j.core.serial.throwable.OperationFailedException, 
  com.serial4j.core.serial.throwable.NoAvailableTtyDevicesException; 
  descriptor: 
@@ -1051,24 +1046,23 @@
  public 
  void 
  setReadConfigurationMode(com.serial4j.core.serial.ReadConfiguration, 
- int, 
- int) 
+ byte, 
+ byte) 
  throws 
  com.serial4j.core.serial.throwable.NoSuchDeviceException, 
  com.serial4j.core.serial.throwable.PermissionDeniedException, 
  com.serial4j.core.serial.throwable.BrokenPipeException, 
  com.serial4j.core.serial.throwable.InvalidPortException, 
- com.serial4j.core.serial.throwable.NoResultException, 
  com.serial4j.core.serial.throwable.OperationFailedException, 
  com.serial4j.core.serial.throwable.NoAvailableTtyDevicesException; 
  descriptor: 
- (Lcom/serial4j/core/serial/ReadConfiguration;II)V 
+ (Lcom/serial4j/core/serial/ReadConfiguration;BB)V 
  public 
  final 
- com.serial4j.core.serial.ReadConfiguration 
+ byte[] 
  getReadConfigurationMode(); 
  descriptor: 
- ()Lcom/serial4j/core/serial/ReadConfiguration; 
+ ()[B 
  public 
  final 
  long 
@@ -1078,7 +1072,6 @@
  com.serial4j.core.serial.throwable.PermissionDeniedException, 
  com.serial4j.core.serial.throwable.BrokenPipeException, 
  com.serial4j.core.serial.throwable.InvalidPortException, 
- com.serial4j.core.serial.throwable.NoResultException, 
  com.serial4j.core.serial.throwable.OperationFailedException, 
  com.serial4j.core.serial.throwable.NoAvailableTtyDevicesException; 
  descriptor: 
@@ -1092,7 +1085,6 @@
  com.serial4j.core.serial.throwable.PermissionDeniedException, 
  com.serial4j.core.serial.throwable.BrokenPipeException, 
  com.serial4j.core.serial.throwable.InvalidPortException, 
- com.serial4j.core.serial.throwable.NoResultException, 
  com.serial4j.core.serial.throwable.OperationFailedException, 
  com.serial4j.core.serial.throwable.NoAvailableTtyDevicesException; 
  descriptor: 
@@ -1105,8 +1097,14 @@
  ()J 
  public 
  final 
- java.lang.String 
+ long 
  readBuffer(); 
+ descriptor: 
+ ()J 
+ public 
+ final 
+ java.lang.String 
+ getReadBuffer(); 
  descriptor: 
  ()Ljava/lang/String; 
  public 
@@ -1118,7 +1116,6 @@
  com.serial4j.core.serial.throwable.PermissionDeniedException, 
  com.serial4j.core.serial.throwable.BrokenPipeException, 
  com.serial4j.core.serial.throwable.InvalidPortException, 
- com.serial4j.core.serial.throwable.NoResultException, 
  com.serial4j.core.serial.throwable.OperationFailedException, 
  com.serial4j.core.serial.throwable.NoAvailableTtyDevicesException; 
  descriptor: 
@@ -1132,7 +1129,6 @@
  com.serial4j.core.serial.throwable.PermissionDeniedException, 
  com.serial4j.core.serial.throwable.BrokenPipeException, 
  com.serial4j.core.serial.throwable.InvalidPortException, 
- com.serial4j.core.serial.throwable.NoResultException, 
  com.serial4j.core.serial.throwable.OperationFailedException, 
  com.serial4j.core.serial.throwable.NoAvailableTtyDevicesException; 
  descriptor: 
@@ -1145,7 +1141,6 @@
  com.serial4j.core.serial.throwable.PermissionDeniedException, 
  com.serial4j.core.serial.throwable.BrokenPipeException, 
  com.serial4j.core.serial.throwable.InvalidPortException, 
- com.serial4j.core.serial.throwable.NoResultException, 
  com.serial4j.core.serial.throwable.OperationFailedException, 
  com.serial4j.core.serial.throwable.NoAvailableTtyDevicesException; 
  descriptor: 
@@ -1158,7 +1153,6 @@
  com.serial4j.core.serial.throwable.PermissionDeniedException, 
  com.serial4j.core.serial.throwable.BrokenPipeException, 
  com.serial4j.core.serial.throwable.InvalidPortException, 
- com.serial4j.core.serial.throwable.NoResultException, 
  com.serial4j.core.serial.throwable.OperationFailedException, 
  com.serial4j.core.serial.throwable.NoAvailableTtyDevicesException; 
  descriptor: 
@@ -1176,10 +1170,10 @@
  ()Z 
  public 
  final 
- int 
+ char[] 
  getReadData(); 
  descriptor: 
- ()I 
+ ()[C 
  public 
  final 
  java.io.InputStream 
@@ -1206,7 +1200,6 @@
  com.serial4j.core.serial.throwable.PermissionDeniedException, 
  com.serial4j.core.serial.throwable.BrokenPipeException, 
  com.serial4j.core.serial.throwable.InvalidPortException, 
- com.serial4j.core.serial.throwable.NoResultException, 
  com.serial4j.core.serial.throwable.OperationFailedException, 
  com.serial4j.core.serial.throwable.NoAvailableTtyDevicesException; 
  descriptor: 
@@ -1365,7 +1358,6 @@
  com.serial4j.core.serial.throwable.PermissionDeniedException, 
  com.serial4j.core.serial.throwable.BrokenPipeException, 
  com.serial4j.core.serial.throwable.InvalidPortException, 
- com.serial4j.core.serial.throwable.NoResultException, 
  com.serial4j.core.serial.throwable.OperationFailedException, 
  com.serial4j.core.serial.throwable.NoAvailableTtyDevicesException, 
  java.io.FileNotFoundException; 
@@ -1452,7 +1444,7 @@
  { 
  private 
  java.lang.String 
- name; 
+ path; 
  descriptor: 
  Ljava/lang/String; 
  private 
@@ -1476,12 +1468,12 @@
  (I)V 
  public 
  void 
- setName(java.lang.String); 
+ setPath(java.lang.String); 
  descriptor: 
  (Ljava/lang/String;)V 
  public 
  java.lang.String 
- getName(); 
+ getPath(); 
  descriptor: 
  ()Ljava/lang/String; 
  public 
@@ -2370,10 +2362,10 @@
  Lcom/serial4j/core/serial/ReadConfiguration; 
  private 
  final 
- int[] 
+ byte[] 
  mode; 
  descriptor: 
- [I 
+ [B 
  private 
  final 
  java.lang.String 
@@ -2400,15 +2392,15 @@
  descriptor: 
  (Ljava/lang/String;)Lcom/serial4j/core/serial/ReadConfiguration; 
  private 
- com.serial4j.core.serial.ReadConfiguration(int[], 
+ com.serial4j.core.serial.ReadConfiguration(byte[], 
  java.lang.String); 
  descriptor: 
- (Ljava/lang/String;I[ILjava/lang/String;)V 
+ (Ljava/lang/String;I[BLjava/lang/String;)V 
  public 
- int[] 
+ byte[] 
  getMode(); 
  descriptor: 
- ()[I 
+ ()[B 
  public 
  java.lang.String 
  getDescription(); 
@@ -2417,9 +2409,9 @@
  public 
  static 
  com.serial4j.core.serial.ReadConfiguration 
- getFromNativeReadConfig(int[]); 
+ getFromNativeReadConfig(byte[]); 
  descriptor: 
- ([I)Lcom/serial4j/core/serial/ReadConfiguration; 
+ ([B)Lcom/serial4j/core/serial/ReadConfiguration; 
  static 
  {}; 
  descriptor: 
@@ -2447,7 +2439,6 @@
  com.serial4j.core.serial.throwable.PermissionDeniedException, 
  com.serial4j.core.serial.throwable.BrokenPipeException, 
  com.serial4j.core.serial.throwable.InvalidPortException, 
- com.serial4j.core.serial.throwable.NoResultException, 
  com.serial4j.core.serial.throwable.OperationFailedException, 
  com.serial4j.core.serial.throwable.NoAvailableTtyDevicesException; 
  descriptor: 
@@ -2489,13 +2480,6 @@
  final 
  com.serial4j.core.errno.Errno 
  EINVALID_PORT; 
- descriptor: 
- Lcom/serial4j/core/errno/Errno; 
- public 
- static 
- final 
- com.serial4j.core.errno.Errno 
- ENO_RESULT; 
  descriptor: 
  Lcom/serial4j/core/errno/Errno; 
  public 
