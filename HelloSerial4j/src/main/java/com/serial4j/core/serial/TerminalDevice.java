@@ -67,7 +67,7 @@ public final class TerminalDevice {
      */
     static {
         NativeImageLoader.loadLibrary();
-        setupJniEnvironment();
+        TerminalDevice.setupJniEnvironment();
     }
 
     private static final Logger LOGGER = Logger.getLogger(TerminalDevice.class.getName());

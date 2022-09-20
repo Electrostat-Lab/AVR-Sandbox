@@ -1077,7 +1077,6 @@
  descriptor: 
  (Ljava/lang/String;)J 
  public 
- final 
  long 
  writeData(int) 
  throws 
@@ -1090,7 +1089,6 @@
  descriptor: 
  (I)J 
  public 
- final 
  long 
  writeData(int[]) 
  throws 
