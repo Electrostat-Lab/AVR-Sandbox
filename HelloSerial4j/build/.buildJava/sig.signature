@@ -137,16 +137,16 @@
  protected 
  native 
  int 
- setReadConfigurationMode0(byte, 
- byte); 
+ setReadConfigurationMode0(int, 
+ int); 
  descriptor: 
- (BB)I 
+ (II)I 
  protected 
  native 
- byte[] 
+ int[] 
  getReadConfigurationMode0(); 
  descriptor: 
- ()[B 
+ ()[I 
  protected 
  native 
  int 
@@ -193,6 +193,13 @@
  protected 
  native 
  int 
+ openPort0(java.lang.String, 
+ int); 
+ descriptor: 
+ (Ljava/lang/String;I)I 
+ protected 
+ native 
+ int 
  initTermios0(); 
  descriptor: 
  ()I 
@@ -202,13 +209,6 @@
  setBaudRate0(int); 
  descriptor: 
  (I)I 
- protected 
- native 
- int 
- openPort0(java.lang.String, 
- int); 
- descriptor: 
- (Ljava/lang/String;I)I 
  protected 
  native 
  int 
@@ -1046,8 +1046,8 @@
  public 
  void 
  setReadConfigurationMode(com.serial4j.core.serial.ReadConfiguration, 
- byte, 
- byte) 
+ int, 
+ int) 
  throws 
  com.serial4j.core.serial.throwable.NoSuchDeviceException, 
  com.serial4j.core.serial.throwable.PermissionDeniedException, 
@@ -1056,13 +1056,13 @@
  com.serial4j.core.serial.throwable.OperationFailedException, 
  com.serial4j.core.serial.throwable.NoAvailableTtyDevicesException; 
  descriptor: 
- (Lcom/serial4j/core/serial/ReadConfiguration;BB)V 
+ (Lcom/serial4j/core/serial/ReadConfiguration;II)V 
  public 
  final 
- byte[] 
+ com.serial4j.core.serial.ReadConfiguration 
  getReadConfigurationMode(); 
  descriptor: 
- ()[B 
+ ()Lcom/serial4j/core/serial/ReadConfiguration; 
  public 
  final 
  long 
@@ -2374,11 +2374,10 @@
  descriptor: 
  Lcom/serial4j/core/serial/ReadConfiguration; 
  private 
- final 
- byte[] 
+ int[] 
  mode; 
  descriptor: 
- [B 
+ [I 
  private 
  final 
  java.lang.String 
@@ -2405,15 +2404,15 @@
  descriptor: 
  (Ljava/lang/String;)Lcom/serial4j/core/serial/ReadConfiguration; 
  private 
- com.serial4j.core.serial.ReadConfiguration(byte[], 
+ com.serial4j.core.serial.ReadConfiguration(int[], 
  java.lang.String); 
  descriptor: 
- (Ljava/lang/String;I[BLjava/lang/String;)V 
+ (Ljava/lang/String;I[ILjava/lang/String;)V 
  public 
- byte[] 
+ int[] 
  getMode(); 
  descriptor: 
- ()[B 
+ ()[I 
  public 
  java.lang.String 
  getDescription(); 
@@ -2422,9 +2421,9 @@
  public 
  static 
  com.serial4j.core.serial.ReadConfiguration 
- getFromNativeReadConfig(byte[]); 
+ getFromNativeReadConfig(int[]); 
  descriptor: 
- ([B)Lcom/serial4j/core/serial/ReadConfiguration; 
+ ([I)Lcom/serial4j/core/serial/ReadConfiguration; 
  static 
  {}; 
  descriptor: 

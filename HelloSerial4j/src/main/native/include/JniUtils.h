@@ -316,6 +316,12 @@ namespace JniUtils {
         (*JniUtils::getJniEnv())->SetCharArrayRegion(charArray, 0, length, buffer);
         return charArray;
     }
+
+    static inline jbooleanArray getBooleanArrayFromBuffer(jboolean* buffer, int length) {
+        jbooleanArray booleanArray = (*JniUtils::getJniEnv())->NewBooleanArray(length);
+        (*JniUtils::getJniEnv())->SetBooleanArrayRegion(booleanArray, 0, length, buffer);
+        return booleanArray;
+    }
 }
 
 #endif

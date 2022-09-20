@@ -33,6 +33,17 @@ package com.serial4j.core.serial.throwable;
 
 import com.serial4j.core.errno.Errno;
 
+/**
+ * Defines an abstract entity for the serial throwable exceptions.
+ *
+ * @author pavl_g.
+ */
 public interface SerialThrowable {
+    
+    /**
+     * Gets the causing error code.
+     *
+     * @return the error code causing this exception.
+     */
     Errno getCausingErrno();
 }

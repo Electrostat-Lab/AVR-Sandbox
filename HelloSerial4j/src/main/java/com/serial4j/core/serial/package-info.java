@@ -34,6 +34,6 @@
  * Provides a Serial UART Monitor API using Serial4j with 2 monitor entities, SerialReadEntity
  * and SerialWriteEntity.
  *
- * @author pavl_g.s
+ * @author pavl_g.
  */
 package com.serial4j.core.serial;

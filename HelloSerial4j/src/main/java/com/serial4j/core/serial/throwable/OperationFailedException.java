@@ -35,8 +35,19 @@ import java.lang.RuntimeException;
 import com.serial4j.core.errno.Errno;
 import com.serial4j.core.serial.throwable.SerialThrowable;
 
+/**
+ * Implements an operation failed exception with error code [EOPERATION_FAILED] or [-1].
+ * Possibly thrown from a failed operation, for example trying to open a read-only device.
+ *
+ * @author pavl_g.
+ */
 public final class OperationFailedException extends RuntimeException implements SerialThrowable {
 
+    /**
+     * Instantiates an operation failed java exceptions with error code (-1).
+     *
+     * @param additionalText additional text to add to the exception message.
+     */
     public OperationFailedException(final String additionalText) {
         super(Errno.EOPERATION_FAILED.getDescription() + "\n" + additionalText);
     }

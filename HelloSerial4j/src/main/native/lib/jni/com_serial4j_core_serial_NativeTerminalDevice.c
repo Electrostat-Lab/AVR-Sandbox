@@ -106,16 +106,20 @@ JNIEXPORT jlong JNICALL Java_com_serial4j_core_serial_NativeTerminalDevice_getTe
 }
 
 JNIEXPORT jint JNICALL Java_com_serial4j_core_serial_NativeTerminalDevice_setReadConfigurationMode0
-  (JNIEnv* env, jobject object, jbyte timeoutValue, jbyte minimumBytes) {
+  (JNIEnv* env, jobject object, jint timeoutValue, jint minimumBytes) {
     
     jint fd = JniUtils::getPortDescriptorFromSerialPort(&object);
 
     return TerminalDevice::setReadConfigurationMode(timeoutValue, minimumBytes, &fd);
 }
 
-JNIEXPORT jbyteArray JNICALL Java_com_serial4j_core_serial_NativeTerminalDevice_getReadConfigurationMode0
+JNIEXPORT jintArray JNICALL Java_com_serial4j_core_serial_NativeTerminalDevice_getReadConfigurationMode0
   (JNIEnv* env, jobject object) {
-    return JniUtils::getByteArrayFromBuffer((signed char*) getReadConfiguration(&object), READ_CONFIG_SIZE);
+    const cc_t* readConfig = getReadConfiguration(&object);
+    int* buffer = (int*) calloc(2, sizeof(int));
+    buffer[0] = readConfig[0];
+    buffer[1] = readConfig[1];
+    return JniUtils::getIntArrayFromBuffer(buffer, READ_CONFIG_SIZE);
 }
 
 JNIEXPORT jint JNICALL Java_com_serial4j_core_serial_NativeTerminalDevice_fetchSerialPorts0

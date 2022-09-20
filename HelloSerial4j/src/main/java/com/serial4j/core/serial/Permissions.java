@@ -1,5 +1,25 @@
 /*
- * BSD 3-Clause License
+ * From POSIX Standard: 6.5 File Control Operations.
+ * Copyright (C) 1993-2019 Free Software Foundation, Inc.
+ * This file is part of the GNU C Library.
+ *
+ * The GNU C Library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * The GNU C Library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with the GNU C Library; if not, see
+ * <http://www.gnu.org/licenses/>.
+ * 
+ *  -----------------------------------------------------------------------
+ *
+ * BSD 3-Clause License for Serial4j from the AVR-Sandbox Project.
  *
  * Copyright (c) 2022, Scrappers Team, The AVR-Sandbox Project, Serial4j API.
  * All rights reserved.
@@ -48,21 +68,46 @@ public final class Permissions {
     private int value;
     private String description;
 
+    /**
+     * Wraps a POSIX IO flag using an integer value.
+     *
+     * @param value the value of the permission flag.
+     * @param description the description of the flag.
+     */
     protected Permissions(final int value, final String description) {
         this.value = value;
         this.description = description;
     }
     
+    /**
+     * Create a custom permissions object from a source value.
+     *
+     * @param value the value of the permission flag.
+     * @param description the description for this flag.
+     * @return a new Permissions object wrapping the POSIX IO flag.
+     */
     public static final Permissions createCustomPermissions(final int value, final String description) {
         return new Permissions(value, description);
     }
 
+    /**
+     * Appends new permissions to this permissions object.
+     *
+     * @param permissions the new permissions to append.
+     * @return this permissions object with the new appended value.
+     */
     public Permissions append(final Permissions permissions) {
         this.value |= permissions.getValue();
         this.description += "-" + permissions.getDescription();
         return this;
     }
 
+    /**
+     * Appends some new permissions to this permissions object.
+     *
+     * @param permissions an array args of the new permissions to append.
+     * @return this permissions object with the new appended value.
+     */
     public Permissions append(final Permissions...permissions) {
         for (int i = 0; i < permissions.length; i++) {
             append(permissions[i]);
@@ -70,10 +115,20 @@ public final class Permissions {
         return this;
     }
 
+    /**
+     * Retrieves the value of this permissions object.
+     *
+     * @return the value of this permissions object.
+     */
     public int getValue() {
         return value;
     }
 
+    /**
+     * Retrieves the description of this permissions object.
+     *
+     * @return the description of this permissions object.
+     */
     public String getDescription() {
         return description;
     }

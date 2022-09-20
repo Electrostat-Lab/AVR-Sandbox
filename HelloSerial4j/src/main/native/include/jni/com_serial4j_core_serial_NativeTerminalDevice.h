@@ -82,17 +82,17 @@ JNIEXPORT jlong JNICALL Java_com_serial4j_core_serial_NativeTerminalDevice_getTe
 /*
  * Class:     com_serial4j_core_serial_NativeTerminalDevice
  * Method:    setReadConfigurationMode0
- * Signature: (BB)I
+ * Signature: (II)I
  */
 JNIEXPORT jint JNICALL Java_com_serial4j_core_serial_NativeTerminalDevice_setReadConfigurationMode0
-  (JNIEnv *, jobject, jbyte, jbyte);
+  (JNIEnv *, jobject, jint, jint);
 
 /*
  * Class:     com_serial4j_core_serial_NativeTerminalDevice
  * Method:    getReadConfigurationMode0
- * Signature: ()[B
+ * Signature: ()[I
  */
-JNIEXPORT jbyteArray JNICALL Java_com_serial4j_core_serial_NativeTerminalDevice_getReadConfigurationMode0
+JNIEXPORT jintArray JNICALL Java_com_serial4j_core_serial_NativeTerminalDevice_getReadConfigurationMode0
   (JNIEnv *, jobject);
 
 /*
@@ -153,6 +153,14 @@ JNIEXPORT jlong JNICALL Java_com_serial4j_core_serial_NativeTerminalDevice_readB
 
 /*
  * Class:     com_serial4j_core_serial_NativeTerminalDevice
+ * Method:    openPort0
+ * Signature: (Ljava/lang/String;I)I
+ */
+JNIEXPORT jint JNICALL Java_com_serial4j_core_serial_NativeTerminalDevice_openPort0
+  (JNIEnv *, jobject, jstring, jint);
+
+/*
+ * Class:     com_serial4j_core_serial_NativeTerminalDevice
  * Method:    initTermios0
  * Signature: ()I
  */
@@ -166,14 +174,6 @@ JNIEXPORT jint JNICALL Java_com_serial4j_core_serial_NativeTerminalDevice_initTe
  */
 JNIEXPORT jint JNICALL Java_com_serial4j_core_serial_NativeTerminalDevice_setBaudRate0
   (JNIEnv *, jobject, jint);
-
-/*
- * Class:     com_serial4j_core_serial_NativeTerminalDevice
- * Method:    openPort0
- * Signature: (Ljava/lang/String;I)I
- */
-JNIEXPORT jint JNICALL Java_com_serial4j_core_serial_NativeTerminalDevice_openPort0
-  (JNIEnv *, jobject, jstring, jint);
 
 /*
  * Class:     com_serial4j_core_serial_NativeTerminalDevice

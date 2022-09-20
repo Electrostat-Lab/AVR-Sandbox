@@ -35,8 +35,20 @@ import java.io.IOException;
 import com.serial4j.core.errno.Errno;
 import com.serial4j.core.serial.throwable.SerialThrowable;
 
+/**
+ * Implements a permission exception for error code [EACCESS] or [13] as defined by <errno.h>.
+ * Possibly thrown from non-authorized permissions from a non-root user during an attempt to open
+ * a system resource.
+ *
+ * @author pavl_g.
+ */
 public class PermissionDeniedException extends IOException implements SerialThrowable {
 
+    /**
+     * Instantiates a permission exception with an additionaltext and error code [13].
+     *
+     * @param additionalText additional text for the permission message.
+     */
     public PermissionDeniedException(final String additionalText) {
         super(Errno.EACCES.getDescription() + "\n" + additionalText);
     }

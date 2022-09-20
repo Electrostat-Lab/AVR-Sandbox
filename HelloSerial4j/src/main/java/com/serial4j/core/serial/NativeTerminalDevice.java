@@ -106,7 +106,7 @@ public final class NativeTerminalDevice {
 
     /**
      * Adjusts the native terminal control [c_cflag] of the [termios] structure variable for this terminal device.
-     * @note The terminal control flag controls the way the terminal device r/w the charachters on the console.
+     * @apiNote The terminal control flag controls the way the terminal device r/w the charachters on the console.
      * For more, refer to the POSIX terminal control guide.
      * 
      * Default value = tty->c_cflag |= (CREAD | CS8 | CLOCAL); defined by {@link NativeTerminalDevice#initTermios0()}.
@@ -119,7 +119,7 @@ public final class NativeTerminalDevice {
 
     /**
      * Adjusts the native terminal local [c_lflag] of the [termios] structure variable for this terminal device.
-     * @note The terminal local flag controls the way the terminal device interprets and displays the charachters on the console (i.e local console).
+     * @apiNote The terminal local flag controls the way the terminal device interprets and displays the charachters on the console (i.e local console).
      * For more, refer to the POSIX terminal control guide.
      *
      * Default value = tty->c_lflag &= ~(ICANON | ECHO | ECHOE | ECHOK | ECHOKE | ECHONL | ECHOPRT | ECHOCTL | ISIG | IEXTEN); 
@@ -133,7 +133,7 @@ public final class NativeTerminalDevice {
 
     /**
      * Adjusts the native terminal input [c_iflag] of the [termios] structure variable for this terminal device.
-     * @note The terminal input flag controls the way the terminal device receives and interprets the charachters on input.
+     * @apiNote The terminal input flag controls the way the terminal device receives and interprets the charachters on input.
      * For more, refer to the POSIX terminal control guide.
      * 
      * Default value = tty->c_iflag = 0x00; defined by {@link NativeTerminalDevice#initTermios0()}.
@@ -146,7 +146,7 @@ public final class NativeTerminalDevice {
 
     /**
      * Adjusts the native terminal output [c_oflag] of the [termios] structure variable for this terminal device.
-     * @note The terminal output flag controls the way the terminal device transmits and interprets the charachters on output.
+     * @apiNote The terminal output flag controls the way the terminal device transmits and interprets the charachters on output.
      * For more, refer to the POSIX terminal control guide.
      * 
      * Default value = tty->c_oflag &= ~(OPOST | ONLCR); defined by {@link NativeTerminalDevice#initTermios0()}.
@@ -198,7 +198,7 @@ public final class NativeTerminalDevice {
      * @return errno(-1) for failure, errno(-2) for invalid port, errno(1) for success.
      * @see com.serial4j.core.serial.ReadConfiguration
      */
-    protected native int setReadConfigurationMode0(final byte VTIME_VALUE, final byte VMIN_VALUE);
+    protected native int setReadConfigurationMode0(final int VTIME_VALUE, final int VMIN_VALUE);
 
     /**
      * Gets the read configuration for this terminal device defining the timeout value as the first index and 
@@ -209,7 +209,7 @@ public final class NativeTerminalDevice {
      * @return an array refering to the read mode, where index [0] represents the read timeout, index [1] represents
      *         the minimum bytes to read.
      */
-    protected native byte[] getReadConfigurationMode0();
+    protected native int[] getReadConfigurationMode0();
 
     /**
      * Retrieves the last error encountered by the native code,
@@ -227,9 +227,9 @@ public final class NativeTerminalDevice {
     protected native int fetchSerialPorts0();
 
     /**
-     * Retrieves the baud rate for this terminal process.
+     * Retrieves the baud rate POSIX code for this terminal process, find more at <./usr/include/x86_64-linux-gnu/bits/termios.h>.
      * 
-     * @return the baud rate in integers.
+     * @return the baud rate code in integers.
      */
     protected native int getBaudRate0();
 
@@ -249,19 +249,83 @@ public final class NativeTerminalDevice {
      */
     protected native long readData0();
 
+    /**
+     * Writes a string buffer (const char*) with a length to this terminal device.
+     * 
+     * @param buffer a string buffer to write to this terminal device.
+     * @param length the string buffer length in integers, this minimizes the jni native calls.
+     * @return the number of written bytes to this terminal device.
+     */
     protected native long writeBuffer0(final String buffer, final int length);
 
+    /**
+     * Reads the data from this terminal device and insert the result into the {@link NativeTerminalDevice#readBuffer}
+     * string buffer.
+     *
+     * @return the number of read bytes from this terminal device.
+     */
     protected native long readBuffer0();
 
-    protected native int initTermios0();
-
-    protected native int setBaudRate0(int baudRate);
-
+    /**
+     * Opens this terminal device using the path to the port [port] in strings and the port permissions [flag] in integers.
+     *
+     * @param port the port path in strings. 
+     * @param int the flag for the base file control native api [fcntl].
+     * @return errno(-1) for failure, errno(1) for success.
+     */
     protected native int openPort0(final String port, final int flag);
 
     /**
+     * Initializes this terminal device with the default terminal flags and read timeout properties:
+     * -----------
+     * # c_cflag: for control mode flags.
+     * *** Enable these bits:
+     * - [CREAD]: Allow input to be received.
+     * - [CS8]: For charachter size 8-bit, you can use the bit mask CSIZE to read this value.
+     * - [CLOCAL]: Ignore modem status lines (dont check carrier signal).
+     * -----------
+     * # c_lflag: for local mode flags.
+     * ***Disable these bits:
+     * - [ICANON]: Canonical mode (line-by-line) input.
+     * - [ECHO]: Echo input characters.
+     * - [ECHOE]: Perform ERASE visually.
+     * - [ECHOK]: Echo KILL visually.
+     * - [ECHOKE]: Dont output a newline after echoed KILL.
+     * - [ECHONL]: Echo NL (in canonical mode) even if echoing is disabled.
+     * - [ECHOPRT]: Echo deleted characters backward (between \ and / ).
+     * - [ECHOCTL]: Echo control characters visually (e.g., ^L ).
+     * - [ISIG]: Enable signal-generating characters (INTR, QUIT, SUSP).
+     * - [IEXTEN]: Enable extended processing of input characters.
+     * -----------
+     * # c_oflag: for output mode flags.
+     * ***Disable these bits:
+     * - [OPOST]: Perform output postprocessing.
+     * - [ONLCR]: Map NL to CR-NL on output.
+     * -----------
+     * # c_iflag: for input mode flags.
+     * ***Disable all input bit masks.
+     * -----------
+     * # c_cc: For control characters.
+     * ***Sets to BLOCKING READ ONE CHAR AT A TIME MODE.
+     * -----------
+     *
+     * @apiNote This should be called right after {@link NativeTerminalDevice#openPort0(String, int)}.
+     * 
+     * @return errno(-1) for failure, errno(-2) for invalid port, errno(1) for success.
+     */
+    protected native int initTermios0();
+
+    /**
+     * Adjusts the baud rate aka. the speed of data transmission in bits/seconds for this bus.
+     *
+     * @param baudRate the baud rate POSIX native code, find more about baud rate codes at <./usr/include/x86_64-linux-gnu/bits/termios.h>.
+     * @return errno(-1) for failure, errno(-2) for invalid port, errno(1) for success.
+     */    
+    protected native int setBaudRate0(int baudRate);
+
+    /**
      * Closes the serial port of this terminal device releasing the resources.
-     * @note This call triggers {@link NativeTerminalDevice#serialPort#portOpened} to 0, 
+     * @apiNote This call triggers {@link NativeTerminalDevice#serialPort#portOpened} to 0, 
      * the port descriptor {@link NativeTerminalDevice#serialPort#fd} to 0 and the port path {@link NativeTerminalDevice#serialPort#fd} to "".
      * 
      * @return errno(-1) for failure, errno(-2) for invalid port, errno(1) for success.

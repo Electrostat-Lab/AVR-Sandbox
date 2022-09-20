@@ -99,13 +99,13 @@ public final class HelloNativeSerial4J extends Thread {
 			/* set the baud rate (bits/second) */
 			ttyDevice.setBaudRate(BaudRate.B57600);
 			/* set the reading mode config to interbyte timeout of delay 510 bytes and delay of 5ms between each charachter */
-			ttyDevice.setReadConfigurationMode(ReadConfiguration.BLOCKING_READ_ONE_CHAR, (byte) 0, (byte) 100);
+			ttyDevice.setReadConfigurationMode(ReadConfiguration.READ_WITH_INTERBYTE_TIMEOUT, 0, 255);
 
 			/* print the port file descriptor */
 			if (ttyDevice.getSerialPort().getFd() > 0) {
 				System.out.println("Port Opened with " + ttyDevice.getSerialPort().getFd());
 			}
-			System.out.println(Arrays.toString(ttyDevice.getReadConfigurationMode()));
+			System.out.println(Arrays.toString(ttyDevice.getReadConfigurationMode().getMode()));
 			System.out.println(Arrays.toString(ttyDevice.getSerialPorts()) + " " + ttyDevice.getSerialPorts().length);
 			// /* start the R/W threads */
 			startReadThread(ttyDevice, 0);

@@ -112,8 +112,8 @@ public final class TerminalDevice {
             LOGGER.log(Level.INFO, "Opening serial device " + serialPort.getPath());
         }
         this.nativeTerminalDevice.setSerialPort(serialPort);
-        final int errno = nativeTerminalDevice.openPort0(serialPort.getPath(), permissions.getValue());
-        ErrnoToException.throwFromErrno(errno, serialPort.getPath());
+        nativeTerminalDevice.openPort0(serialPort.getPath(), permissions.getValue());
+        ErrnoToException.throwFromErrno(nativeTerminalDevice.getErrno0(), serialPort.getPath());
         /* update port data natively */
         /* ... */
     }
@@ -258,7 +258,7 @@ public final class TerminalDevice {
         ErrnoToException.throwFromErrno(errno, getSerialPort().getPath()); 
     } 
 
-    public void setReadConfigurationMode(final ReadConfiguration readConfiguration, final byte timeoutValue, final byte minimumBytes) throws NoSuchDeviceException,
+    public void setReadConfigurationMode(final ReadConfiguration readConfiguration, final int timeoutValue, final int minimumBytes) throws NoSuchDeviceException,
                                                                                                                                                 PermissionDeniedException,
                                                                                                                                                 BrokenPipeException,
                                                                                                                                                 InvalidPortException,
@@ -268,14 +268,14 @@ public final class TerminalDevice {
         if (isSerial4jLoggingEnabled()) {
             LOGGER.log(Level.INFO, "Setting reading config to " + readConfiguration.getDescription());
         }
-        final byte timoutByteValue = ((byte) (readConfiguration.getMode()[0] * timeoutValue));
-        final byte minimumBytesValue = ((byte) (readConfiguration.getMode()[1] * minimumBytes));
-        final int errno = nativeTerminalDevice.setReadConfigurationMode0(timoutByteValue, minimumBytesValue);
+        final int timoutByteValue = readConfiguration.getMode()[0] * timeoutValue;
+        final int minimumBytesValue = readConfiguration.getMode()[1] * minimumBytes;
+        final int errno = nativeTerminalDevice.setReadConfigurationMode0(Math.min(255, timoutByteValue), Math.min(255, minimumBytesValue));
         ErrnoToException.throwFromErrno(errno, "port is not invalid.");                                                                            
     }
 
-    public final byte[] getReadConfigurationMode() {
-        return nativeTerminalDevice.getReadConfigurationMode0();
+    public final ReadConfiguration getReadConfigurationMode() {
+        return ReadConfiguration.getFromNativeReadConfig(nativeTerminalDevice.getReadConfigurationMode0());
     }
     
     public final long writeBuffer(final String buffer) throws NoSuchDeviceException,
@@ -292,17 +292,17 @@ public final class TerminalDevice {
             message = "Invalid Port " + nativeTerminalDevice.getSerialPort().getPath(); 
         }
         if (numberOfWrittenBytes < 1) {
-            ErrnoToException.throwFromErrno((int) numberOfWrittenBytes, message);                                                                        
+            ErrnoToException.throwFromErrno(nativeTerminalDevice.getErrno0(), message);                                                                        
         }
         return numberOfWrittenBytes;
     }
 
-    public final long writeData(final int data) throws NoSuchDeviceException,
-                                                       PermissionDeniedException,
-                                                       BrokenPipeException,
-                                                       InvalidPortException,
-                                                       OperationFailedException,
-                                                       NoAvailableTtyDevicesException {
+    public long writeData(final int data) throws NoSuchDeviceException,
+                                                 PermissionDeniedException,
+                                                 BrokenPipeException,
+                                                 InvalidPortException,
+                                                 OperationFailedException,
+                                                 NoAvailableTtyDevicesException {
         final long numberOfWrittenBytes = nativeTerminalDevice.writeData0(data);
         String message;
         if (numberOfWrittenBytes == -1) {
@@ -310,33 +310,24 @@ public final class TerminalDevice {
         } else {
             message = "Invalid Port " + nativeTerminalDevice.getSerialPort().getPath(); 
         }
-        if (numberOfWrittenBytes < 1) {
-            ErrnoToException.throwFromErrno((int) numberOfWrittenBytes, message);                                                                            
+        if (numberOfWrittenBytes < 0) {
+            ErrnoToException.throwFromErrno(nativeTerminalDevice.getErrno0(), message);                                                                            
         }
         return numberOfWrittenBytes;
     }
 
-    public final long writeData(final int[] data) throws NoSuchDeviceException,
-                                                       PermissionDeniedException,
-                                                       BrokenPipeException,
-                                                       InvalidPortException,
-                                                       OperationFailedException,
-                                                       NoAvailableTtyDevicesException {
+    public long writeData(final int[] data) throws NoSuchDeviceException,
+                                                   PermissionDeniedException,
+                                                   BrokenPipeException,
+                                                   InvalidPortException,
+                                                   OperationFailedException,
+                                                   NoAvailableTtyDevicesException {
         long numberOfWrittenBytes = 0;
         for (int i = 0; i < data.length; i++) {
-           numberOfWrittenBytes += nativeTerminalDevice.writeData0(data[i]);
-           if (numberOfWrittenBytes == -1) {
+           numberOfWrittenBytes += this.writeData(data[i]);
+           if (numberOfWrittenBytes < 0) {
                break;
            }
-        }
-        String message;
-        if (numberOfWrittenBytes == -1) {
-            message = "Write Permission [O_WRONLY] isnot granted.";
-        } else {
-            message = "Invalid Port " + nativeTerminalDevice.getSerialPort().getPath(); 
-        }
-        if (numberOfWrittenBytes < 1) {
-            ErrnoToException.throwFromErrno((int) numberOfWrittenBytes, message);                                                                            
         }
         return numberOfWrittenBytes;
     }
