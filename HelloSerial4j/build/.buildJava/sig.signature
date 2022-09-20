@@ -1092,6 +1092,19 @@
  public 
  final 
  long 
+ writeData(int[]) 
+ throws 
+ com.serial4j.core.serial.throwable.NoSuchDeviceException, 
+ com.serial4j.core.serial.throwable.PermissionDeniedException, 
+ com.serial4j.core.serial.throwable.BrokenPipeException, 
+ com.serial4j.core.serial.throwable.InvalidPortException, 
+ com.serial4j.core.serial.throwable.OperationFailedException, 
+ com.serial4j.core.serial.throwable.NoAvailableTtyDevicesException; 
+ descriptor: 
+ ([I)J 
+ public 
+ final 
+ long 
  readData(); 
  descriptor: 
  ()J 
@@ -1457,20 +1470,20 @@
  fd; 
  descriptor: 
  I 
+ private 
+ int 
+ ioFlag; 
+ descriptor: 
+ I 
  public 
  com.serial4j.core.serial.SerialPort(java.lang.String); 
  descriptor: 
  (Ljava/lang/String;)V 
  public 
- void 
- setFd(int); 
+ int 
+ getIOFlag(); 
  descriptor: 
- (I)V 
- public 
- void 
- setPath(java.lang.String); 
- descriptor: 
- (Ljava/lang/String;)V 
+ ()I 
  public 
  java.lang.String 
  getPath(); 

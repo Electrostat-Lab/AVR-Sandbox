@@ -163,7 +163,7 @@ public final class HelloNativeSerial4J extends Thread {
 				try {
 					/* write a buffer (array of chars) and close the port */
 					Thread.sleep(millis);
-					ttyDevice.writeBuffer("AB");
+					ttyDevice.writeData(new int[] {'A', 'B'});
 					Thread.sleep(millis / 2);
 					ttyDevice.closePort();
 				} catch (Exception e) {

@@ -316,6 +316,31 @@ public final class TerminalDevice {
         return numberOfWrittenBytes;
     }
 
+    public final long writeData(final int[] data) throws NoSuchDeviceException,
+                                                       PermissionDeniedException,
+                                                       BrokenPipeException,
+                                                       InvalidPortException,
+                                                       OperationFailedException,
+                                                       NoAvailableTtyDevicesException {
+        long numberOfWrittenBytes = 0;
+        for (int i = 0; i < data.length; i++) {
+           numberOfWrittenBytes += nativeTerminalDevice.writeData0(data[i]);
+           if (numberOfWrittenBytes == -1) {
+               break;
+           }
+        }
+        String message;
+        if (numberOfWrittenBytes == -1) {
+            message = "Write Permission [O_WRONLY] isnot granted.";
+        } else {
+            message = "Invalid Port " + nativeTerminalDevice.getSerialPort().getPath(); 
+        }
+        if (numberOfWrittenBytes < 1) {
+            ErrnoToException.throwFromErrno((int) numberOfWrittenBytes, message);                                                                            
+        }
+        return numberOfWrittenBytes;
+    }
+
     public final long readData() {
         return nativeTerminalDevice.readData0();
     }

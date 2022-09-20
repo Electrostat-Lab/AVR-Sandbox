@@ -41,27 +41,54 @@ public final class SerialPort {
    private String path;
    private int portOpened;
    private int fd;
+   private int ioFlag;
 
+   /**
+    * Instantiates a new serial port for a terminal device with a port path.
+    * The rest of the port data is assigned from the jni side after opening the device.
+    * 
+    * @param path the port path on the file system.
+    */
    public SerialPort(final String path) {
         this.path = path;
    }
 
-   public void setFd(int fd) {
-       this.fd = fd;
+  /**
+   * Gets the io flags defined by the {@link com.serial4j.core.serial.Permissions}.
+   * The io flags setter is assigned from the jni side by {@link com.serial4j.core.serial.NativeTerminalDevice#openPort(String, int)}.
+   * 
+   * @return a number format representing the IO flag for the POSIX base file api.
+   */
+   public int getIOFlag() {
+       return ioFlag;
    }
-
-   public void setPath(String path) {
-       this.path = path;
-   }
-
+   
+  /**
+   * Gets the path to this port.
+   * 
+   * @return a String representing the path to this port.
+   */
    public String getPath() {
        return path;
    }
-
+   
+  /**
+   * Gets the virtual file descriptor defining this port.
+   * The fd (file descriptor) setter is assigned from the jni side by {@link com.serial4j.core.serial.NativeTerminalDevice#openPort(String, int)}.
+   * 
+   * @return a number format representing the file descriptor for this port.
+   */
    public int getFd() {
        return fd;
    }
 
+  /**
+   * Tests whether this port is still opened.
+   * This flag setter is assigned from the jni side by {@link com.serial4j.core.serial.NativeTerminalDevice#openPort(String, int)} 
+   * and {@link com.serial4j.core.serial.NativeTerminalDevice#closePort()}. 
+   * 
+   * @return true if the port is still alive, false if the port is closed.
+   */
    public boolean isPortOpened() {
        return this.portOpened == 1;
    }
