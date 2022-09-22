@@ -32,9 +32,8 @@
 package com.serial4j.core.serial.throwable;
 
 import com.serial4j.core.errno.Errno;
-import com.serial4j.core.serial.throwable.SerialThrowable;
 
-public class NoAvailableTtyDevicesException extends RuntimeException implements SerialThrowable {
+public class NoAvailableTtyDevicesException extends SerialThrowable {
     
     public NoAvailableTtyDevicesException(final String additionalText) {
         super(Errno.ERR_NO_AVAILABLE_TTY_DEVICES.getDescription() + "\n" + additionalText);

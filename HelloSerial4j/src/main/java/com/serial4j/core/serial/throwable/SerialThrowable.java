@@ -38,12 +38,16 @@ import com.serial4j.core.errno.Errno;
  *
  * @author pavl_g.
  */
-public interface SerialThrowable {
+public abstract class SerialThrowable extends RuntimeException {
     
+    public SerialThrowable(String message) {
+        super(message);
+    }
+
     /**
      * Gets the causing error code.
      *
      * @return the error code causing this exception.
      */
-    Errno getCausingErrno();
+    abstract Errno getCausingErrno();
 }

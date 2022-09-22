@@ -40,7 +40,6 @@ import com.serial4j.core.serial.SerialPort;
 import com.serial4j.core.serial.TerminalDevice;
 import com.serial4j.core.serial.ReadConfiguration;
 import com.serial4j.core.serial.throwable.PermissionDeniedException;
-import com.serial4j.example.HelloNativeSerial4J;
 import com.serial4j.core.serial.throwable.BrokenPipeException;
 import com.serial4j.core.serial.throwable.NoSuchDeviceException;
 import com.serial4j.core.serial.throwable.InvalidPortException;

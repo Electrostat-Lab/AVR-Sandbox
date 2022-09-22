@@ -42,7 +42,7 @@ import com.serial4j.core.serial.throwable.SerialThrowable;
  *
  * @author pavl_g.
  */
-public class PermissionDeniedException extends IOException implements SerialThrowable {
+public class PermissionDeniedException extends SerialThrowable {
 
     /**
      * Instantiates a permission exception with an additionaltext and error code [13].

@@ -46,7 +46,7 @@ public enum ReadConfiguration {
     BLOCKING_READ_ONE_CHAR(new int[] {0, 1}, "Blocking read one charachter at a time"),
     READ_WITH_TIMEOUT(new int[] {1, 0}, "Polling Read with timeout"),
     READ_WITH_INTERBYTE_TIMEOUT(new int[] {1, 1}, "Blocking read with timeout"),
-    ERR_INVALID_PORT(new int[] {(int) Errno.EINVALID_PORT.getValue(), (int) Errno.EINVALID_PORT.getValue()}, "Error invalid port");
+    ERR_INVALID_PORT(new int[] {(int) Errno.ERR_INVALID_PORT.getValue(), (int) Errno.ERR_INVALID_PORT.getValue()}, "Error invalid port");
 
     private int[] mode;
     private final String description;
@@ -72,7 +72,7 @@ public enum ReadConfiguration {
             readConfiguration = ReadConfiguration.POLLING_READ;
         } else if (nativeReadConfig[0] >= 1 && nativeReadConfig[1] >= 1) {
             readConfiguration = ReadConfiguration.READ_WITH_INTERBYTE_TIMEOUT;
-        } else if ((nativeReadConfig[0] & nativeReadConfig[1]) == Errno.EINVALID_PORT.getValue()) {
+        } else if ((nativeReadConfig[0] & nativeReadConfig[1]) == Errno.ERR_INVALID_PORT.getValue()) {
             throw new InvalidPortException("Cannot get read configuration for an invalid port !");
         } else {
             readConfiguration = ReadConfiguration.READ_WITH_TIMEOUT;

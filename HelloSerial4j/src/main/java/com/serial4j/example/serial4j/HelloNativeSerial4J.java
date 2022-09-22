@@ -84,7 +84,7 @@ public final class HelloNativeSerial4J extends Thread {
 																.disable(TerminalOutputFlag.OPOST, TerminalOutputFlag.ONLCR);
 			final TerminalInputFlag TIF_VALUE = (TerminalInputFlag) TerminalInputFlag.EMPTY_INSTANCE.disableAll();
 			/* open the serial port using the path or the name */
-			ttyDevice.openPort(new SerialPort(ttyDevice.getSerialPorts()[0]));
+			ttyDevice.openPort(new SerialPort("/dev/ttyUSB0"));
 			/* initialize the terminal IO with the default terminal flags */
 			ttyDevice.initTermios();
 			/* print the initial terminal control flags as long value */
@@ -110,12 +110,7 @@ public final class HelloNativeSerial4J extends Thread {
 			// /* start the R/W threads */
 			startReadThread(ttyDevice, 0);
 			startWriteThread(ttyDevice, 20000);
-		} catch(NoSuchDeviceException |
-				PermissionDeniedException |
-				BrokenPipeException |
-				InvalidPortException |
-				OperationFailedException |
-				FileNotFoundException e) {
+		} catch(FileNotFoundException e) {
 			e.printStackTrace();
 		}
 		

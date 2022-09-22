@@ -54,7 +54,7 @@ int DynamicBuffer::getItemIndex(void* item) {
             return i;
         }
     }
-    return OPERATION_FAILED;
+    return ERR_OPERATION_FAILED;
 }
 
 int* DynamicBuffer::getItemsCount() {

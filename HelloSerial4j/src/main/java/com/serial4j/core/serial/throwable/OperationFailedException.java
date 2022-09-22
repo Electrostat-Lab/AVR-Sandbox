@@ -41,7 +41,7 @@ import com.serial4j.core.serial.throwable.SerialThrowable;
  *
  * @author pavl_g.
  */
-public final class OperationFailedException extends RuntimeException implements SerialThrowable {
+public final class OperationFailedException extends SerialThrowable {
 
     /**
      * Instantiates an operation failed java exceptions with error code (-1).
@@ -49,11 +49,11 @@ public final class OperationFailedException extends RuntimeException implements 
      * @param additionalText additional text to add to the exception message.
      */
     public OperationFailedException(final String additionalText) {
-        super(Errno.EOPERATION_FAILED.getDescription() + "\n" + additionalText);
+        super(Errno.ERR_OPERATION_FAILED.getDescription() + "\n" + additionalText);
     }
     
     @Override
     public Errno getCausingErrno() {
-        return Errno.EOPERATION_FAILED;
+        return Errno.ERR_OPERATION_FAILED;
     }
 }

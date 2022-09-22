@@ -74,7 +74,7 @@ namespace JniUtils {
      */
     static inline int setupJavaEnvironment(JNIEnv* env, jint version) {
         if (env == NULL) {
-            return OPERATION_FAILED;
+            return ERR_OPERATION_FAILED;
         }
         env->GetJavaVM(&JniUtils::jvm);
         JniUtils::version = version;

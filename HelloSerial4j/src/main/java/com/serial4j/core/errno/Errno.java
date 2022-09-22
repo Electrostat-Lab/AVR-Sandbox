@@ -31,6 +31,8 @@
  */
 package com.serial4j.core.errno;
 
+import com.serial4j.core.serial.NativeTerminalDevice;
+
 /**
  * Interprets the native methods bad return values into error codes,
  * used by the java {@link com.serial4j.core.errno.ErrnoToException} 
@@ -39,12 +41,49 @@ package com.serial4j.core.errno;
  * @author pavl_g.
  */
 public enum Errno {
-    ENOENT(2, "No Such file or directory"),
-    EACCES(13, "Permission denied"),
-    EPIPE(32, "Broken pipe"),
-    EINVALID_PORT(-2, "Invalid Port"),
-    EOPERATION_FAILED(-1, "Operation Failed"),
-    ERR_NO_AVAILABLE_TTY_DEVICES(-4, "No available teletype devices");
+    /**
+     * Serial4j business errors.
+     */
+    ERR_INVALID_PORT(NativeErrno.getInvalidPortErrno(), "Invalid Port"),
+    ERR_OPERATION_FAILED(NativeErrno.getOperationFailedErrno(), "Operation Failed"),
+    ERR_NO_AVAILABLE_TTY_DEVICES(NativeErrno.getNoAvailableTtyDevicesErrno(), "No available teletype devices"),
+
+    /**
+     * Error codes for open(const char*, int), file names and IO.
+     */
+    EACCES(NativeErrno.getPermissionDeniedErrno(), "Permission denied"),
+    EEXIST(NativeErrno.getFileAlreadyOpenedErrno(), "File exists"),
+    EINTR(NativeErrno.getInterruptedSystemCallErrno(), "Interrupted system call"),
+    EISDIR(NativeErrno.getFileIsDirectoryErrno(), "Is a directory"),
+    EMFILE(NativeErrno.getTooManyOpenedFilesErrno(), "Too many open files"),
+    ENFILE(NativeErrno.getFileTableOverflowErrno(), "File table overflow"),
+    ENOENT(NativeErrno.getNoSuchFileErrno(), "No Such file or directory"),
+    ENOSPC(NativeErrno.getNoSpaceLeftErrno(), "No space left on device"),
+    ENXIO(NativeErrno.getNoSuchDeviceErrno(), "No such device or address"),
+    EROFS(NativeErrno.getReadOnlyFileSystemErrno(), "Read-only file system"),
+    EPIPE(NativeErrno.getBrokenPipeErrno(), "Broken pipe"),
+
+    /**
+     * Error codes for tcgetattr(int, struct termios*) and tcsetattr(int, struct termios*).
+     */
+    EBADF(NativeErrno.getBadFileDescriptorErrno(), "File descriptor in bad state"),
+    ENOTTY(NativeErrno.getNotTtyDeviceErrno(), "Not a typewriter device"),
+
+    /**
+     * tcsetattr(int, struct termios*) only.
+     */
+    EINVAL(NativeErrno.getInvalidArgumentErrno(), "Invalid argumnet"),
+
+    /**
+     * Additional error codes for basic R/W from <fcntl.h>
+     */
+    EAGAIN(NativeErrno.getTryAgainErrno(), "Try again"),
+    EIO(NativeErrno.getInputOutputErrno(), "I/O Error"),
+
+    /**
+     * For write(int, void*, int); only.
+     */
+    EFBIG(NativeErrno.getFileTooLargeErrno(), "File too large");
 
     private final int value;
     private final String description;

@@ -164,9 +164,10 @@ public final class NativeImageLoader {
             final InputStream nativeImageIS = NativeImageLoader.class.getClassLoader().getResourceAsStream(image.getImage());
             final byte[] buffer = new byte[nativeImageIS.available()];
             final FileOutputStream fos = new FileOutputStream(workingDirectory + "/libserial4j.so");  
-            int result = 0;
-            while ((result = nativeImageIS.read(buffer)) != -1) {
-                fos.write(buffer, 0, buffer.length);
+            int numberOfReadBytes = 0;
+            while ((numberOfReadBytes = nativeImageIS.read(buffer)) != -1) {
+                /* use the numberOfReadBytes as the buffer length to write valid data */
+                fos.write(buffer, 0, numberOfReadBytes);
             }
             nativeImageIS.close();
             fos.close();

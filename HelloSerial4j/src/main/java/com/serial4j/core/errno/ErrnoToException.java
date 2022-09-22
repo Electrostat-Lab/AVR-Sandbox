@@ -62,24 +62,18 @@ public final class ErrnoToException {
      * @throws OperationFailedException in case of errno(-1).
      * @throws NoAvailableTtyDevicesException in case of errno(-4).
      */
-    public static void throwFromErrno(final int errno, final String additionalText) 
-                                                       throws NoSuchDeviceException,
-                                                              PermissionDeniedException,
-                                                              BrokenPipeException,
-                                                              InvalidPortException,
-                                                              OperationFailedException,
-                                                              NoAvailableTtyDevicesException {
+    public static void throwFromErrno(final int errno, final String additionalText) {                                                    
         if (errno == Errno.ENOENT.getValue()) {
             throw new NoSuchDeviceException(additionalText);
         } else if (errno == Errno.EACCES.getValue()) {
             throw new PermissionDeniedException(additionalText);
         } else if (errno == Errno.EPIPE.getValue()) {
             throw new BrokenPipeException(additionalText);
-        } else if (errno == Errno.EINVALID_PORT.getValue()) {
+        } else if (errno == Errno.ERR_INVALID_PORT.getValue()) {
             throw new InvalidPortException(additionalText);
         } else if (errno == Errno.ERR_NO_AVAILABLE_TTY_DEVICES.getValue()) {
             throw new NoAvailableTtyDevicesException(additionalText);
-        } else if (errno == Errno.EOPERATION_FAILED.getValue()) {
+        } else if (errno == Errno.ERR_OPERATION_FAILED.getValue()) {
             throw new OperationFailedException(additionalText);
         }
     }

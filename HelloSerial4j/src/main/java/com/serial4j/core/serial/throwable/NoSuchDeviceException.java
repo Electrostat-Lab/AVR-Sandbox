@@ -31,19 +31,16 @@
  */
 package com.serial4j.core.serial.throwable;
 
-import java.io.IOException;
-import java.nio.file.NoSuchFileException;
 import com.serial4j.core.errno.Errno;
-import com.serial4j.core.serial.throwable.SerialThrowable;
 
-public final class NoSuchDeviceException extends NoSuchFileException implements SerialThrowable {
+public final class NoSuchDeviceException extends SerialThrowable {
 
     public NoSuchDeviceException(final String additionalText) {
-        super(Errno.ENOENT.getDescription() + "\n" + additionalText);
+        super(Errno.ENXIO.getDescription() + "\n" + additionalText);
     }
     
     @Override
     public Errno getCausingErrno() {
-        return Errno.ENOENT;
+        return Errno.ENXIO;
     }
 }

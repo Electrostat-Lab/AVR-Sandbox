@@ -35,15 +35,15 @@ import java.lang.RuntimeException;
 import com.serial4j.core.serial.throwable.SerialThrowable;
 import com.serial4j.core.errno.Errno;
 
-public final class InvalidPortException extends RuntimeException implements SerialThrowable {
+public final class InvalidPortException extends SerialThrowable {
 
     public InvalidPortException(final String portName) {
-        super(Errno.EINVALID_PORT.getDescription() + "\n" + portName);
+        super(Errno.ERR_INVALID_PORT.getDescription() + "\n" + portName);
     }
 
     @Override
     public Errno getCausingErrno() {
-        return Errno.EINVALID_PORT;
+        return Errno.ERR_INVALID_PORT;
     }
 
 }

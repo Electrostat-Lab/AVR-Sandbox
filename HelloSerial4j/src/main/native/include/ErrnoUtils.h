@@ -38,11 +38,13 @@
 #ifndef ERRNO_UTILS
 #define ERRNO_UTILS
 
+#include<errno.h>
+
 #define ERR_INVALID_PORT (-2)
 #define ERR_INVALID_DIR (-3)
 #define ERR_NO_RESULT (0)
 #define LOGGER_DISABLED (-5)
-#define OPERATION_FAILED (-1)
+#define ERR_OPERATION_FAILED (-1)
 #define ERR_NO_AVAILABLE_TTY_DEVICES (-4)
 
 #define OPERATION_SUCCEEDED (1)
