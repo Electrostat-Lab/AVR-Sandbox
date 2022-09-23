@@ -101,8 +101,18 @@
     ``` 
     
 - SPI (Serial Peripheral Interface):
+    1) Interface with MCP3008 and send data over UART to the arduino serial monitor.
 
 - Timers:
-  1) Kitchen microwave timer with a buzzer.
-  2) Modify any of the above projects to use the timer interrupt service routine.
+     1) Kitchen microwave timer with a buzzer.
+     2) Modify any of the above projects to use the timer interrupt service routine.
 
+     <br>
+    
+    ```
+    After these tasks, the learner should be able to:
+    1) Understand how timers work.
+    2) Understand how to initialize timers and set its deadline.
+    3) Understand timer interrupts.
+
+    ```
