@@ -61,12 +61,22 @@
     6) Learn how to debug using LCD and/or UART communications.
     ```
 - ADC (Analog Digital Converter):
-
+    1) Voltage reader device monitor using LCD (or UART) and ADC.
+    2) UART Ultrasonic obstacle detector sensor.
+    <br>
+    
+    ```
+    After these tasks, the learner should be able to:
+    1) Understand the initialization of ADC.
+    2) Understand the basic 8-bit read.
+    3) Understand how to read a 10-bit data.
+    4) Understand the Vref and how to set it up.
+    ```
 
 - UART (Universal Async R/T):
     1) UART controllable robot prototype (via Arduino IDE serial monitor).
     2) UART controllable LCD screen (displays what is typed in the serial monitor console).
-    3) UART Ultrasonic obstacle detector sensor.
+    
     <br>
     
     ```
