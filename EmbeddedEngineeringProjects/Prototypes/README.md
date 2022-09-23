@@ -48,6 +48,8 @@
     5) LED Matrix (4x4, 5x5, 6x6 ..etc, choose your own).
     6) Basic electric piano using push buttons and a buzzer.
     7) Basic music player using push buttons, a buzzer and LCD for switching songs (add 2 songs in code).
+    8) UART Ultrasonic obstacle detector sensor.
+    9) Ultrasonic eye using an LED screen.
     <br>
     
     ```
@@ -62,7 +64,7 @@
     ```
 - ADC (Analog Digital Converter):
     1) Voltage reader device monitor using LCD (or UART) and ADC.
-    2) UART Ultrasonic obstacle detector sensor.
+    2) Temperature controllable CPU fan.
     <br>
     
     ```
