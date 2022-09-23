@@ -64,7 +64,6 @@
     ```
 - ADC (Analog Digital Converter):
     1) Voltage reader device monitor using LCD (or UART) and ADC.
-    2) Temperature controllable CPU fan.
     <br>
     
     ```
@@ -104,6 +103,7 @@
     
 - SPI (Serial Peripheral Interface):
     1) Interface with the 10-bit MCP3008 ADC and send data over UART to the arduino serial monitor.
+    2) Temperature controllable CPU fan (PWM + SPI).
     <br>
     
     ```
