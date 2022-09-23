@@ -103,7 +103,7 @@ public final class NativeImageLoader {
         }
     }
 
-    protected static final Semaphore.Mutex MUTEX = Semaphore.Mutex.SIMPLE_MUTEX;
+    protected static final Semaphore.Mutex MUTEX = new Semaphore.Mutex();
 	protected static final Semaphore SEMAPHORE = Semaphore.build(MUTEX);
     
     private static boolean isLoaded = false;

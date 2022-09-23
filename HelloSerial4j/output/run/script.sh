@@ -8,5 +8,5 @@ source variables.sh
 
 function run() {
     cd $project_root'/output/'$jar_folder
-    $java -jar 'serial4j.jar'
+    $java --enable-preview -jar 'serial4j.jar'
 }

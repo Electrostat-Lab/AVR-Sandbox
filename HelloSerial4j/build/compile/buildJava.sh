@@ -27,7 +27,7 @@ function generateHeaders() {
     cd $javabuild_directory
     java_sources=`find -name "*.java"`
     # creates C headers file for java natives.
-    $javac -cp '.:'$dependencies -h . $java_sources -Xlint:unchecked
+    $javac -cp '.:'$dependencies -h .  $java_sources -Xlint:unchecked --release '19' --enable-preview
     result=$?
     # generate a methods signature file to help in invocation api
     bytecode=`find -name "*.class"`

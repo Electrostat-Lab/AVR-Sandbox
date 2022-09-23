@@ -60,9 +60,10 @@ import java.util.ArrayList;
  *
  * @author pavl_g.
  */
-public final class SerialMonitor extends ThreadGroup {
+public final class SerialMonitor {
 
     private final ArrayList<SerialDataListener> serialDataListeners = new ArrayList<>();
+    private final String monitorName;
 
     public volatile EntityStatus<SerialReadEntity> serialReadEntityEntityStatus;
     public volatile EntityStatus<SerialWriteEntity> serialWriteEntityEntityStatus;
@@ -84,10 +85,10 @@ public final class SerialMonitor extends ThreadGroup {
      * Use {@link SerialMonitor#startDataMonitoring(String, int)} to initialize and start
      * data monitoring.
      *
-     * @param monitorName the name for this thread group.
+     * @param monitorName the name for this monitor.
      */
     public SerialMonitor(final String monitorName) {
-        super(monitorName);
+        this.monitorName = monitorName;
     }
 
     /**
@@ -103,7 +104,6 @@ public final class SerialMonitor extends ThreadGroup {
                                                                                                                        OperationFailedException,
                                                                                                                        NoAvailableTtyDevicesException,
                                                                                                                        FileNotFoundException {  
-        setMaxPriority(Thread.MAX_PRIORITY);
         /* ignore timeout strategy */
         terminalDevice = new TerminalDevice();
         terminalDevice.setSerial4jLoggingEnabled(true);
@@ -135,13 +135,15 @@ public final class SerialMonitor extends ThreadGroup {
         writeEntityStream = terminalDevice.getOutputStream();
 
         serialWriteEntity = new SerialWriteEntity(this);
-        serialWriteEntity.setPriority(Thread.MIN_PRIORITY);
-        serialWriteEntity.start();
+        Thread.ofPlatform().start(serialWriteEntity);
 
         serialReadEntity = new SerialReadEntity(this);
-        serialWriteEntity.setPriority(Thread.MAX_PRIORITY);
-        serialReadEntity.start();
+        Thread.ofPlatform().start(serialReadEntity);
 
+    }
+
+    public String getMonitorName() {
+        return monitorName;
     }
 
     /**

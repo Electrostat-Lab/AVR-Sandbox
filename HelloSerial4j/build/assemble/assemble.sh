@@ -49,6 +49,24 @@ fi
 
 echo -e $RESET_Cs
 
+generate_docs=`generateDocs`
+if (( generate_docs > 0 )); then
+    echo -e "$RED_C Task@GenerateJavaDocs : Failed"
+else
+    echo -e "$ORANGE_C Task@GenerateJavaDocs : Completed"
+fi
+
+echo -e $RESET_Cs
+
+add_docs=`addJavaDocs`
+if (( add_docs > 0 )); then 
+    echo -e "$RED_C Task@AddJavaDocs : Failed"
+else
+    echo -e "$MAGNETA_C Task@AddJavaDocs : Completed"
+fi
+
+echo -e $RESET_Cs
+
 add_natives=`addDesktopNativeDependencies`
 if (( add_natives > 0 )); then 
     echo -e "$RED_C Task@AddDesktopNativeDependencies : Failed"
@@ -81,6 +99,33 @@ if (( create_jar > 0 )); then
     echo -e "$RED_C Task@CreateJar : Failed"
 else
     echo -e "$ORANGE_C Task@CreateJar : Completed"
+fi
+
+echo -e $RESET_Cs
+
+create_docsjar=`createDocsJar`
+if (( create_jar > 0 )); then 
+    echo -e "$RED_C Task@CreateDocsJar : Failed"
+else
+    echo -e "$ORANGE_C Task@CreateDocsJar : Completed"
+fi
+
+echo -e $RESET_Cs
+
+create_output=`createOutput`
+if (( create_jar > 0 )); then 
+    echo -e "$RED_C Task@CreateOutput : Failed"
+else
+    echo -e "$WHITE_C Task@CreateOutput : Completed"
+fi
+
+echo -e $RESET_Cs
+
+remove_manifest=`removeManifest`
+if (( create_jar > 0 )); then 
+    echo -e "$RED_C Task@RemoveManifest : Failed"
+else
+    echo -e "$WHITE_C Task@RemoveManifest : Completed"
 fi
 
 echo -e $RESET_Cs

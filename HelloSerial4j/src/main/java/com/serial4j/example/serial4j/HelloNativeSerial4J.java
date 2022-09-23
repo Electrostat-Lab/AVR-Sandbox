@@ -35,6 +35,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Arrays;
 import java.io.FileNotFoundException;
+import java.util.logging.Logger;
 import com.serial4j.core.serial.control.TerminalControlFlag;
 import com.serial4j.core.serial.control.TerminalLocalFlag;
 import com.serial4j.core.serial.control.TerminalOutputFlag;
@@ -56,15 +57,18 @@ import com.serial4j.core.serial.throwable.OperationFailedException;
  *
  * @author pavl_g.
  */
-public final class HelloNativeSerial4J extends Thread {
+public final class HelloNativeSerial4J implements Runnable {
 
 	/**
 	 * Provides a java binding to a native terminal device.
 	 */
 	protected final TerminalDevice ttyDevice = new TerminalDevice();
+
+	protected static final Logger EXAMPLE_LOGGER = Logger.getLogger(HelloNativeSerial4J.class.getName());
 	
 	@Override
 	public void run() {
+		System.out.println(Thread.currentThread());
 		try {
 			System.out.println("Started native io example: ");
 			/* set port permissions */

@@ -5,6 +5,18 @@
 #*#
 
 source variables.sh
+source generatedocs.sh
+
+function makeDir() {
+    local folder=$1
+    
+    if [[ ! -d $folder ]]; then
+        if [[ ! `mkdir $folder` -eq 0 ]]; then
+            errors=$(( $errors + 1 ))
+        fi
+    fi
+    return $errors
+}
 
 #**
 #* Makes an output directory at the output location.
@@ -14,11 +26,9 @@ source variables.sh
 function makeOutputDir() {
     local errors
     cd $javabuild_directory
-    if [[ ! -d $jar_folder ]]; then
-        if [[ ! `mkdir $jar_folder` -eq 0 ]]; then
-            errors=$(( $errors + 1 ))
-        fi
-    fi
+    
+    makeDir $jar_folder
+
     return $errors
 }
 
@@ -36,7 +46,32 @@ function createManifest() {
     if [[ ! `echo $mainclass >> Manifest.mf` -eq 0 ]]; then
         errors=$(( $errors + 1 ))
     fi
+    if [[ ! `echo $api_name >> Manifest.mf` -eq 0 ]]; then
+        errors=$(( $errors + 1 ))
+    fi
+    if [[ ! `echo $version >> Manifest.mf` -eq 0 ]]; then
+        errors=$(( $errors + 1 ))
+    fi
     return $errors
+}
+
+#**
+#* Adds the API generated java docs from the javadoc tool.
+#
+#* @return the number of errors, 0 if no errors, 1 or 2 if there are errors.
+#**
+function addJavaDocs() {
+    local errors=0
+    cd $project_root
+	
+    if [[ $docs_dir ]]; then
+        # copy the object file to the build dir
+        if [[ ! `cp -r $docs_dir $jar_tmp` -eq 0 ]]; then
+            errors=$(( $errors + 1 ))
+        fi   
+    fi   
+    return $errors
+
 }
 
 #**
@@ -103,25 +138,47 @@ function addAssets() {
     return $errors
 }
 
+function createDocsJar() {
+    local errors=0
+    # get the manifest file to link it
+    cd $docs_tmp
+    if [[ ! `$java_jar --create --file $java_docs_jar --manifest $manifest_file './'` -eq 0 ]]; then 
+        errors=$(( $errors + 1 ))
+    fi
+	
+    # move the jar to its respective output folder
+    mv $java_docs_jar $jar_tmp
+    
+	rm -r $docs_tmp
+	return $errors
+}
+
 function createJar() {
     local errors=0
     # get the manifest file to link it
     cd $javabuild_directory
-    manifest_file=$jar_folder'/Manifest.mf'
     # get the class files ready
     bytecode=`find -name "*.class"`
     # command and output a jar file with linked manifest, java class files and object files
-    if [[ ! `$java_jar cmf $manifest_file $jar $bytecode` -eq 0 ]]; then 
+    if [[ ! `$java_jar --create --file $jar --manifest $manifest_file $bytecode -C $jar_tmp './native'` -eq 0 ]]; then 
         errors=$(( $errors + 1 ))
     fi
-    $java_jar uf $jar -C $jar_tmp './native'
-	rm -r $jar_tmp'/native/'
+	
     # move the jar to its respective output folder
     mv $jar $jar_tmp
+
+	rm -r $jar_tmp'/native/'
+
+    return $errors
+}
+
+function createOutput() {
     # move the jar directory containing the jar and the assets to the output directory
     mv $jar_tmp $project_root'/output'
+}
+
+function removeManifest() {
     # remove the residual manifest file
     cd $project_root'/output/'$jar_folder
     rm 'Manifest.mf'
-    return $errors
 }

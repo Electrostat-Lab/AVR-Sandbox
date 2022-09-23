@@ -34,6 +34,9 @@ package com.serial4j.core.serial.entity;
 import com.serial4j.core.serial.TerminalDevice;
 import com.serial4j.core.serial.monitor.SerialDataListener;
 import com.serial4j.core.serial.monitor.SerialMonitor;
+import com.serial4j.core.util.process.Semaphore;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 import java.io.Closeable;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -45,7 +48,15 @@ import java.util.ArrayList;
  *
  * @author pavl_g.
  */
-public abstract class SerialMonitorEntity extends Thread {
+public abstract class SerialMonitorEntity implements Runnable {
+
+    protected final Semaphore.Mutex MUTEX = new Semaphore.Mutex();
+	protected final Semaphore SEMAPHORE = Semaphore.build(MUTEX);
+
+    private final Logger entityLogger;
+    private boolean hasLoggedMonitor;
+    private final SerialMonitor serialMonitor;
+    private final String entityName;
 
     /**
      * Defines a serial monitor basic entity.
@@ -54,12 +65,22 @@ public abstract class SerialMonitorEntity extends Thread {
      * @param entityName the entity name.
      */
     public SerialMonitorEntity(SerialMonitor serialMonitor, String entityName) {
-        super(serialMonitor, entityName);
+        this.serialMonitor = serialMonitor;
+        this.entityName = entityName;
+
+        entityLogger = Logger.getLogger(entityName);
+        initMutexWithLockData();
     }
 
     @Override
     public void run() {
-        onDataMonitored((SerialMonitor) getThreadGroup());
+        /* using re-entrant block to be optimized by the new vthreads system */
+        SEMAPHORE.lock(this);
+        if (!hasLoggedMonitor) {
+            entityLogger.log(Level.INFO, "Started data monitoring for " + entityName + " thread " + Thread.currentThread());
+        }
+        onDataMonitored(getSerialMonitor());
+        SEMAPHORE.unlock(this);
     }
 
     /**
@@ -68,6 +89,8 @@ public abstract class SerialMonitorEntity extends Thread {
     protected void terminate() {
         try {
             getEntityStream().close();
+            hasLoggedMonitor = false;
+            entityLogger.log(Level.WARNING, "Terminated data monitoring for " + entityName + " thread " + Thread.currentThread());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -116,7 +139,7 @@ public abstract class SerialMonitorEntity extends Thread {
      * @return the serial monitor object that holds this entity.
      */
     public SerialMonitor getSerialMonitor() {
-        return ((SerialMonitor) getThreadGroup());
+        return serialMonitor;
     }
 
     /**
@@ -185,4 +208,9 @@ public abstract class SerialMonitorEntity extends Thread {
      * @return a stream provided by the SerialPort.
      */
     protected abstract Closeable getEntityStream();
+
+    private void initMutexWithLockData() {
+        MUTEX.setLockData(this);
+        MUTEX.setMonitorObject(this);
+    }
 }

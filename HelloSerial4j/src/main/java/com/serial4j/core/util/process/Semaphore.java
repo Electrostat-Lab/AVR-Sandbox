@@ -43,17 +43,19 @@ public final class Semaphore {
     private final Mutex mutex;
     private static final Logger logger = Logger.getLogger(Semaphore.class.getName());
 
-    public enum Mutex {
-        SIMPLE_MUTEX(new Object(), new Object(), new Object());
-
+    public static final class Mutex {
         private Object lockData;
         private Object monitorObject;
         private Object unlockData;
 
-        <O, LD, ULD> Mutex(final O monitorObject, final LD lockData, final ULD unlockData) {
+        public <O, LD, ULD> Mutex(final O monitorObject, final LD lockData, final ULD unlockData) {
             this.monitorObject = monitorObject;
             this.lockData = lockData;
             this.unlockData = unlockData;
+        }
+
+        public Mutex() {
+            this(new Object(), new Object(), new Object());
         }
 
         public void setLockData(Object lockData) {

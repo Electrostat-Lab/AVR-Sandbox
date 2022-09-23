@@ -51,7 +51,7 @@ import com.serial4j.core.serial.Permissions;
  * 
  * @author pavl_g.
  */
-public final class HelloSerial4jIO extends Thread {
+public final class HelloSerial4jIO implements Runnable {
 
     /**
      * Provides a java binding to the native terminal device.

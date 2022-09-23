@@ -64,7 +64,6 @@ import com.serial4j.core.serial.throwable.FileTableOverflowException;
 import com.serial4j.core.serial.throwable.NoSuchFileException;
 import com.serial4j.core.serial.throwable.NoSpaceLeftException;
 import com.serial4j.core.serial.throwable.InvalidPortException;
-import com.serial4j.core.serial.throwable.OperationFailedException;
 import com.serial4j.core.serial.throwable.NoAvailableTtyDevicesException;
 
 /**
@@ -129,7 +128,6 @@ public final class TerminalDevice {
      * @throws NoSpaceLeftException if an attempt is made to open a device while there is no space left.
      * @throws ReadOnlyFileSystemException if an attempt is made to open a read-only device.
      * @throws PermissionDeniedException if an unauthorized user attempts to open this device.
-     * @throws OperationFailedException if an attempt to open this port has failed for any other reasons.
      */
     public void openPort(final SerialPort serialPort) throws NoSuchDeviceException,
                                                              NoSuchFileException,
@@ -140,8 +138,7 @@ public final class TerminalDevice {
                                                              FileTableOverflowException,
                                                              NoSpaceLeftException,
                                                              ReadOnlyFileSystemException,
-                                                             PermissionDeniedException,
-                                                             OperationFailedException {                                                           
+                                                             PermissionDeniedException {                                                           
         if (isSerial4jLoggingEnabled()) {
             LOGGER.log(Level.INFO, "Opening serial device " + serialPort.getPath());
         }

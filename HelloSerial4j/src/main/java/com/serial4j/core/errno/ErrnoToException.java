@@ -32,6 +32,14 @@
 package com.serial4j.core.errno;
 
 import com.serial4j.core.serial.throwable.PermissionDeniedException;
+import com.serial4j.core.serial.throwable.BadFileDescriptorException;
+import com.serial4j.core.serial.throwable.FileAlreadyOpenedException;
+import com.serial4j.core.serial.throwable.FileIsDirectoryException;
+import com.serial4j.core.serial.throwable.FileTableOverflowException;
+import com.serial4j.core.serial.throwable.FileTooLargeException;
+import com.serial4j.core.serial.throwable.InputOutputException;
+import com.serial4j.core.serial.throwable.InterruptedSystemCallException;
+
 import com.serial4j.core.serial.throwable.BrokenPipeException;
 import com.serial4j.core.serial.throwable.NoSuchDeviceException;
 import com.serial4j.core.serial.throwable.InvalidPortException;
@@ -62,9 +70,9 @@ public final class ErrnoToException {
      * @throws OperationFailedException in case of errno(-1).
      * @throws NoAvailableTtyDevicesException in case of errno(-4).
      */
-    public static void throwFromErrno(final int errno, final String additionalText) {                                                    
+    public static void throwFromErrno(final int errno, final String additionalText) { 
         if (errno == Errno.ENOENT.getValue()) {
-            throw new NoSuchDeviceException(additionalText);
+            throw new NoSuchFileException(additionalText);
         } else if (errno == Errno.EACCES.getValue()) {
             throw new PermissionDeniedException(additionalText);
         } else if (errno == Errno.EPIPE.getValue()) {
@@ -73,8 +81,32 @@ public final class ErrnoToException {
             throw new InvalidPortException(additionalText);
         } else if (errno == Errno.ERR_NO_AVAILABLE_TTY_DEVICES.getValue()) {
             throw new NoAvailableTtyDevicesException(additionalText);
-        } else if (errno == Errno.ERR_OPERATION_FAILED.getValue()) {
-            throw new OperationFailedException(additionalText);
+        } else if (errno == Errno.EBADF.getValue()) {
+            throw new BadFileDescriptorException(additionalText);
+        } else if (errno == Errno.EEXIST.getValue()) {
+            throw new FileAlreadyOpenedException(additionalText);
+        } else if (errno == Errno.EISDIR.getValue()) {
+            throw new FileIsDirectoryException(additionalText);
+        } else if (errno == Errno.ENFILE.getValue()) {
+            throw new FileTableOverflowException(additionalText);
+        } else if (errno == Errno.EFBIG.getValue()) {
+            throw new FileTooLargeException(additionalText);
+        } else if (errno == Errno.EIO.getValue()) {
+            throw new InputOutputException(additionalText);
+        } else if (errno == Errno.EINTR.getValue()) {
+            throw new InterruptedSystemCallException(additionalText);
+        } else if (errno == Errno.EINVAL.getValue()) {
+            throw new InvalidArgumentException(additionalText);
+        } else if (errno == Errno.ENOSPC.getValue()) {
+            throw new NoSpaceLeftException(additionalText);
+        } else if (errno == Errno.ENXIO.getValue()) {
+            throw new NoSuchDeviceException(additionalText);
+        } else if (errno == Errno.EROFS.getValue()) {
+            throw new ReadOnlyFileSystemException(additionalText);
+        } else if (errno == Errno.ENOTTY.getValue()) {
+            throw new NotTtyDeviceException(additionalText);
+        } else if (errno == Errno.EMFILE.getValue()) {
+            throw new TooManyOpenedFilesException(additionalText);
         }
     }
 

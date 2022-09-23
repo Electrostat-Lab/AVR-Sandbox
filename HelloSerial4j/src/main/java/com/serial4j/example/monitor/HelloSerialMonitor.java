@@ -43,11 +43,13 @@ import com.serial4j.core.serial.monitor.SerialMonitor;
  *
  * @author pavl_g.
  */
-public class HelloSerialMonitor implements SerialDataListener, EntityStatus<SerialWriteEntity> {
+public class HelloSerialMonitor implements SerialDataListener, EntityStatus<SerialWriteEntity>, Runnable {
 
     private static boolean isDataSent;
 
+    @Override
     public void run() {
+        System.out.println(Thread.currentThread());
         System.out.println("---------------Welcome to Serial4j Monitor Testcase---------------");
         try {
             final SerialMonitor serialMonitor = new SerialMonitor("Monitor A");
@@ -88,7 +90,7 @@ public class HelloSerialMonitor implements SerialDataListener, EntityStatus<Seri
 
     @Override
     public void onSerialEntityTerminated(SerialWriteEntity serialMonitorEntity) {
-        System.err.println("JSerialComm: Terminated");
+        System.err.println("Serial4j: Terminated");
     }
 
     @Override
@@ -105,7 +107,7 @@ public class HelloSerialMonitor implements SerialDataListener, EntityStatus<Seri
 
     @Override
     public void onDataReceived(int data) {
-
+        
     }
 
     @Override
@@ -115,6 +117,7 @@ public class HelloSerialMonitor implements SerialDataListener, EntityStatus<Seri
 
     @Override
     public void onDataReceived(String data) {
+        System.out.println(Thread.currentThread());
         System.out.println(data);
     }
 }

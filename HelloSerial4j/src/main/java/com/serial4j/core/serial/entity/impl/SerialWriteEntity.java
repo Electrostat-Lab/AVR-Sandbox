@@ -49,8 +49,8 @@ public class SerialWriteEntity extends SerialMonitorEntity {
 
     private final ArrayList<WritableCapsule> writableCapsules = new ArrayList<>();
 
-    public SerialWriteEntity(final SerialMonitor threadGroup) {
-        super(threadGroup, SerialWriteEntity.class.getName());
+    public SerialWriteEntity(final SerialMonitor serialMonitor) {
+        super(serialMonitor, SerialWriteEntity.class.getName());
     }
 
     @Override
@@ -96,11 +96,9 @@ public class SerialWriteEntity extends SerialMonitorEntity {
                 /* send capsule data to the UART */
                 final String data = capsule.getData();
                 for (int j = 0; j < data.length(); j++) {
-                    synchronized (SerialWriteEntity.class) {
-                        sendToUART(data.charAt(j));
-                        for (int k = 0; k < getSerialDataListeners().size(); k++) {
-                            getSerialDataListeners().get(k).onDataTransmitted(data.charAt(j));
-                        }
+                    sendToUART(data.charAt(j));
+                    for (int k = 0; k < getSerialDataListeners().size(); k++) {
+                        getSerialDataListeners().get(k).onDataTransmitted(data.charAt(j));
                     }
                 }
                 capsule.setDataWritten(true);

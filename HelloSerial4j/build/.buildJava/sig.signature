@@ -1237,8 +1237,6 @@
  final 
  class 
  com.serial4j.core.serial.monitor.SerialMonitor 
- extends 
- java.lang.ThreadGroup 
  { 
  private 
  final 
@@ -1246,6 +1244,12 @@
  serialDataListeners; 
  descriptor: 
  Ljava/util/ArrayList; 
+ private 
+ final 
+ java.lang.String 
+ monitorName; 
+ descriptor: 
+ Ljava/lang/String; 
  public 
  volatile 
  com.serial4j.core.serial.entity.EntityStatus<com.serial4j.core.serial.entity.impl.SerialReadEntity> 
@@ -1337,6 +1341,11 @@
  java.io.FileNotFoundException; 
  descriptor: 
  (Ljava/lang/String;Lcom/serial4j/core/serial/BaudRate;Lcom/serial4j/core/serial/Permissions;)V 
+ public 
+ java.lang.String 
+ getMonitorName(); 
+ descriptor: 
+ ()Ljava/lang/String; 
  public 
  boolean 
  isTerminate(); 
@@ -2263,9 +2272,44 @@
  abstract 
  class 
  com.serial4j.core.serial.entity.SerialMonitorEntity 
- extends 
- java.lang.Thread 
+ implements 
+ java.lang.Runnable 
  { 
+ protected 
+ final 
+ com.serial4j.core.util.process.Semaphore$Mutex 
+ MUTEX; 
+ descriptor: 
+ Lcom/serial4j/core/util/process/Semaphore$Mutex; 
+ protected 
+ final 
+ com.serial4j.core.util.process.Semaphore 
+ SEMAPHORE; 
+ descriptor: 
+ Lcom/serial4j/core/util/process/Semaphore; 
+ private 
+ final 
+ java.util.logging.Logger 
+ entityLogger; 
+ descriptor: 
+ Ljava/util/logging/Logger; 
+ private 
+ boolean 
+ hasLoggedMonitor; 
+ descriptor: 
+ Z 
+ private 
+ final 
+ com.serial4j.core.serial.monitor.SerialMonitor 
+ serialMonitor; 
+ descriptor: 
+ Lcom/serial4j/core/serial/monitor/SerialMonitor; 
+ private 
+ final 
+ java.lang.String 
+ entityName; 
+ descriptor: 
+ Ljava/lang/String; 
  public 
  com.serial4j.core.serial.entity.SerialMonitorEntity(com.serial4j.core.serial.monitor.SerialMonitor, 
  java.lang.String); 
@@ -2348,6 +2392,11 @@
  getEntityStream(); 
  descriptor: 
  ()Ljava/io/Closeable; 
+ private 
+ void 
+ initMutexWithLockData(); 
+ descriptor: 
+ ()V 
  } 
  Compiled 
  from 
@@ -3094,16 +3143,7 @@
  final 
  class 
  com.serial4j.core.util.process.Semaphore$Mutex 
- extends 
- java.lang.Enum<com.serial4j.core.util.process.Semaphore$Mutex> 
  { 
- public 
- static 
- final 
- com.serial4j.core.util.process.Semaphore$Mutex 
- SIMPLE_MUTEX; 
- descriptor: 
- Lcom/serial4j/core/util/process/Semaphore$Mutex; 
  private 
  java.lang.Object 
  lockData; 
@@ -3119,26 +3159,7 @@
  unlockData; 
  descriptor: 
  Ljava/lang/Object; 
- private 
- static 
- final 
- com.serial4j.core.util.process.Semaphore$Mutex[] 
- $VALUES; 
- descriptor: 
- [Lcom/serial4j/core/util/process/Semaphore$Mutex; 
  public 
- static 
- com.serial4j.core.util.process.Semaphore$Mutex[] 
- values(); 
- descriptor: 
- ()[Lcom/serial4j/core/util/process/Semaphore$Mutex; 
- public 
- static 
- com.serial4j.core.util.process.Semaphore$Mutex 
- valueOf(java.lang.String); 
- descriptor: 
- (Ljava/lang/String;)Lcom/serial4j/core/util/process/Semaphore$Mutex; 
- private 
  <O, 
  LD, 
  ULD> 
@@ -3146,7 +3167,11 @@
  LD, 
  ULD); 
  descriptor: 
- (Ljava/lang/String;ILjava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;)V 
+ (Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;)V 
+ public 
+ com.serial4j.core.util.process.Semaphore$Mutex(); 
+ descriptor: 
+ ()V 
  public 
  void 
  setLockData(java.lang.Object); 
@@ -3183,16 +3208,6 @@
  NO_JOB(); 
  descriptor: 
  ()Ljava/lang/Void; 
- private 
- static 
- com.serial4j.core.util.process.Semaphore$Mutex[] 
- $values(); 
- descriptor: 
- ()[Lcom/serial4j/core/util/process/Semaphore$Mutex; 
- static 
- {}; 
- descriptor: 
- ()V 
  } 
  Compiled 
  from 
@@ -3529,7 +3544,8 @@
  com.serial4j.example.monitor.HelloSerialMonitor 
  implements 
  com.serial4j.core.serial.monitor.SerialDataListener, 
- com.serial4j.core.serial.entity.EntityStatus<com.serial4j.core.serial.entity.impl.SerialWriteEntity> 
+ com.serial4j.core.serial.entity.EntityStatus<com.serial4j.core.serial.entity.impl.SerialWriteEntity>, 
+ java.lang.Runnable 
  { 
  private 
  static 
@@ -3712,8 +3728,8 @@
  final 
  class 
  com.serial4j.example.serial4j.HelloSerial4jIO 
- extends 
- java.lang.Thread 
+ implements 
+ java.lang.Runnable 
  { 
  protected 
  final 
@@ -3779,8 +3795,8 @@
  final 
  class 
  com.serial4j.example.serial4j.HelloNativeSerial4J 
- extends 
- java.lang.Thread 
+ implements 
+ java.lang.Runnable 
  { 
  protected 
  final 
@@ -3788,6 +3804,13 @@
  ttyDevice; 
  descriptor: 
  Lcom/serial4j/core/serial/TerminalDevice; 
+ protected 
+ static 
+ final 
+ java.util.logging.Logger 
+ EXAMPLE_LOGGER; 
+ descriptor: 
+ Ljava/util/logging/Logger; 
  public 
  com.serial4j.example.serial4j.HelloNativeSerial4J(); 
  descriptor: 
@@ -3809,4 +3832,8 @@
  long); 
  descriptor: 
  (Lcom/serial4j/core/serial/TerminalDevice;J)V 
+ static 
+ {}; 
+ descriptor: 
+ ()V 
  } 
