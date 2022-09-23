@@ -101,7 +101,15 @@
     ``` 
     
 - SPI (Serial Peripheral Interface):
-    1) Interface with MCP3008 and send data over UART to the arduino serial monitor.
+    1) Interface with the 10-bit MCP3008 ADC and send data over UART to the arduino serial monitor.
+    <br>
+    
+    ```
+    After these tasks, the learner should be able to:
+    1) Understand how to use the SPI driver.
+    2) Understand how MCP3008 ADC works.
+    3) Understand how to read data sheets and interpret it to code properly.
+    ``` 
 
 - Timers:
      1) Kitchen microwave timer with a buzzer.
