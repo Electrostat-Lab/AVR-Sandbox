@@ -67,12 +67,29 @@
     1) UART controllable robot prototype (via Arduino IDE serial monitor).
     2) UART controllable LCD screen (displays what is typed in the serial monitor console).
     3) UART Ultrasonic obstacle detector sensor.
+    <br>
     
-
+    ```
+    After these tasks, the learner should be able to:
+    1) Understand how the UART works.
+    2) Interface IO with UART using RS232 port interface (usb now).
+    3) Control MCU behavior over UART signals.
+    4) Perform synchronous and async operations using UART.
+    5) Understand how the ultrasonic works and interface it with the mcu.
+    ```    
 
 - PWM (Pulse Width Modulation):
-
-
+    1) Small standing robot controllable over buttons or UART (up to you).
+    2) Obstacle avoider robot prototype using Ultrasonic.
+    <br>
+    
+    ```
+    After these tasks, the learner should be able to:
+    1) Understand how to make pwm signals.
+    2) Understand how motors work.
+    3) Understand basic robotics.
+    ``` 
+    
 - SPI (Serial Peripheral Interface):
 
 - Timers:
