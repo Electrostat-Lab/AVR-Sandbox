@@ -4,6 +4,7 @@
  *
  * Created on September 24, 2022, 8:42 PM
  */
+#define F_CPU 1000000UL
 
 #include <stdio.h>
 #include <stdlib.h>
