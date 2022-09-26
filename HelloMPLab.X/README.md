@@ -50,10 +50,10 @@ or like this:
 targets : prerequisites ; recipe
 recipe
 ```
-So, 
-targets: the targets of this rule.
-prerequisites: could be other targets to call other rules before the recipe and they can define some local variables.
-recipe: an only-shell code area.
+So:
+- targets: the targets of this rule.
+- prerequisites: could be other targets to call other rules before the recipe and they can define some local variables.
+- recipe: an only-shell code area.
 
 The main linux commands are delegated via the following commands:
 ```make
