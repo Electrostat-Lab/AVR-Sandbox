@@ -269,3 +269,60 @@ AVRDUDE_UPLOAD=avrdude -c${PROGRAMMER} -p${CHIP_ALIAS} -b${BAUD_RATE} -P${PORT} 
 .build-post: .build-impl .upload-impl
 ```
 - Now running the `make all` will clean, build and upload the code to the chip !
+- Here is the logs from MPLab.X IDE:
+<details>
+<summary>Clean, build and upload logs</summary>
+<br>
+
+```bash
+CLEAN SUCCESSFUL (total time: 53ms)
+make -f nbproject/Makefile-default.mk SUBPROJECTS= .build-conf
+avrdude -c'usbasp' -p'm32' -b'9600' -P'/dev/ttyUSB0' -B'187500Hz' -U flash:w:`pwd`'/'dist/default/production/HelloMPLab.X.production.hex
+make[1]: warning: jobserver unavailable: using -j1.  Add '+' to parent make rule.
+make[1]: Entering directory '/home/twisted/GradleProjects/AVR-Sandbox/HelloMPLab.X'
+make  -f nbproject/Makefile-default.mk dist/default/production/HelloMPLab.X.production.hex
+make[2]: Entering directory '/home/twisted/GradleProjects/AVR-Sandbox/HelloMPLab.X'
+"/home/twisted/GradleProjects/AVR-Sandbox/avr8-gnu-toolchain/avr8-gnu-toolchain-linux_x86_64/bin/avr-gcc"   -mmcu=atmega32 -I "/opt/microchip/mplabx/v6.00/packs/Microchip/ATmega_DFP/2.4.131/include" -B "/opt/microchip/mplabx/v6.00/packs/Microchip/ATmega_DFP/2.4.131/gcc/dev/atmega32"  -x c -c -D__ATmega32__  -funsigned-char -funsigned-bitfields -O1 -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -Wall -MD -MP -MF "build/default/production/HelloWorld.o.d" -MT "build/default/production/HelloWorld.o.d" -MT build/default/production/HelloWorld.o  -o build/default/production/HelloWorld.o HelloWorld.c  -DXPRJ_default=default   
+"/home/twisted/GradleProjects/AVR-Sandbox/avr8-gnu-toolchain/avr8-gnu-toolchain-linux_x86_64/bin/avr-gcc"  -mmcu=atmega32 -B "/opt/microchip/mplabx/v6.00/packs/Microchip/ATmega_DFP/2.4.131/gcc/dev/atmega32"  -D__ATmega32__  -Wl,-Map="dist/default/production/HelloMPLab.X.production.map"    -o dist/default/production/HelloMPLab.X.production.elf build/default/production/HelloWorld.o      -DXPRJ_default=default    -Wl,--defsym=__MPLAB_BUILD=1 -Wl,--gc-sections -Wl,--start-group  -Wl,-lm -Wl,--end-group 
+"/home/twisted/GradleProjects/AVR-Sandbox/avr8-gnu-toolchain/avr8-gnu-toolchain-linux_x86_64/bin"/avr-objcopy -O ihex "dist/default/production/HelloMPLab.X.production.elf" "dist/default/production/HelloMPLab.X.production.hex"
+make[2]: Leaving directory '/home/twisted/GradleProjects/AVR-Sandbox/HelloMPLab.X'
+make[1]: Leaving directory '/home/twisted/GradleProjects/AVR-Sandbox/HelloMPLab.X'
+
+avrdude: set SCK frequency to 187500 Hz
+avrdude: AVR device initialized and ready to accept instructions
+
+Reading | ################################################## | 100% 0.00s
+
+avrdude: Device signature = 0x1e9502 (probably m32)
+avrdude: NOTE: "flash" memory has been specified, an erase cycle will be performed
+         To disable this feature, specify the -D option.
+avrdude: erasing chip
+avrdude: set SCK frequency to 187500 Hz
+avrdude: reading input file "/home/twisted/GradleProjects/AVR-Sandbox/HelloMPLab.X/dist/default/production/HelloMPLab.X.production.hex"
+avrdude: input file /home/twisted/GradleProjects/AVR-Sandbox/HelloMPLab.X/dist/default/production/HelloMPLab.X.production.hex auto detected as Intel Hex
+avrdude: writing flash (118 bytes):
+
+Writing | ################################################## | 100% 0.07s
+
+avrdude: 118 bytes of flash written
+avrdude: verifying flash memory against /home/twisted/GradleProjects/AVR-Sandbox/HelloMPLab.X/dist/default/production/HelloMPLab.X.production.hex:
+avrdude: load data flash data from input file /home/twisted/GradleProjects/AVR-Sandbox/HelloMPLab.X/dist/default/production/HelloMPLab.X.production.hex:
+avrdude: input file /home/twisted/GradleProjects/AVR-Sandbox/HelloMPLab.X/dist/default/production/HelloMPLab.X.production.hex auto detected as Intel Hex
+avrdude: input file /home/twisted/GradleProjects/AVR-Sandbox/HelloMPLab.X/dist/default/production/HelloMPLab.X.production.hex contains 118 bytes
+avrdude: reading on-chip flash data:
+
+Reading | ################################################## | 100% 0.04s
+
+avrdude: verifying ...
+avrdude: 118 bytes of flash verified
+
+avrdude done.  Thank you.
+
+
+BUILD SUCCESSFUL (total time: 811ms)
+Loading code from /home/twisted/GradleProjects/AVR-Sandbox/HelloMPLab.X/dist/default/production/HelloMPLab.X.production.hex...
+Program loaded with pack,ATmega_DFP,2.4.131,Microchip
+Loading completed
+```
+
+</details>
