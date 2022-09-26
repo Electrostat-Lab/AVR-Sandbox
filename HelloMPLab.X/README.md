@@ -274,7 +274,7 @@ SCK-HZ='187500Hz'
 # Add the upload script here
 AVRDUDE_UPLOAD=avrdude -c${PROGRAMMER} -p${CHIP_ALIAS} -b${BAUD_RATE} -P${PORT} -B${SCK-HZ} -U flash:w:${CND_BASEDIR}'/'${CND_ARTIFACT_PATH_default}
 ```
-- In the `Makefile-impl.mk` file, define the following suffix rule with a prerequisite calling the avrdude command defined previously in `AVRDUDE_UPLOAD` variable:
+- In the `Makefile-impl.mk` file, define the following suffix rule with a `recipe` calling the avrdude command defined previously in `AVRDUDE_UPLOAD` variable:
 ```makefile
 # code upload
 .upload-impl:
