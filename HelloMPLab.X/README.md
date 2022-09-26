@@ -37,7 +37,7 @@ Here is a general layout of the file tree:
 10 directories, 16 files
 
 ```
-The `Makefile` contains the main targets for exceuting the main GNU make implementation suffix rules (eg: .build-post) and the main rules reciepes execute direct linux commands (eg: .build-impl) to clean, build, upload and/or clobber (which removes the directory of production), the variables for these linux/make commands are defined within `Makefile-variables.mk`.
+The `Makefile` contains the main targets for exceuting the main GNU make implementation suffix rules (eg: .build-post) and the main rules recipe execute direct linux commands (eg: .build-impl) to clean, build, upload and/or clobber (which removes the directory of production), the variables for these linux/make commands are defined within `Makefile-variables.mk`.
 
 The main linux commands are delegated via the following commands:
 ```make
@@ -250,13 +250,13 @@ SCK-HZ='187500Hz'
 # Add the upload script here
 AVRDUDE_UPLOAD=avrdude -c${PROGRAMMER} -p${CHIP_ALIAS} -b${BAUD_RATE} -P${PORT} -B${SCK-HZ} -U flash:w:${CND_BASEDIR}'/'${CND_ARTIFACT_PATH_default}
 ```
-- In the `Makefile-impl.mk` file, define the following suffix rule with a receipe calling the avrdude command defined previously in `AVRDUDE_UPLOAD` variable:
+- In the `Makefile-impl.mk` file, define the following suffix rule with a recipe calling the avrdude command defined previously in `AVRDUDE_UPLOAD` variable:
 ```makefile
 # code upload
 .upload-impl:
         ${AVRDUDE_UPLOAD}
 ```
-- In the main `Makefile`, make a call to the `.upload-impl` suffix rule in the receipe of `.build-post`:
+- In the main `Makefile`, make a call to the `.upload-impl` suffix rule in the recipe of `.build-post`:
 ```makefile
 .build-post: .build-impl .upload-impl
 ```
