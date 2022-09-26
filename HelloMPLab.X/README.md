@@ -50,6 +50,10 @@ or like this:
 targets : prerequisites ; recipe
 recipe
 ```
+So, 
+targets: the targets of this rule.
+prerequisites: could be other targets to call other rules before the recipe and they can define some local variables.
+recipe: an only-shell code area.
 
 The main linux commands are delegated via the following commands:
 ```make
@@ -69,7 +73,7 @@ The main linux commands are delegated via the following commands:
 .all-impl: .all-pre .depcheck-impl
 	    make SUBPROJECTS=${SUBPROJECTS} CONF=default build
 ```
-the `make -f` runs another make script that enboxes the linux commands from the user inside the `nbproject` dir, but you could modify its variables to change the behavior of the netbeans project.
+Here, the prerequisites are used to run other targets and the recipes are used to do the shell job, where `make -f` runs another make script that enboxes the linux commands from the user inside the `nbproject` dir, but you could modify its variables to change the behavior of the netbeans project.
 
 For example, here is the `nbproject/Makefile-default.mk` that builds the project:
 
@@ -270,13 +274,13 @@ SCK-HZ='187500Hz'
 # Add the upload script here
 AVRDUDE_UPLOAD=avrdude -c${PROGRAMMER} -p${CHIP_ALIAS} -b${BAUD_RATE} -P${PORT} -B${SCK-HZ} -U flash:w:${CND_BASEDIR}'/'${CND_ARTIFACT_PATH_default}
 ```
-- In the `Makefile-impl.mk` file, define the following suffix rule with a recipe calling the avrdude command defined previously in `AVRDUDE_UPLOAD` variable:
+- In the `Makefile-impl.mk` file, define the following suffix rule with a prerequisite calling the avrdude command defined previously in `AVRDUDE_UPLOAD` variable:
 ```makefile
 # code upload
 .upload-impl:
         ${AVRDUDE_UPLOAD}
 ```
-- In the main `Makefile`, make a call to the `.upload-impl` suffix rule in the recipe of `.build-post`:
+- In the main `Makefile`, make a call to the `.upload-impl` suffix rule in the prerequisite part of `.build-post` rule:
 ```makefile
 .build-post: .build-impl .upload-impl
 ```
