@@ -254,7 +254,7 @@ endif
 
 </details>
 
-There are lots of details here, the variables for this file (eg: ${MP_CC} and ${MP_CPP}) are defined within the `Makefile-local-default.mk` file and points at the GCC and the G++ avr compiler.
+There are lots of details here, the variables for this file (eg: `${MP_CC}` and `${MP_CPP}`) are defined within the `Makefile-local-default.mk` file and points at the GCC and the G++ avr compiler.
 
 The rest of the file defines how the native image (object files) will be made out of the GCC, in this case there are 2 options, either output a real `.hex` image if the `TYPE_IMAGE` isn't a `DEBUG_RUN` or output an image with `.elf` extension to be used within a debugger (or simulator).
 
