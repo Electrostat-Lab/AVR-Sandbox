@@ -60,7 +60,12 @@ The main linux commands are delegated via the following commands:
 the `make -f` runs another make script that enboxes the linux commands from the user inside the `nbproject` dir, but you could modify its variables to change the behavior of the netbeans project.
 
 For example, here is the `nbproject/Makefile-default.mk` that builds the project:
-```make
+
+<details>
+<summary>nbproject/Makefile-default.mk</summary>
+<br>
+
+```makefile
 #
 # Generated Makefile - do not edit!
 #
@@ -230,6 +235,9 @@ ifneq (${DEPFILES},)
 include ${DEPFILES}
 endif
 ```
+
+</details>
+
 There are lots of details here, the variables for this file (eg: ${MP_CC} and ${MP_CPP}) are defined within the `Makefile-local-default.mk` file and points at the GCC and the G++ avr compiler.
 
 The rest of the file defines how the native image (object files) will be made out of the GCC, in this case there are 2 options, either output a real `.hex` image if the `TYPE_IMAGE` isn't a `DEBUG_RUN` or output an image with `.elf` extension to be used within a debugger (or simulator).
