@@ -22,7 +22,7 @@ CLEAN_SUBPROJECTS_=.clean-subprojects
 CLEAN_SUBPROJECTS_NO=
 CLEAN_SUBPROJECTS=${CLEAN_SUBPROJECTS_${SUBPROJECTS}}
 # Add the upload script here
-AVRDUDE_UPLOAD=avrdude -c${PROGRAMMER} -p${CHIP_ALIAS} -b${BAUD_RATE} -P${PORT} -B8 -U flash:w:${CND_BASEDIR}'/'${CND_ARTIFACT_PATH_default}
+AVRDUDE_UPLOAD=avrdude -c${PROGRAMMER} -p${CHIP_ALIAS} -b${BAUD_RATE} -P${PORT} -B${SCK-HZ} -U flash:w:${CND_BASEDIR}'/'${CND_ARTIFACT_PATH_default}
 
 # Project Name
 PROJECTNAME=HelloMPLab.X
@@ -38,6 +38,7 @@ ALLCONFS=default
 .build-impl: .build-pre
 	make -f nbproject/Makefile-${CONF}.mk SUBPROJECTS=${SUBPROJECTS} .build-conf
 
+# code upload
 .upload-impl:
 	${AVRDUDE_UPLOAD}
 	
