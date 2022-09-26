@@ -280,7 +280,7 @@ AVRDUDE_UPLOAD=avrdude -c${PROGRAMMER} -p${CHIP_ALIAS} -b${BAUD_RATE} -P${PORT} 
 .upload-impl:
         ${AVRDUDE_UPLOAD}
 ```
-- In the main `Makefile`, make a call to the `.upload-impl` suffix rule in the prerequisite part of `.build-post` rule:
+- In the main `Makefile`, make a call to the `.upload-impl` suffix rule in the `prerequisite` part of `.build-post` rule:
 ```makefile
 .build-post: .build-impl .upload-impl
 ```
