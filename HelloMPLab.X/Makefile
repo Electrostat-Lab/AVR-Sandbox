@@ -42,7 +42,12 @@
 #
 # NOCDDL
 
+# Set the locale character encoding value to any value, C is the English C default encoding for all locales
+# to find your system locales, use `locale` shell command...
+# the avr-gcc assets that this should be valid
+# https://gcc.gnu.org/onlinedocs/gcc-9.3.0/gcc/Environment-Variables.html
 export LC_ALL=C
+
 # Environment 
 MKDIR=mkdir
 CP=cp
