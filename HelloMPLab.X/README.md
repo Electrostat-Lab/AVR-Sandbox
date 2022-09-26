@@ -39,6 +39,18 @@ Here is a general layout of the file tree:
 ```
 The `Makefile` contains the main targets for exceuting the main GNU make implementation suffix rules (eg: .build-post) and the main rules recipe execute direct linux commands (eg: .build-impl) to clean, build, upload and/or clobber (which removes the directory of production), the variables for these linux/make commands are defined within `Makefile-variables.mk`.
 
+Here is the makefile basic target, rules and recipes syntax:
+```makefile
+targets : prerequisites
+recipe
+...
+```
+or like this:
+```makefile
+targets : prerequisites ; recipe
+recipe
+```
+
 The main linux commands are delegated via the following commands:
 ```make
 # build
