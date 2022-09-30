@@ -1,6 +1,12 @@
+# <img src="https://user-images.githubusercontent.com/60224159/193262155-bf82f982-e84d-4af4-835f-152c8e923f60.png" width="40" height="30"> Windows Terminal
 ## Steps to use WSL on Windows terminal to compile, hex and upload code for avr chips
 
 1) Enable WSL (Windows Subsystem for linux) microsoft widows feature.
+
+| `Access Windows program features list` | `Enabling the WSL feature` |
+|---------------------------------------|-----------------------------|
+| ![image-1](https://user-images.githubusercontent.com/60224159/193261736-e008010f-1cc3-4996-8881-93f3e0919d07.png) | ![image-2](https://user-images.githubusercontent.com/60224159/193261758-483a1058-ed42-46d4-a196-b4f4c6cd13e9.png) |
+
 2) Download WSL from the command prompt or MS powershell using:
 
 ```
