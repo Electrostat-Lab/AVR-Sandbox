@@ -39,7 +39,14 @@ import com.serial4j.core.serial.throwable.FileTableOverflowException;
 import com.serial4j.core.serial.throwable.FileTooLargeException;
 import com.serial4j.core.serial.throwable.InputOutputException;
 import com.serial4j.core.serial.throwable.InterruptedSystemCallException;
-
+import com.serial4j.core.serial.throwable.ErrnoNotFoundError;
+import com.serial4j.core.serial.throwable.NoSuchFileException;
+import com.serial4j.core.serial.throwable.InvalidArgumentException;
+import com.serial4j.core.serial.throwable.NoSpaceLeftException;
+import com.serial4j.core.serial.throwable.ReadOnlyFileSystemException;
+import com.serial4j.core.serial.throwable.NotTtyDeviceException;
+import com.serial4j.core.serial.throwable.TooManyOpenedFilesException;
+import com.serial4j.core.serial.throwable.TryAgainException;
 import com.serial4j.core.serial.throwable.BrokenPipeException;
 import com.serial4j.core.serial.throwable.NoSuchDeviceException;
 import com.serial4j.core.serial.throwable.InvalidPortException;
@@ -107,6 +114,10 @@ public final class ErrnoToException {
             throw new NotTtyDeviceException(additionalText);
         } else if (errno == Errno.EMFILE.getValue()) {
             throw new TooManyOpenedFilesException(additionalText);
+        } else if (errno == Errno.EAGAIN.getValue()) {
+            throw new TryAgainException(additionalText);
+        } else {
+            throw new ErrnoNotFoundError("Cannot interpret this error code !");
         }
     }
 

@@ -7,6 +7,9 @@
 # constant independent
 clibName=('libserial4j.so')
 
+# native toolchains
+gcc='g++-10'
+
 # android tool-chain constants
 min_android_sdk=21
 arm64="aarch64-linux-android"

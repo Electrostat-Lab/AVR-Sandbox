@@ -74,7 +74,7 @@ function linux_x86_x64() {
     if [[ ! -d $linux_natives_dir'/linux-x86-x64' ]]; then
         mkdir -p $linux_natives_dir'/linux-x86-x64'
     fi
-    g++ -fPIC $native_sources -shared -o $linux_natives_dir'/linux-x86-x64/'${clibName} \
+    $gcc -fPIC $native_sources -shared -o $linux_natives_dir'/linux-x86-x64/'${clibName} \
         -I${JAVA__HOME%/*}'/include' \
         -I${JAVA__HOME%/*}'/include/linux' \
         -I${nativessrc_directory}'/include/linux/' \

@@ -887,8 +887,7 @@
  com.serial4j.core.serial.throwable.FileTableOverflowException, 
  com.serial4j.core.serial.throwable.NoSpaceLeftException, 
  com.serial4j.core.serial.throwable.ReadOnlyFileSystemException, 
- com.serial4j.core.serial.throwable.PermissionDeniedException, 
- com.serial4j.core.serial.throwable.OperationFailedException; 
+ com.serial4j.core.serial.throwable.PermissionDeniedException; 
  descriptor: 
  (Lcom/serial4j/core/serial/SerialPort;)V 
  public 
@@ -1006,7 +1005,6 @@
  com.serial4j.core.serial.throwable.PermissionDeniedException, 
  com.serial4j.core.serial.throwable.BrokenPipeException, 
  com.serial4j.core.serial.throwable.InvalidPortException, 
- com.serial4j.core.serial.throwable.OperationFailedException, 
  com.serial4j.core.serial.throwable.NoAvailableTtyDevicesException; 
  descriptor: 
  (Lcom/serial4j/core/serial/ReadConfiguration;II)V 
@@ -1025,7 +1023,6 @@
  com.serial4j.core.serial.throwable.PermissionDeniedException, 
  com.serial4j.core.serial.throwable.BrokenPipeException, 
  com.serial4j.core.serial.throwable.InvalidPortException, 
- com.serial4j.core.serial.throwable.OperationFailedException, 
  com.serial4j.core.serial.throwable.NoAvailableTtyDevicesException; 
  descriptor: 
  (Ljava/lang/String;)J 
@@ -1037,7 +1034,6 @@
  com.serial4j.core.serial.throwable.PermissionDeniedException, 
  com.serial4j.core.serial.throwable.BrokenPipeException, 
  com.serial4j.core.serial.throwable.InvalidPortException, 
- com.serial4j.core.serial.throwable.OperationFailedException, 
  com.serial4j.core.serial.throwable.NoAvailableTtyDevicesException; 
  descriptor: 
  (I)J 
@@ -1049,7 +1045,6 @@
  com.serial4j.core.serial.throwable.PermissionDeniedException, 
  com.serial4j.core.serial.throwable.BrokenPipeException, 
  com.serial4j.core.serial.throwable.InvalidPortException, 
- com.serial4j.core.serial.throwable.OperationFailedException, 
  com.serial4j.core.serial.throwable.NoAvailableTtyDevicesException; 
  descriptor: 
  ([I)J 
@@ -1080,7 +1075,6 @@
  com.serial4j.core.serial.throwable.PermissionDeniedException, 
  com.serial4j.core.serial.throwable.BrokenPipeException, 
  com.serial4j.core.serial.throwable.InvalidPortException, 
- com.serial4j.core.serial.throwable.OperationFailedException, 
  com.serial4j.core.serial.throwable.NoAvailableTtyDevicesException; 
  descriptor: 
  ()I 
@@ -1093,7 +1087,6 @@
  com.serial4j.core.serial.throwable.PermissionDeniedException, 
  com.serial4j.core.serial.throwable.BrokenPipeException, 
  com.serial4j.core.serial.throwable.InvalidPortException, 
- com.serial4j.core.serial.throwable.OperationFailedException, 
  com.serial4j.core.serial.throwable.NoAvailableTtyDevicesException; 
  descriptor: 
  ()[Ljava/lang/String; 
@@ -1105,7 +1098,6 @@
  com.serial4j.core.serial.throwable.PermissionDeniedException, 
  com.serial4j.core.serial.throwable.BrokenPipeException, 
  com.serial4j.core.serial.throwable.InvalidPortException, 
- com.serial4j.core.serial.throwable.OperationFailedException, 
  com.serial4j.core.serial.throwable.NoAvailableTtyDevicesException; 
  descriptor: 
  ()V 
@@ -1117,7 +1109,6 @@
  com.serial4j.core.serial.throwable.PermissionDeniedException, 
  com.serial4j.core.serial.throwable.BrokenPipeException, 
  com.serial4j.core.serial.throwable.InvalidPortException, 
- com.serial4j.core.serial.throwable.OperationFailedException, 
  com.serial4j.core.serial.throwable.NoAvailableTtyDevicesException; 
  descriptor: 
  ()V 
@@ -1164,7 +1155,6 @@
  com.serial4j.core.serial.throwable.PermissionDeniedException, 
  com.serial4j.core.serial.throwable.BrokenPipeException, 
  com.serial4j.core.serial.throwable.InvalidPortException, 
- com.serial4j.core.serial.throwable.OperationFailedException, 
  com.serial4j.core.serial.throwable.NoAvailableTtyDevicesException; 
  descriptor: 
  ()V 
@@ -2186,6 +2176,20 @@
  getCausingErrno(); 
  descriptor: 
  ()Lcom/serial4j/core/errno/Errno; 
+ } 
+ Compiled 
+ from 
+ "ErrnoNotFoundError.java" 
+ public 
+ class 
+ com.serial4j.core.serial.throwable.ErrnoNotFoundError 
+ extends 
+ java.lang.Error 
+ { 
+ public 
+ com.serial4j.core.serial.throwable.ErrnoNotFoundError(java.lang.String); 
+ descriptor: 
+ (Ljava/lang/String;)V 
  } 
  Compiled 
  from 
