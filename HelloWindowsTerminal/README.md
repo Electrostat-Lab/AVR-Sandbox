@@ -105,8 +105,10 @@ pavl_g@pavl-machine:~$ ls /dev/ttyUSB*
 ```bash
 git clone https://github.com/Software-Hardware-Codesign/AVR-Sandbox.git
 ```
+----------------------------------------------------------------------------------------------------
 
 ### For more refer to the documentation pages:
+- [A quick tour around](https://www.linkedin.com/feed/update/urn:li:activity:6981421099192340480/)
 - [Windows-Terminal-Documentation](https://learn.microsoft.com/en-us/windows/terminal/)
 - [WSL-Documentation](https://learn.microsoft.com/en-us/windows/wsl/)
 - [Usbipd-Wiki](https://github.com/dorssel/usbipd-win/wiki)
