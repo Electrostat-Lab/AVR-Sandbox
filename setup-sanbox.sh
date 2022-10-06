@@ -62,10 +62,10 @@ function downloadJdk() {
 }
 
 ##
-# Gives R/W/E permissions to the specified files in the given folder.
+# Provokes R/W/E permissions to the specified files in the given folder.
 # @return [0] for success, [positive-number] for failure indicating errno, [1] for operation not permitted [EPERM].
 ##
-function giveReadWriteExecutePermissions() {
+function provokeReadWriteExecutePermissions() {
     local directory=$1
     # rwx = read-write-execute for the owner, -R for recursive search
     chmod +rwx -R $directory
