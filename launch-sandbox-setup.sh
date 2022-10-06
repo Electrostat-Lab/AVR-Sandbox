@@ -91,7 +91,7 @@ fi
 
 echo -e ${RESET_Cs}
 
-giveReadWriteExecutePermissions './avr8-gnu-toolchain-linux_x86_64'
+provokeReadWriteExecutePermissions './avr8-gnu-toolchain-linux_x86_64'
 
 if [[ $? -gt 0 ]]; then
     echo -e "${RED_C} --MajorTask@Provoke-Permissions-AVR-GCC : Failed to provoke permissions, file not found or you aren't [root]."
@@ -102,7 +102,7 @@ fi
 
 echo -e ${RESET_Cs}
 
-giveReadWriteExecutePermissions './jdk-19'
+provokeReadWriteExecutePermissions './jdk-19'
 
 if [[ $? -gt 0 ]]; then
     echo -e "${RED_C} --MajorTask@Provoke-Permissions-JDK-19 : Failed to provoke permissions, file not found or you aren't [root]."
