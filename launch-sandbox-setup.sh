@@ -5,7 +5,7 @@ confirmDownload
 
 setupCURL
 
-if [[ $? -lt 0 ]]; then 
+if [[ $? -gt 0 ]]; then 
     echo -e "${RED_C} --MajorTask@SetupCURL : Failed setting up CURL, check your connection and your storage"
 	exit $?
 else 
