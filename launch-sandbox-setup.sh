@@ -3,6 +3,17 @@ source CommonVariables.sh
 
 confirmDownload
 
+setupAvrDude
+
+if [[ $? -gt 0 ]]; then 
+    echo -e "${RED_C} --MajorTask@SetupAvrDude : Failed setting up avrdude, check your connection and your storage"
+	exit $?
+else 
+    echo -e "${GREEN_C} --MajorTask@SetupAvrDude : avrdude Successfully settled up and ready to run."
+fi
+
+echo -e ${RESET_Cs}
+
 setupCURL
 
 if [[ $? -gt 0 ]]; then 

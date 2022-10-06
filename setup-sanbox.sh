@@ -11,7 +11,7 @@ jdk_compressed='jdk.tar.gz'
 ##
 function confirmDownload() {
 
-   printf "%s" "This may additional data apply charges of [224.5 MB], if you want to proceed type [y] or [Y], and [n] or [N] to terminate ? "
+   printf "%s" "Additional data apply charges may be applied, if you want to proceed type [y] or [Y], and [n] or [N] to terminate ? "
 
    read command < /dev/stdin
 
@@ -23,6 +23,15 @@ function confirmDownload() {
         # Recall the prompt
         confirmDownload
    fi
+}
+
+##
+# Sets up avr-dude from the apt package manager.
+# @return [0] for success, [positive-number] for failure indicating errno, [1] for operation not permitted [EPERM].
+##
+function setupAvrDude() {
+    sudo apt-get install avrdude 
+    return $?
 }
 
 ##
