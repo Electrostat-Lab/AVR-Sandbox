@@ -1,7 +1,7 @@
 /**
  * @file hello_uart.c.
  * @author pavl_g.
- * @brief Shows a basic implementation of the [libuart] library based on the observer/subscriber pattern.
+ * @brief Shows a basic implementation of the [libuart] library based on the command-state pattern.
  * @version 0.1
  * @date 2022-10-08
  * 
