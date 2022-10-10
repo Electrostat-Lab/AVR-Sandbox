@@ -3,12 +3,13 @@
 #*
 #* @author pavl_g.
 #*#
-
-
+export LC_ALL=C
 # define work directory
-# 1) print the current working directory to a string value
-pwd=`pwd`
-project="${pwd%/*}"
+
+canonical_link=`readlink -f ${0}`
+build_dir=`dirname $canonical_link`
+
+project="${build_dir%/*}"
 
 avr_examples_dir="${project%/*}"
 

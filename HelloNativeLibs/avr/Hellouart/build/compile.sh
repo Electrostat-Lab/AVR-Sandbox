@@ -1,5 +1,7 @@
-source variables.sh
-export LC_ALL=C
+canonical_link=`readlink -f ${0}`
+build_dir=`dirname $canonical_link`
+
+source $build_dir"/"variables.sh
 
 function addLibsTold() {
 	sudo ${AVR_HOME}'/bin/avr-ld' --library-path "${project}/libs" "${project}/libs/libuart"

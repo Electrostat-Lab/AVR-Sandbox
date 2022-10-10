@@ -4,12 +4,14 @@
 #* @author pavl_g.
 #*#
 
+# export all locales as C
+export LC_ALL=C
 
-# define work directory
-# 1) print the current working directory to a string value
-pwd=`pwd`
+canonical_link=`readlink -f ${0}`
+build_dir=`dirname $canonical_link`
+
 # cut the working directory from its end by a one '/' delimiter
-project="${pwd%/*}"
+project=`dirname $build_dir`
 
 avr_examples_dir="${project%/*}"
 

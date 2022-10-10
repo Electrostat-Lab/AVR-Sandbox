@@ -1,5 +1,8 @@
-source variables.sh
-export LC_ALL=C
+canonical_link=`readlink -f ${0}`
+build_dir=`dirname $canonical_link`
+
+source $build_dir"/"variables.sh
+
 function compile() {
 	# attrs : dir to compile & sharedLib name
 	cd ${project}'/src/lib/'

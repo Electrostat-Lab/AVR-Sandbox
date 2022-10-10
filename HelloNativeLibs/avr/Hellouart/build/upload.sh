@@ -1,4 +1,7 @@
-source variables.sh
+canonical_link=`readlink -f ${0}`
+build_dir=`dirname $canonical_link`
+
+source $build_dir"/"variables.sh
 
 function prepare() {
 	sudo stty -F ${PORT} ${BAUD_RATE}

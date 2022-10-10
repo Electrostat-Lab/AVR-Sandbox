@@ -98,19 +98,6 @@ udr_sprint.c.o:
 00000000 a __tmp_reg__
 00000001 a __zero_reg__
 
-receiver_isr.c.o:
-00000000 b _ZL13uart_instance
-0000005e T _ZN4uart15stopReceiverISREv
-00000050 T _ZN4uart16startReceiverISREv
-         U _ZN4uart5state22onDataReceiveCompletedEh
-0000003e a __SP_H__
-0000003d a __SP_L__
-0000003f a __SREG__
-         U __do_clear_bss
-00000000 a __tmp_reg__
-00000000 T __vector_18
-00000001 a __zero_reg__
-
 udr_reset_isr.c.o:
 00000000 b _ZL13uart_instance
 0000000e T _ZN4uart30stopDataRegisterEmptyBufferISREv
@@ -146,4 +133,17 @@ udr_cprintln.c.o:
          U __do_clear_bss
          U __do_copy_data
 00000000 a __tmp_reg__
+00000001 a __zero_reg__
+
+receiver_isr.c.o:
+00000000 b _ZL13uart_instance
+0000005e T _ZN4uart15stopReceiverISREv
+00000050 T _ZN4uart16startReceiverISREv
+         U _ZN4uart5state22onDataReceiveCompletedEh
+0000003e a __SP_H__
+0000003d a __SP_L__
+0000003f a __SREG__
+         U __do_clear_bss
+00000000 a __tmp_reg__
+00000000 T __vector_18
 00000001 a __zero_reg__
