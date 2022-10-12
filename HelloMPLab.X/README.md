@@ -290,7 +290,7 @@ AVRDUDE_UPLOAD=avrdude -c${PROGRAMMER} -p${CHIP_ALIAS} -b${BAUD_RATE} -P${PORT} 
 <summary>Clean, build and upload logs</summary>
 <br>
 
-```bash
+```shell
 CLEAN SUCCESSFUL (total time: 53ms)
 make -f nbproject/Makefile-default.mk SUBPROJECTS= .build-conf
 avrdude -c'usbasp' -p'm32' -b'9600' -P'/dev/ttyUSB0' -B'187500Hz' -U flash:w:`pwd`'/'dist/default/production/HelloMPLab.X.production.hex
