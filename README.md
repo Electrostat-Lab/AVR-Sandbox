@@ -13,7 +13,7 @@ The General block diagram for the MCU architecture is a great tool that guides t
 ## Documentations:
 - [AVR-C-Lib Docs](https://software-hardware-codesign.github.io/AVR-Sandbox/docs/avr-libc/avr-libc-user-manual/index.html)
 - [Lib-Iberty Docs](https://software-hardware-codesign.github.io/AVR-Sandbox/docs/libiberty/libiberty.html)
-- [Operating On Windows Terminal](https://software-hardware-codesign.github.io/AVR-Sandbox/HelloWindowsTerminal/README.md)
+- [Operating On Windows Terminal](https://software-hardware-codesign.github.io/AVR-Sandbox/HelloWindowsTerminal)
 - [Serial4j API Docs](WIP)
 - [Code of conduct and orientation around using AVR-Sandbox](WIP)
 
