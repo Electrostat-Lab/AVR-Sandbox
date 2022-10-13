@@ -34,7 +34,7 @@ jobs:
         with:
           source: ./
           destination: ./_site
-          remote_theme: pages-themes/midnight@v0.2.0
+          theme: minima
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
 
