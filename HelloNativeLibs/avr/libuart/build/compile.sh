@@ -1,3 +1,5 @@
+#!/bin/bash
+
 canonical_link=`readlink -f ${0}`
 build_dir=`dirname $canonical_link`
 

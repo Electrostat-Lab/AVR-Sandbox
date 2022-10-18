@@ -1,3 +1,5 @@
+#!/bin/bash
+
 #**
 #* Ccoffee Build tool, manual build, alpha-v1.
 #*
