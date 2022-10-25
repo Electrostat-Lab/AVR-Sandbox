@@ -1,4 +1,0 @@
-#ifndef _TERMINAL_CONTROL_RS232
-#define _TERMINAL_CONTROL_RS232
-
-#endif
