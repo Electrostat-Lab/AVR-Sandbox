@@ -41,10 +41,10 @@
 #define _THREADS
 
 #include<pthread.h>
-#include<stdlib.h>
 
 namespace POSIX {
     struct Thread {
+        
     };
 }
 

@@ -1,6 +1,13 @@
 #include<Rs232Service.h>
 #include<DynamicBuffer.h>
 
+static inline void terminatePrinterFormat(int* numberOfPrintedChars, size_t targetLength) {
+    if (*numberOfPrintedChars == targetLength) {
+        printf("\r\n");
+        *numberOfPrintedChars = 0;
+    } 
+}
+
 int* startRs232Service() {
     /** create a service block to enable the retry again criteria */
     service: {
@@ -37,12 +44,12 @@ void* handshakeDeviceDriver(void* data) {
     int* service_descriptor = (int*) data;
     
     printf("%s\n", " --- Started Rs232 handshake service --- ");
-    
+
     handshake_service:{
         assert(pthread_mutex_lock(&handshake_mutex) == 0);
         assert(pthread_cond_wait(&handshake_cond, &handshake_mutex) == 0);
         /* critical section starts */
-        
+
         int numberOfWrittenBytes = TerminalDevice::writeData(HANDSHAKING_SIGNAL, strlen(HANDSHAKING_SIGNAL), service_descriptor);
         if (numberOfWrittenBytes == -2) {
             perror(" --- Invalid Port --- \n");
@@ -50,10 +57,11 @@ void* handshakeDeviceDriver(void* data) {
             perror(" --- Failed to handshake the service --- \n");
         } 
         
-        assert(pthread_mutex_unlock(&handshake_mutex) == 0);
         /* critical section ends */
-        usleep(1000000);
+        assert(pthread_mutex_unlock(&handshake_mutex) == 0);
         
+        usleep(100000); /* send data each 100,000 micros = 0.1 seconds */
+
         goto handshake_service;
     }
 
@@ -67,6 +75,8 @@ void* logHandshakingSignals(void* data) {
 
     char* vacant = (char*) calloc(1, sizeof(char));
 
+    int numberOfPrintedChars = 0;
+
     printf("%s\n", " --- Started Rs232 log service --- ");
 
     /* wait for the start of the reading thread */
@@ -78,23 +88,31 @@ void* logHandshakingSignals(void* data) {
 
         int numberOfReadBytes = TerminalDevice::readData((void*) vacant, 1, service_descriptor);
 
+        if (*vacant == 0x20) {
+            /* critical section ends */
+            assert(pthread_cond_signal(&handshake_cond) == 0);
+            assert(pthread_mutex_unlock(&handshake_mutex) == 0);  
+
+            goto read_service;
+        }
+
         if (numberOfReadBytes > 0) {
-            printf("%c\n", *vacant);
+            printf("%c", *vacant);
             *vacant = 0;
+            numberOfPrintedChars += 1;
         } else if (numberOfReadBytes == -2) {
             perror(" --- Invalid Port --- \n");
             return NULL;
         }
-        /* critical section ends */
+        
+        terminatePrinterFormat(&numberOfPrintedChars, strlen(HANDSHAKING_SIGNAL));
 
+        /* critical section ends */
         assert(pthread_cond_signal(&handshake_cond) == 0);
         assert(pthread_mutex_unlock(&handshake_mutex) == 0);  
-        usleep(10000);
 
         goto read_service;
     }
-    
-    
     
     pthread_exit(NULL);
 }
