@@ -74,7 +74,9 @@ function linux_x86_x64() {
 3) Compiling the project into a dynamic/shared (or runtime) library for avr MCUs: 
 
 ```
-There is no way to use the dynamic linked libraries on a microcontroller, since there is no a runtime environment to act upon (the linker program needs a linux machine), so shared libraries on avr-gcc isn't supported.
+There is no way to use the dynamic linked libraries on a microcontroller, 
+since there is no a runtime environment to act upon (the linker program needs a linux machine), 
+so shared libraries on avr-gcc isn't supported.
 ```
 
 4) Compiling the project into a static library for avr MCUs: 
