@@ -30,7 +30,7 @@ void uart::state::onDataBufferCleared(const uint8_t* transmitData) {
  * Listens for the protocol start command and fires accordingly.
  */
 void uart::state::onProtocolStarted() {
-	uart_instance.sprintln((char*) "Protocol Started Successfully !");
+	// uart_instance.sprintln((char*) "Protocol Started Successfully !");
 }
 
 /**
@@ -51,8 +51,7 @@ void uart::state::onProtocolStopped() {
  * @param data a data to be received through the interrupt service from the data register.
  */
 void uart::state::onDataReceiveCompleted(const uint8_t data) {
-	uart_instance.println((const int64_t) data, 16);
-	uart_instance.stopProtocol();
+	uart_instance.cprint((char*) &data);
 }
 
 /**
@@ -64,7 +63,7 @@ void uart::state::onDataReceiveCompleted(const uint8_t data) {
  * @param data a data to be transmitted through the interrupt service from the data register.
  */
 void uart::state::onDataTransmitCompleted(const uint8_t data) {
-	uart_instance.sprintln((char*) message);
+	// uart_instance.sprintln((char*) message);
 }
 
 /**
