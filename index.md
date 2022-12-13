@@ -2,7 +2,7 @@
 
 ### Featured Projects: 
 - [MCP3008 ADC Operation](https://software-hardware-codesign.github.io/AVR-Sandbox/HelloSPI)
-- [SerialMonitor API](https://github.com/Software-Hardware-Codesign/AVR-Sandbox/tree/master/HelloJSerialComm)
+- [SerialMonitor API](https://software-hardware-codesign.github.io/AVR-Sandbox/HelloJSerialComm)
 - [Serial4j API](https://software-hardware-codesign.github.io/AVR-Sandbox/wip-index.html)
 - [Static V.S. Dynamic Libraries](https://software-hardware-codesign.github.io/AVR-Sandbox/wip-index.html)
 - [Makefile tutorial](https://software-hardware-codesign.github.io/AVR-Sandbox/wip-index.html)
