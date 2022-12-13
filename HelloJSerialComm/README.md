@@ -22,7 +22,7 @@ For more, refer to the documentation provided at:
 -----------------------------------------------------
 ## 2) Serial-Monitor API Basic Paradigm:
 
-![SerialMonitor](https://github.com/Software-Hardware-Codesign/AVR-Sandbox/blob/master/HelloJSerialComm/UML/SerialMonitor.svg)
+![SerialMonitor](https://software-hardware-codesign.github.io/AVR-Sandbox/HelloJSerialComm/UML/SerialMonitor.svg)
 
 - `com.serial.monitor.SerialMonitor`: A threadgroup, it starts, controls and monitors the serial monitor R/W entities threads, 
 it also holds the basic piece of operation, the monitor port, an instance of `com.fazecast.jSerialComm.SerialPort`.
