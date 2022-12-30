@@ -7,4 +7,5 @@ package com.scrappers.fsa.state;
  */
 public interface AutoState<T> {
     void invoke(T input);
+    T getInput();
 }
