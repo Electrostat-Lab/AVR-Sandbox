@@ -10,8 +10,8 @@ import com.scrappers.fsa.core.state.TransitionListener;
 /**
  * A tech-demo demonstrating a basic example of an antegrade finite-state-automaton design pattern.
  * 
- * Input bits at t0 = (x1 = 1, x2 = 1) ; At Present-State(PS) = (0) = NonCarryState(default-state) ; Output(Z0) = 0 ; Next-State(NS) = (1) = CarryState
- * Input bits at t1 = (x1 = 1, x2 = 0) ; At Present-State(PS) = (1) = CarryState ; Output(Z1) = 0 ; Next-State(NS) = (1) = CarryState
+ * Input bits at t0 = (x1 = 0, x2 = 0) ; At Present-State(PS) = (0) = NonCarryState(default-state) ; Output(Z0) = 0 ; Next-State(NS) = (0) = NonCarryState
+ * Input bits at t1 = (x1 = 0, x2 = 1) ; At Present-State(PS) = (0) = NonCarryState ; Output(Z1) = 1 ; Next-State(NS) = (0) = NonCarryState
  * ..... and so on
  * 
  * The execution states flow is determined by those 3 factors: 
@@ -40,8 +40,13 @@ public final class SerialAdder extends Thread implements TransitionListener {
     public void init() {
         
         /* create bits to add */
-        adders.add(new BitsAdder(1, 1));
+        adders.add(new BitsAdder(0, 0));
+        adders.add(new BitsAdder(0, 1));
         adders.add(new BitsAdder(1, 0));
+        adders.add(new BitsAdder(1, 1));
+        adders.add(new BitsAdder(0, 1));
+        adders.add(new BitsAdder(1, 0));
+        adders.add(new BitsAdder(1, 1));
         adders.add(new BitsAdder(0, 0));
         
         /* define states */

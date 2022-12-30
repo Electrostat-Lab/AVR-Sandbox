@@ -6,8 +6,8 @@ package com.scrappers.fsa.example;
  * @author pavl_g.
  */
 public final class BitsAdder {
-    private final int input0;
-    private final int input1;
+    public final int input0;
+    public final int input1;
     public int output;
     
     public BitsAdder(int input0, int input1) {
