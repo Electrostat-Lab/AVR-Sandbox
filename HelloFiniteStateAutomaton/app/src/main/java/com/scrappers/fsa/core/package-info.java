@@ -1,1 +1,1 @@
-package com.scrappers.fsa;
+package com.scrappers.fsa.core;
