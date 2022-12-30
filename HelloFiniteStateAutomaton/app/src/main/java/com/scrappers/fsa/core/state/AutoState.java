@@ -9,6 +9,7 @@ package com.scrappers.fsa.core.state;
  */
 public interface AutoState<I, O> {
     void invoke(I input);
+    void onFinish();
     I getInput();
     O getStateTracer();
 }

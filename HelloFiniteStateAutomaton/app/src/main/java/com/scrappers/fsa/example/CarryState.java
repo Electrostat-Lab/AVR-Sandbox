@@ -14,6 +14,7 @@ public final class CarryState implements AutoState<BitsAdder, Integer> {
     public void invoke(BitsAdder adder) {
         this.adder = adder;
         adder.output = adder.add() + 1;
+
         /* sanity update output and carry */
         if (adder.output == 2) {
             // output = 0 and carry = 1
@@ -25,7 +26,7 @@ public final class CarryState implements AutoState<BitsAdder, Integer> {
             carry = Integer.valueOf(1);
         } /* else, carry = 0 :-) */
 
-        LOGGER.log(Level.INFO, "Present-State = CarryState ; " + "X1/X2 = Z" + " " + adder.input0 + "/" + adder.input1 + " = " + adder.output);
+        LOGGER.log(Level.INFO, "Present-State = CarryState ; " + "X1/X2 = Z" + " ; " + adder.input0 + "/" + adder.input1 + " = " + adder.output);
     }
 
     @Override
@@ -36,5 +37,12 @@ public final class CarryState implements AutoState<BitsAdder, Integer> {
     @Override
     public Integer getStateTracer() {
         return carry;
+    }
+
+    @Override
+    public void onFinish() {
+        // reset values and/or release resoureces
+        carry = Integer.valueOf(0);
+        this.adder = null;
     }
 }

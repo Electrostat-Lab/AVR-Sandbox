@@ -48,6 +48,8 @@ public final class SerialAdder extends Thread implements TransitionListener {
         adders.add(new BitsAdder(1, 0));
         adders.add(new BitsAdder(1, 1));
         adders.add(new BitsAdder(0, 0));
+        /* state is transited to stateA again -- NonCarryState default state */
+        adders.add(new BitsAdder(0, 0));
         
         /* define states */
         final AutoState<BitsAdder, Integer> stateA = new NonCarryState();
