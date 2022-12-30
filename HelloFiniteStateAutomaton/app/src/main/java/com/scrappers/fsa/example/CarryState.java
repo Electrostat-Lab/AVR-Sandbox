@@ -25,8 +25,7 @@ public final class CarryState implements AutoState<BitsAdder, Integer> {
             carry = Integer.valueOf(1);
         } /* else, carry = 0 :-) */
 
-        LOGGER.log(Level.INFO, "CarryState invoked, shifted to a new present state !");
-        LOGGER.log(Level.INFO, String.valueOf(adder.output));
+        LOGGER.log(Level.INFO, "Present-State = CarryState ; " + "X1/X2 = Z" + " " + adder.input0 + "/" + adder.input1 + " = " + adder.output);
     }
 
     @Override
