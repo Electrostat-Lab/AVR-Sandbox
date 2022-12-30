@@ -13,9 +13,4 @@ public final class SerialAdder implements AutoState<Adder> {
         LOGGER.log(Level.INFO, "State invoked, shifted to a new present state !");
         LOGGER.log(Level.INFO, String.valueOf(adder.add()));
     }
-    
-    @Override
-    public void revoke(Adder adder) {
-        LOGGER.log(Level.INFO, "State revoked with no action !");
-    }
 }

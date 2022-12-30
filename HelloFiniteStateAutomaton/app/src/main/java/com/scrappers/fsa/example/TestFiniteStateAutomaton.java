@@ -1,10 +1,13 @@
 package com.scrappers.fsa.example;
 
-import java.util.NoSuchElementException;
 import java.util.logging.Logger;
-
 import com.scrappers.fsa.TransitionalManager;
 
+/**
+ * A tech-demo demonstrating a basic example of an antegrade finite-state-automaton design pattern.
+ * 
+ * @author
+ */
 public final class TestFiniteStateAutomaton extends Thread {
 
     private TransitionalManager transitionalManager;
