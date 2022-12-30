@@ -24,9 +24,9 @@ public class TransitionalManager {
     public <I, O> void transit(final I input, final TransitionListener transitionListener) {
         final AutoState<I, O> autoState = (AutoState<I, O>) autostates.iterator().next();
         /* sanity check the input */
-        assert autostates.contains(input);
         autoState.invoke(input);
         transitionListener.onTransition(autoState);
+        autoState.onFinish();
         autostates.remove(autoState);
     }
 }

@@ -20,8 +20,8 @@ public final class NonCarryState implements AutoState<BitsAdder, Integer> {
             adder.output = 0;
             carry = Integer.valueOf(1);
         }/* else, carry = 0 and output = 1 :-) */
-
-        LOGGER.log(Level.INFO, "Present-State = NonCarryState ; " + "X1/X2 = Z" + " " + adder.input0 + "/" + adder.input1 + " = " + adder.output);
+        
+        LOGGER.log(Level.INFO, "Present-State = NonCarryState ; " + "X1/X2 = Z"  + " ; " + adder.input0 + "/" + adder.input1 + " = " + adder.output);
     }
 
     @Override
@@ -32,5 +32,12 @@ public final class NonCarryState implements AutoState<BitsAdder, Integer> {
     @Override
     public Integer getStateTracer() {
         return carry;
+    }
+    
+    @Override
+    public void onFinish() {
+        // reset values and/or release resoureces
+        carry = Integer.valueOf(0);
+        this.adder = null;
     }
 }
