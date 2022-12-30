@@ -23,7 +23,7 @@ import com.scrappers.fsa.core.state.TransitionListener;
  */
 public final class SerialAdder extends Thread implements TransitionListener {
 
-    private TransitionalManager transitionalManager;
+    private final TransitionalManager transitionalManager = new TransitionalManager();
     private final List<BitsAdder> adders = new ArrayList<>();
     private final List<AutoState<BitsAdder, Integer>> states = new ArrayList<>();
 
@@ -38,10 +38,6 @@ public final class SerialAdder extends Thread implements TransitionListener {
      * Initializes the AutoStates and assigns the entry state.
      */
     public void init() {
-        /* initialize the manager on the first update */
-        if (transitionalManager == null) {
-            transitionalManager = TransitionalManager.initialize();
-        }
         
         /* create bits to add */
         adders.add(new BitsAdder(1, 1));
