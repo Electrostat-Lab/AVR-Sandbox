@@ -7,7 +7,7 @@ package com.scrappers.fsa.example;
  */
 public final class Launcher {
     public static void main(String[] args) {
-        final TestFiniteStateAutomaton finiteStateAutomataTest = new TestFiniteStateAutomaton();
+        final SerialAdder finiteStateAutomataTest = new SerialAdder();
         finiteStateAutomataTest.init();
         finiteStateAutomataTest.start();
     }

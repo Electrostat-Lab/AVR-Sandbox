@@ -1,16 +1,93 @@
 package com.scrappers.fsa.example;
 
-import com.scrappers.fsa.state.AutoState;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
-import java.util.logging.Level;
+import com.scrappers.fsa.core.TransitionalManager;
+import com.scrappers.fsa.core.state.AutoState;
+import com.scrappers.fsa.core.state.TransitionListener;
 
-public final class SerialAdder implements AutoState<Adder> {
+/**
+ * A tech-demo demonstrating a basic example of an antegrade finite-state-automaton design pattern.
+ * 
+ * Input bits at t0 = (x1 = 1, x2 = 1) ; At Present-State(PS) = (0) = NonCarryState(default-state) ; Output(Z0) = 0 ; Next-State(NS) = (1) = CarryState
+ * Input bits at t1 = (x1 = 1, x2 = 0) ; At Present-State(PS) = (1) = CarryState ; Output(Z1) = 0 ; Next-State(NS) = (1) = CarryState
+ * ..... and so on
+ * 
+ * The execution states flow is determined by those 3 factors: 
+ * # The Present-State(PS)
+ * # The Inputs 
+ * # The Next-State (which is determined by the inputs and the present state)
+ * 
+ * @author pavl_g.
+ */
+public final class SerialAdder extends Thread implements TransitionListener {
+
+    private TransitionalManager transitionalManager;
+    private final List<BitsAdder> adders = new ArrayList<>();
+    private final List<AutoState<BitsAdder, Integer>> states = new ArrayList<>();
+
+    /**
+     * Creates a serial adder state-machine example
+     */
+    public SerialAdder() {
+        super("SerialAdder-Finite-State-Automaton");
+    }
     
-    private final Logger LOGGER = Logger.getLogger(SerialAdder.class.getName());
+    /**
+     * Initializes the AutoStates and assigns the entry state.
+     */
+    public void init() {
+        /* initialize the manager on the first update */
+        if (transitionalManager == null) {
+            transitionalManager = TransitionalManager.initialize();
+        }
+        
+        /* create bits to add */
+        adders.add(new BitsAdder(1, 1));
+        adders.add(new BitsAdder(1, 0));
+        adders.add(new BitsAdder(0, 0));
+        
+        /* define states */
+        final AutoState<BitsAdder, Integer> stateA = new NonCarryState();
+        final AutoState<BitsAdder, Integer> stateB = new CarryState();
+        states.add(stateA);
+        states.add(stateB);
+
+        /* assign the entry state to this machine */
+        transitionalManager.assignNextState(stateA);
+    }
     
     @Override
-    public void invoke(Adder adder) {
-        LOGGER.log(Level.INFO, "State invoked, shifted to a new present state !");
-        LOGGER.log(Level.INFO, String.valueOf(adder.add()));
+    public void run() {
+        adders.forEach( adder -> {
+            try {
+                transitionalManager.transit(500, adder, this);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } 
+        });  
+        Logger.getLogger(getName()).info("Finite state finishes !");
+    }
+
+    @Override
+    public <I, O> void onTransition(AutoState<I, O> presentState) {
+        /** assign the state on transition */
+        final AutoState<BitsAdder, Integer> autoState = (AutoState<BitsAdder, Integer>) presentState;
+        if (!hasNextCarryState(autoState)) {
+            transitionalManager.assignNextState(states.get(0));
+        } else {
+            transitionalManager.assignNextState(states.get(1));
+        }
+    }
+
+    /**
+     * Tests whether the current state has a next {@link CarryState}.
+     * 
+     * @param state the state to test against its tracer
+     * @return true if the next state is a carry state (i.e: when the tracer is 1), false otherwise.
+     */
+    private boolean hasNextCarryState(AutoState<BitsAdder, Integer> state) {
+        return state.getStateTracer().intValue() == 1;
     }
 }
