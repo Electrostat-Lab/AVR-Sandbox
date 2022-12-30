@@ -41,7 +41,6 @@ public final class TransitionalManager {
         /* sanity check the input */
         assert autostates.contains(input);
         autoState.invoke(input);
-        autoState.revoke(input);
         autostates.remove(autoState);
     }
 }
