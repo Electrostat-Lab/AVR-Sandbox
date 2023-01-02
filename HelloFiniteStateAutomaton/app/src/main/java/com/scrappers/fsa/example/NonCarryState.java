@@ -35,6 +35,11 @@ public final class NonCarryState implements AutoState<BitsAdder, Integer> {
     }
     
     @Override
+    public void onStart() {
+        
+    }
+
+    @Override
     public void onFinish() {
         // reset values and/or release resoureces
         carry = Integer.valueOf(0);

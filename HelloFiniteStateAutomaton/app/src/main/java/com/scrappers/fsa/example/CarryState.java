@@ -45,4 +45,9 @@ public final class CarryState implements AutoState<BitsAdder, Integer> {
         carry = Integer.valueOf(0);
         this.adder = null;
     }
+
+    @Override
+    public void onStart() {
+        
+    }
 }
