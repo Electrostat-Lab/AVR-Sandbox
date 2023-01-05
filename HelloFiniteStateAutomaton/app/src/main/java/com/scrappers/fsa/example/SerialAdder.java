@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.logging.Logger;
 import com.scrappers.fsa.core.TransitionalManager;
 import com.scrappers.fsa.core.state.AutoState;
+import com.scrappers.fsa.core.state.CloneType;
 import com.scrappers.fsa.core.state.TransitionListener;
 
 /**
@@ -52,13 +53,22 @@ public final class SerialAdder extends Thread implements TransitionListener {
         adders.add(new BitsAdder(0, 0));
         
         /* define states */
-        final AutoState<BitsAdder, Integer> stateA = new NonCarryState();
+        AutoState<BitsAdder, Integer> stateA = new NonCarryState();
         final AutoState<BitsAdder, Integer> stateB = new CarryState();
-        states.add(stateA);
+        /* Test deep copy */
+        final AutoState<BitsAdder, Integer> copyA = stateA.clone(CloneType.DEEP);
+        System.out.println(stateA);
+        System.out.println(copyA);
+
+        states.add(copyA);
         states.add(stateB);
 
+        stateA = null;
+        System.out.println(stateA);
+        System.out.println(copyA);
+        
         /* assign the entry state to this machine */
-        transitionalManager.assignNextState(stateA);
+        transitionalManager.assignNextState(copyA);
     }
     
     @Override
