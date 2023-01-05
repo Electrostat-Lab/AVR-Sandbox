@@ -7,8 +7,17 @@ import java.util.logging.Level;
 public final class NonCarryState implements AutoState<BitsAdder, Integer> {
     
     private BitsAdder adder;
+    private String test;
     private Integer carry = Integer.valueOf(0);
     private final Logger LOGGER = Logger.getLogger(CarryState.class.getName());
+    
+    public void setTest(String test) {
+        this.test = test;
+    }
+
+    public String getTest() {
+        return test;
+    }
     
     @Override
     public void invoke(BitsAdder adder) {

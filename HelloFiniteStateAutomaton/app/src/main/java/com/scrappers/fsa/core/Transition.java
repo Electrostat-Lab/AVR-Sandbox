@@ -21,7 +21,7 @@ public final class Transition<S extends AutoState<?, ?>> {
     /**
      * Instantiates a transition with a next-state.
      * 
-     * @param nextState
+     * @param nextState the next-state object to assign
      */
     public Transition(S nextState) {
         this.nextState = nextState;
