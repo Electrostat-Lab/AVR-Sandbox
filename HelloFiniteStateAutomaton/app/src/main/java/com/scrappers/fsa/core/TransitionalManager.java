@@ -5,6 +5,7 @@ import java.util.logging.Logger;
 import java.lang.Thread;
 import com.scrappers.fsa.core.state.AutoState;
 import com.scrappers.fsa.core.state.TransitionListener;
+import com.scrappers.fsa.util.StateMap;
 
 /**
  * Represents the core component that drives and controls the flow of the Finite-State pattern by selectively assigning a new state, 
@@ -50,6 +51,39 @@ public class TransitionalManager {
     }
     
     /**
+     * Transits to the next-state from a state-map.
+     * 
+     * @param <I> the state input type
+     * @param <O> the state tracer object type
+     * @param map the system state-map holding a presentstate and a nextstate
+     * @param transitionListener an event driven interface object that fires {@link TransitionListener#onTransition(AutoState)} 
+     *                           after the {@link AutoState#invoke(Object)} is invoked when the transition completes
+     * @throws InterruptedException thrown if the application has interrupted the system during the latency period
+     */
+    public <I, O> void transit(final StateMap<AutoState<I, O>> map, final TransitionListener transitionListener) {
+        transit(map.getPresentState().getInput(), transitionListener);
+        assignNextState(map.getNextState());
+        map.removePresentState();
+    }
+
+    /**
+     * Transits to the next-state from a state-map with a latency period.
+     * 
+     * @param <I> the state input type
+     * @param <O> the state tracer object type
+     * @param time the latency after which the transition starts
+     * @param map the system state-map holding a presentstate and a nextstate
+     * @param transitionListener an event driven interface object that fires {@link TransitionListener#onTransition(AutoState)} 
+     *                           after the {@link AutoState#invoke(Object)} is invoked when the transition completes
+     * @throws InterruptedException thrown if the application has interrupted the system during the latency period
+     */
+    public <I, O> void transit(final long time, final StateMap<AutoState<I, O>> map, final TransitionListener transitionListener) throws InterruptedException {
+        transit(time, map.getPresentState().getInput(), transitionListener);
+        assignNextState(map.getNextState());
+        map.removePresentState();
+    }
+
+    /**
      * Transits to the next-state after a latency time in milliseconds.
      * 
      * @param <I> the state input type
@@ -75,7 +109,7 @@ public class TransitionalManager {
      * @throws InterruptedException thrown if the application has interrupted the system during the latency period
      */
     public <I, O> void transit(final I input, final TransitionListener transitionListener) throws NullPointerException {
-        AutoState<I, O> autostate = (AutoState<I, O>) transition.getNextState();
+        final AutoState<I, O> autostate = (AutoState<I, O>) transition.getNextState();
         LOGGER.log(Level.INFO, "Transitting into a new state " + autostate);
         autostate.onStart();
         autostate.invoke(input);
