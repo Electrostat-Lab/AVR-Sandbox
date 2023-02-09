@@ -139,21 +139,6 @@ int main(void* args) {
 
     /** How the moduluo function work under-the-hood ? */
     /**
-     * Recall this equation: q = (x / d) where; q is the Quotient or the result of the division, x is the numerator and d is the denominator.
-     * then ==> q . d = x
-     * then ==> (q . d) + remainder = x
-     * then ==> remainder = x - (q . d)
-     * conclusion ==> the modulus function, f(x) = x - (q . d) 
-     *
-     * In cases of the division returns a real number, the remainder is always evaluated to zero, and so the modulus function....
-     * Let's test the above function:
-     * Recall, 4 % 2 = 0; because 4 / 2 = 2 and so remainder is zero as the number (4) can be divided equally into 2 and here we apply the above concluded function:
-     *         f(x) = x - (q . d), recall, q = 4 / 2 = 2, and d = 2
-     *         f(4) = 4 - (2 x 2) = 0.
-     *
-     * Example.(2): 7 % 4 = 2; beacause 2 cannot be divided equally into 4 pieces, and here we apply the above linear equation:
-     *              f(x) = x - (q . d), recall, q = 2 / 4 = 0.5, and d = 4
-     *              f(2) = 2 - (0.5 x 4) = 2 - 2 =
      * 
      */
 
