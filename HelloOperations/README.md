@@ -115,9 +115,13 @@ int main(void* args) {
 > Syntax: `l-value` = `1st-Operand` [OPERATOR] `2nd-Operand` [OPERATOR] ..... 
 
 ADDITION `l-value` = `1st-Operand` [+] `2nd-Operand`: adds the 2 operands and the result is evaluated to the `l-value`.
+
 SUBTRACTION `l-value` = `1st-Operand` [-] `2nd-Operand`: subtracts the second operand from the first and the result is evaluated to the `l-value`.
+
 MULTIPLICATION `l-value` = `1st-Operand` [*] `2nd-Operand`: multiplies both operands and the result is evaluated to the `l-value`.
+
 DIVISION `l-value` = `1st-Operand` [/] `2nd-Operand`: divides the first operand by the second operand and the result is evaluated to the `l-value`.
+
 MODULUS `l-value` = `1st-Operand` [%] `2nd-Operand`: returns the remainder of dividing the first operand by the second operand and the result is evaluated to the `l-value`.
 
 Here is an example demonstrating the arithmetic operations in C:
@@ -170,10 +174,15 @@ int main(void* args) {
 The comparison operators used to compare 2 operands and returns 1 if the condition is met and 0 if the condition isn't true.
 
 IS-NOT-EQUAL `!=`: Tests whether both operands are not equal, if this condition is met, the expression returns 1 (true), 0 otherwise.
+
 IS-EQUAL `==`: Tests whether both operands are equal, if this condition is met, the expression returns 1 (true), 0 otherwise.
+
 IS-GREATER-THAN-OR-EQUAL `>=`: Tests whether the first operand is greater than or equal to the second operand, if this condition is met, the expression returns 1, 0 otherwise.
+
 IS-LESS-THAN-OR-EQUAL `<=`: Tests whether the first operand is less than or equal to the second operand, if this condition is met, the expression returns 1, 0 otherwise.
+
 IS-GREATER-THAN `>`: Tests whether the first operand is greater than the second operand, if this condition is met, the expression returns 1, 0 otherwise.
+
 IS-LESS-THAN `<`:  Tests whether the first operand is less than the second operand, if this condition is met, the expression returns 1, 0 otherwise.
 
 Here is an example demonstrating the comparison operators: 
@@ -229,8 +238,11 @@ The logical operators test the truth value of a pair of operands, any non-zero e
 are considered false in C.
 
 Logical AND `&&`: Tests whether both operands are true, if first operand is false, the condition returns with 0 (false) and the second operand isn't evaluated.
+
 Logical OR `||`: Tests whether one of the operands is true, if the first operand is true, the condition returns with 1 (true) and the second operand isn't evaluated.
+
 Logical NOT `!`: Flips the conditional expression, if !(1) then the expression is evaluated to 0 (means false), if !(0) then the expression is evaluated to 1 (means true).
+
 Logical Combinatorial operators: a compound of mutiple expressions, for example: `(n0 == n1) && ((n2 < n3) && (n2 == 2))`, the most inner parenthesis is evaluated first.
 
 Here is an example demonstrating: 
