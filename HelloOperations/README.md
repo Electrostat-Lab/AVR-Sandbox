@@ -139,7 +139,22 @@ int main(void* args) {
 
     /** How the moduluo function work under-the-hood ? */
     /**
+     * The moduluo operation operates on integers only.
+     * It finds the remainder of a division operation without going over the denominator.
      * 
+     * For example: (remember, we are performing an integer division, forget about fractions here...)
+     * 1 / 4 = 0 R 1, as (1) cannot be divided equally into (4) pieces, so it is retained in the remainder.
+     * 2 / 4 = 0 R 2, as (2) cannot be divided equally into (4) pieces, so it is retained in the remainder.
+     * 3 / 4 = 0 R 3, as (3) cannot be divided equally into (4) pieces, so it is retained in the remainder.
+     * 4 / 4 = 1 R 0, as (4) can be divided equally into (4) pieces with no remainder, so (zero) is retained in the remainder.
+     * 5 / 4 = 1 R 1, as (5) can be divided equally into (4) pieces with a remainder of 1 which is retained in the remainder.
+     * 6 / 4 = 1 R 2, as (6) can be divided equally into (4) pieces with a remainder = numerator - denominator = 6 - 4 = 2.
+     * 7 / 4 = 1 R 3, as (7) can be divided equally into (4) pieces with a remainder of (7-4) which is 3.
+     * 8 / 4 = 2 R 0, as (8) can be divided equally into (4) pieces with no remainder, so zero is retained in the remainder variable.
+     * 
+     * AND SO ON....
+     * 
+     * TASK: Create a loop that displays the above example on the console.
      */
 
     return 0;
