@@ -40,7 +40,7 @@ void define_array() {
 	
 	/**************************************************************************/
 	
-	printf("*********************************** Array Declarators with instant initializer ***********************************\n");
+	printf("*********************************** Array Declarators with instant initialization ***********************************\n");
 	long long pre_init_numbers[] = {50000, INT32_MAX, INT8_MAX * 2};
 	printf("Size of buffer [%p] = [%i] bytes \n", &pre_init_numbers, sizeof(pre_init_numbers));
 	printf("Data at chunk [%p] = [%i]\n", &pre_init_numbers[0], pre_init_numbers[0]);
@@ -61,17 +61,26 @@ void define_array() {
 	printf("*****************************************************************************************************\n");
 
 	/**************************************************************************/
-	printf("*********************************** Multi-dimensional arrays with late initialization ***********************************\n");
-	// 1st dimension = ['P'-'a'-'v'-'l'-'y'], 2nd dimension = ['G'-'e'-'r'-'g'-'e'-'s']
+	printf("*********************************** Multi-dimensional arrays with instant initialization ***********************************\n");
 	/* declare a buffer of [2 * 8 * 1] = 16 bytes */
-	char name_elements[2][9] = {{'P', 'a', 'v', 'l', 'y', '\0'}, {'G', 'e', 'r', 'g', 'e', 's', '\0'}};
-	for (int i = 0; i < 2; i++) {
+	/* When thinking of multi-dimensional arrays think of matrices from linear algebra (however a matrix is not an array)*/
+	/* The First subscript expression comprises the rows and the second subscript notation comprises the columns */
+	
+	// 1st element in the 1st dimension (row 1) = ['P'-'a'-'v'-'l'-'y'], 2nd element in the 1st dimension (row2) = ['G'-'e'-'r'-'g'-'e'-'s']
+	// the 2nd dimension is comprised by the columns
+	// total elements = rows * columns = 2 * 9 = 18 elements
+	// total size = 18 * sizeof(char) = 18 bytes.
+	const int rows = 2;
+	const int columns = 9;
+	char name_elements[rows][columns] = {{'P', 'a', 'v', 'l', 'y', '\0'}, 
+										 {'G', 'e', 'r', 'g', 'e', 's', '\0'}};
+	for (int i = 0; i < rows; i++) {
 		if (i == 0) {
 			printf("First name = ");
 		} else {
 			printf("Second name = ");
 		}
-		for (int j = 0; j < 8; j++) {
+		for (int j = 0; j < columns; j++) {
 			printf("%c", name_elements[i][j]);
 		}
 		printf("\n");
