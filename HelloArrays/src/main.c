@@ -70,21 +70,43 @@ void define_array() {
 	// the 2nd dimension is comprised by the columns
 	// total elements = rows * columns = 2 * 9 = 18 elements
 	// total size = 18 * sizeof(char) = 18 bytes.
+	char name_elements[2][12] = {{'E', 'm', 'b', 'e', 'd', 'd', 'e', 'd', 32, '\0'}, 
+                             {'E', 'n', 'g', 'i', 'n', 'e', 'e', 'r', 'i', 'n', 'g', '\0'}};
 	const int rows = 2;
-	const int columns = 9;
-	char name_elements[rows][columns] = {{'P', 'a', 'v', 'l', 'y', '\0'}, 
-										 {'G', 'e', 'r', 'g', 'e', 's', '\0'}};
+	const int columns = 12;
+	
+	/* Those are 3 equivalent ways to access the data inside the [name_elements] */
+
 	for (int i = 0; i < rows; i++) {
-		if (i == 0) {
-			printf("First name = ");
-		} else {
-			printf("Second name = ");
-		}
 		for (int j = 0; j < columns; j++) {
 			printf("%c", name_elements[i][j]);
 		}
-		printf("\n");
 	}
+	printf("\n");
+
+	for (int i = 0; i < rows; i++) {
+		printf("%s", name_elements[i]);
+	}
+	printf("\n");
+
+	/* Here is another equivalent HACK !! */
+	/* In this hack, we designated the first dimension values as strings (aka const char*) */
+	/* The multi-dimensional array variable is an actual pointer to another pointer; the other pointer points to the beginning of the string literals */
+	for (int i = 0; i < rows; i++) {
+		const char* str = *(name_elements + i);
+		printf("%s", str);
+	}
+	printf("\n");
+
+	/* Treating multidimensional array as a single buffer of memory */
+	for (int cell = 0; cell < rows * columns; cell++) {
+		/* Get the actual buffer */
+		const char* buffer = name_elements;
+		/* print buffer cells */
+		printf("%c", buffer[cell]);
+	}
+
+	printf("\n");
 
 	/**************************************************************************/
 }
