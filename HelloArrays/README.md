@@ -96,8 +96,8 @@ for (int cell = 0; cell < cells; cell++) {
 ```
 
 > Remark: 
-> The multi-dimensional arrays represent a pointer to some internal arrays each of which has the address of their first element cell and so, 
-> a multi-dimensional array represents a pointer to another pointer which represents the address of the first element in the first array.
+> The multi-dimensional arrays represent a buffer that is internally divided into large chunks (arrays), de-referencing will
+> get you to the inner most value of those chunks as you go.
 
 ---------------
 
