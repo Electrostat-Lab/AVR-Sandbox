@@ -98,6 +98,7 @@ for (int cell = 0; cell < cells; cell++) {
 > Remark: 
 > The multi-dimensional arrays represent a buffer that is internally divided into large chunks (arrays), de-referencing will
 > get you to the inner most value of those chunks as you go.
+> Casting an array to a buffer (pointer) will manipulate it as a linear memory buffer (unidimensional buffer).
 
 ---------------
 
