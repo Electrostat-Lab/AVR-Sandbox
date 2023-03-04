@@ -19,6 +19,7 @@ An array is a collection of objects of the same data type, allocated contiguousl
 
 Here is a simple example:
 ```c
+int number_of_elements = 3;
 int numbers[number_of_elements];
 
 /* initialize the elements of this array */
