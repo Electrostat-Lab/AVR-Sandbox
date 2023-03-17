@@ -146,12 +146,11 @@ void pointers_example() {
     
     /* A pointer is variable that holds an integer number which represents a memory address to a memory buffer or chunk */ 
     /* Pointers are 64-bit (8 bytes) integer positive numbers in case of 64-bit binaries and 32-bit (4 bytes) in case of 32-bit binaries */ 
-    /* Pointers are stored in memory ????????????????????????? */
     
-    /* create a null pointer -- ageneric pointer (a pointer with indeterminate memory type) */
-	void* ptr0 = NULL;
+    /* create a null pointer -- a generic pointer (a pointer with indeterminate memory type) */
+    void* ptr0 = NULL;
     /* another way to create an un-initialized pointer */
-	void* ptr1 = (void*) 0;
+    void* ptr1 = (void*) 0;
     
     printf("Size of pointer-0 = %d \n", sizeof(ptr0));
     printf("Size of pointer-1 = %d \n", sizeof(ptr1));
