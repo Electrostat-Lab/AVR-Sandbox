@@ -101,7 +101,7 @@ void define_array() {
 	/* Treating multidimensional array as a single buffer of memory */
 	for (int cell = 0; cell < rows * columns; cell++) {
 		/* Get the actual buffer */
-		const char* buffer = name_elements;
+		const char* buffer = (const char*) name_elements;
 		/* print buffer cells */
 		printf("%c", buffer[cell]);
 	}
@@ -133,6 +133,68 @@ void array_operations() {
 	}
 	printf("\n");
 } 
+
+int* pass_by_value(int test) {
+    return &test;
+}
+
+int* pass_by_reference(int* test) {
+    return test;
+}
+
+void pointers_example() {
+    
+    /* A pointer is variable that holds an integer number which represents a memory address to a memory buffer or chunk */ 
+    /* Pointers are 64-bit (8 bytes) integer positive numbers in case of 64-bit binaries and 32-bit (4 bytes) in case of 32-bit binaries */ 
+    /* Pointers are stored in memory ????????????????????????? */
+    
+    /* create a null pointer -- ageneric pointer (a pointer with indeterminate memory type) */
+	void* ptr0 = NULL;
+    /* another way to create an un-initialized pointer */
+	void* ptr1 = (void*) 0;
+    
+    printf("Size of pointer-0 = %d \n", sizeof(ptr0));
+    printf("Size of pointer-1 = %d \n", sizeof(ptr1));
+    
+    int number = 220;
+    
+    /* initialize the pointer variable with the memory address of the [number] */
+    /* the ampersand operator [&] is called the "address-of operator" in C and it is used to fetch the memory address of a memory location */
+    ptr0 = &number;
+    /* A pointer pointing to a location storing another memory reference (pointer to pointer) */
+    ptr1 = &ptr0;
+
+    /* the asterisk operation [*] is called the "de-reference operator" in C and it is used to fetch the value stored in a memory location from a memory address or a pointer */
+    printf("The value of the memory referenced by %p is %d\n", ptr0, *((int*) ptr0));
+    printf("The value of the memory referenced by %p is %p\n", ptr1, *((long*) ptr1));
+    printf("The value of the memory referenced by %p is %d\n", ptr0, *((int*)*((long*) ptr1)));
+    /* changing the value of the memory buffer by dereferencing a memory reference */
+    *((int*)*((long*) ptr1)) = 300;
+    /* printing the memory location value by dereferencing the second memory reference */
+    printf("The value of the memory referenced by %p is %d\n", ptr0, *((int*) ptr0));
+    
+    /* operations on pointers are covered in the automatic buffer (arrays) section */
+
+    /* create a non-generic pointer -- a pointer with determinate memory type helps in avoiding explicit casting when dereferencing and enhances user readability */
+    int* ageneric_ptr = &number;
+    /* no explicit casting is needed when dereferencing */
+    printf("The value of the memory referenced by %p is %d\n", ageneric_ptr, *ageneric_ptr);
+    printf("The value of the memory referenced by %p is %d\n", ageneric_ptr, ageneric_ptr[0]);
+    
+    /* pointer to pointer is the same as the multidimensional array */
+    int** ptr_to_ptr = &ageneric_ptr;
+    
+    printf("The value of the memory referenced by %p is %d\n", ageneric_ptr, ptr_to_ptr[0][0]);
+    
+    /* Test by reference V.S. Pass by value */
+
+    printf("Test lifecycle of memory variables %d\n", *pass_by_reference(ageneric_ptr));
+
+    /* Pass by value cannot be utilized outside of the function block */
+    /* Further using of the locally defined variables outside of the function block will throw 
+       a memory Segmentation Fault indicating faulty memory section */
+    printf("Test lifecycle of local variables %d\n", *pass_by_value(240));
+}
 
 /**
  * Examines a dirty way of expanding an array.
@@ -166,5 +228,6 @@ int main() {
 	define_array();
 	array_operations();
 	expandables_example();
+	pointers_example();
 	return 0;
 }
