@@ -55,8 +55,8 @@ A multi-dimensional array is a collection of a matrix-like array where the eleme
 
 For example:
 ```c
-char name_elements[2][12] = {{'E', 'm', 'b', 'e', 'd', 'd', 'e', 'd', '\32', '\0'}, 
-                             {'E', 'n', 'g', 'i', 'n', 'e', 'e', 'r', 'i', 'n', 'g', '\0'}};
+char name_elements[2][12] = {{'E', 'm', 'b', 'e', 'd', 'd', 'e', 'd', '\\32', '\\0'}, 
+                             {'E', 'n', 'g', 'i', 'n', 'e', 'e', 'r', 'i', 'n', 'g', '\\0'}};
 ```
 This example creates a memory buffer of [2 * 12 =  24] elements with a total size of [24 * 1 = 24] bytes.
 
