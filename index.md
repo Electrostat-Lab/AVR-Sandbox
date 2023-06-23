@@ -62,6 +62,7 @@
 - [Struct hacks]()
 - [Pointers Alternatives]()
 - [Pointers in Java]()
+- [Memory Ownership, shared memory, restricted memory and limited access memory]()
 
 --------------------------------------------
 
