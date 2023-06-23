@@ -167,9 +167,9 @@ Can be represented by this square matrix:
 
 So, in C, it should be represented by: 
 ```c
-int mat_a[3][3] = {{2, 3, 4},
+int mat_a[3][3] = { {2, 3, 4},
                    {5, 6, 6},
-                   {10, 20, 8}};
+                   {10, 20, 8} };
 /* add 2 matrices here by adding their entries and outputing the result in a new matrix */
 ```
 
