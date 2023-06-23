@@ -51,11 +51,10 @@
 - [Embedded Design Patterns]()
 - [Composite Pattern]()
 - [Finite State Automata (FSA)]()
-- 
 
 ### Coding tricks and hacks: 
 
-> Disclaimer: this section is for fun and to explore how the memory works under-the-hood, it's not the best practice by any means.
+> Disclaimer: this section is for fun and to explore how the memory works under the hood, it's not the best practice by any means.
 
 - [Expandable memory using "Dynamic Memory Allocation"]()
 - [Manually partitioning memory]()
@@ -63,8 +62,11 @@
 - [Struct hacks]()
 - [Pointers Alternatives]()
 - [Pointers in Java]()
+
 --------------------------------------------
+
 ## Appendix
+
 ### Featured Projects: 
 - [MCP3008 ADC Operation](https://software-hardware-codesign.github.io/AVR-Sandbox/HelloSPI)
 - [SerialMonitor API](https://software-hardware-codesign.github.io/AVR-Sandbox/HelloJSerialComm)
