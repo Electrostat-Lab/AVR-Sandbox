@@ -41,7 +41,7 @@ This is the internal circuitry for `74LS138 Binary Decoder`:
 
 The main components of 74LS138 are Inverters and NAND Gates, other parts of construction are constructed using common data-lines.
 
-The combinatoric digital circuit shows that a 3-input data lines can be decoded into 8-output data lines, by inserting common data-lines (marked by green) before and after (marked by red triangles) the inverter gates, reduces the need to use more input lines.
+The combinatoric digital circuit shows that 3-input data lines can be decoded into 8-output data lines, by inserting common data-lines (marked by green) before and after (marked by red triangles) the inverter gates reducing the need to use more input lines.
 
 The DM74LS138 decodes one-of-eight lines, based upon
 the conditions at the three binary select inputs and the
