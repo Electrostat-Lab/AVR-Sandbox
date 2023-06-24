@@ -1,14 +1,17 @@
 # Binary Decoders
 > Created by [Pavly G.](https://github.com/Scrappers-glitch)
 
-Binary decoders are combinatorial logic circuits in which a group of inputs (n) can control the logic state of a group of outputs (m); where (n) is the number of inputs and (m) is the number of outputs and (m <= 2^n).
+Binary decoders are combinatorial logic circuits in which a group of inputs (n) can control the logic state of a group of outputs (m); where (n) is the number of inputs and (m) is the number of outputs and `(m <= 2^n)`.
 
 Binary decoders can be constructed from: 
 1) NOT Gates (inverters).
 2) Central data-lines.
 3) AND (for active "HIGH" output) or NAND (for active "LOW" outputs) Gates.
 
-This is a basic circuit of `2-to-4 binary decoder`:
+This is a basic circuit of a `2-to-4 binary decoder`:
+
+![image](https://github.com/Software-Hardware-Codesign/AVR-Sandbox/assets/60224159/348edade-6bc9-42a1-a46f-970b29102dc9)
+
 
 The truth table of this circuit can be displayed as follows: 
 
@@ -34,9 +37,9 @@ This is the internal circuitry for `74LS138 Binary Decoder`:
 
 | Connection Diagram | Logic Diagram | 
 |--------------------|---------------|
-|     |     |   
+| ![image](https://github.com/Software-Hardware-Codesign/AVR-Sandbox/assets/60224159/26302203-d0fe-4064-98bb-28f5aac73c77) | ![image](https://github.com/Software-Hardware-Codesign/AVR-Sandbox/assets/60224159/1f51613e-3d89-4dc2-abc0-b8cf92f4285d) |   
 
-The main components of 74LS138 is Inverters and NAND Gates, other parts of construction is carried out using common data-lines.
+The main components of 74LS138 are Inverters and NAND Gates, other parts of construction are constructed using common data-lines.
 
 The combinatoric digital circuit shows that a 3-input data lines can be decoded into 8-output data lines, by inserting common data-lines (marked by green) before and after (marked by red triangles) the inverter gates, reduces the need to use more input lines.
 
