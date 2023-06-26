@@ -55,3 +55,23 @@ three enable inputs.
 > line decoders in a single package. The active-low enable
 > input can be used as a data line in demultiplexing applications.
 > 
+
+-------------------
+## Examples on decoding addresses: 
+
+The following circuit is a (4k x 8) memory chip with 12 Address pins (A0-A11) representing (2^12) corresponding memory locations with 8 data pins (D0-D7) indicating input/output of 8-bits for the selected memory location, the MSB (Most Significant Bits) A12-A13-A14 selects this memory chip among others by bringing the CS to active LOW:
+
+![image](https://github.com/Software-Hardware-Codesign/AVR-Sandbox/assets/60224159/130e94b6-5006-4425-b9a1-33a4de53b363)
+
+Color codes: 
+1) Green Data lines: represents the MSBs of the memory address, these bits define which memory chip will be selected.
+2) Light-Red Data lines: represents Address Data lines, these bits define which memory location will be involved in the I/O operation when this chip is selected.
+3) Dark-Red Data lines: represents I/O data lines, 8 I/O pins corresponding to a parallel input of 8-bits for the currently active memory location in this memory chip.
+
+> The total storage (4k x 8) bits can be calculated using the following equation:
+> 2^12 Memory Locations (A0-A11) x 8-bits for each = 4K x 8 bits.
+
+-----------------------------
+## Resources: 
+- [Electronics Tutorial: Binary Decoders](https://www.electronics-tutorials.ws/combination/comb_5.html)
+- [AVR Microcontroller and Embedded Systems: Using Assembly and C](https://www.pearson.com/store/p/avr-microcontroller-and-embedded-systems-pearson-new-international-edition-pdf-ebook/GPROG_A100061251868_learnerau-availability/9781292054339)
