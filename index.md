@@ -26,7 +26,7 @@
 - [Basic Logic gates]()
 - [Combinatoric Logic gates]()
 - [Flip flops]()
-- [Address Decoders]()
+- [Binary Decoders](https://software-hardware-codesign.github.io/AVR-Sandbox/blog/decoders.html)
 - [Multiplexers]()
 - [Counters]()
 - [Shift Registers]()
