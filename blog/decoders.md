@@ -1,7 +1,7 @@
 # Binary Decoders
 > Created by [Pavly G.](https://github.com/Scrappers-glitch)
 
-Binary decoders are combinatorial logic circuits in which a group of inputs (n) can control the logic state of a group of outputs (m); where (n) is the number of inputs and (m) is the number of outputs and `(m <= 2^n)`.
+Binary decoders are combinatorial logic circuits in which a group of inputs (n) can control the logic state of a group of outputs (m); where (n) is the number of inputs and (m) is the number of outputs such that `(m <= 2^n)`.
 
 Binary decoders can be constructed from: 
 1) NOT Gates (inverters).
@@ -70,6 +70,17 @@ Color codes:
 
 > The total storage (4k x 8) bits can be calculated using the following equation:
 > 2^12 Memory Locations (A0-A11) x 8-bits for each = 4K x 8 bits.
+
+-------------------
+## Constructing Boolean Functions
+
+Boolean functions can be constructed using additional logic gates on the output side of decoders, for example: 
+
+![image](https://github.com/Software-Hardware-Codesign/AVR-Sandbox/assets/60224159/d0a115b8-fb13-4147-867a-1ca3ae2cd1aa)
+
+This circuit corresponds to this boolean function: 
+
+![image](https://github.com/Software-Hardware-Codesign/AVR-Sandbox/assets/60224159/56dfabef-2025-4c18-84e4-6e270260f93d)
 
 -----------------------------
 ## Resources: 
