@@ -83,6 +83,22 @@ This circuit corresponds to this boolean function:
 ![image](https://github.com/Software-Hardware-Codesign/AVR-Sandbox/assets/60224159/56dfabef-2025-4c18-84e4-6e270260f93d)
 
 -----------------------------
+## Cascading Decoder Circuits
+
+Cascading decoders aims at magnifying the number of input lines for a desired decoder with some available stock decoders.
+
+For example, it's possible to construct a `4-to-16 binary decoder` with a `3-to-8 binary decoder` by introducing 2 binary decoders, the number of the `3-to-8 binary decoders` to utilize in this circuit can be calculated using this equation: 
+`2^(N-n)`; where [N] is the number of input lines of the desired decoder (the 4-to-16 decoder) and [n] is the number of the input lines of the available decoder (the 3-to-8 decoder).
+
+Here is the circuit diagram of the cascade construction: 
+
+![image](https://github.com/Software-Hardware-Codesign/AVR-Sandbox/assets/60224159/7c5034b7-291b-44d2-9c03-7c0b1ac9cdbe)
+
+This logic circuit will have up-to (2^4) or 16 different combinational inputs that will be decoded into 16-bits of output, the (D) input line selects which decoder will be activated, (0) to select the first decoder aka. the least significant decoder for the least significant 8-bits, while the (1) input at (D) selects the second decoder aka. the most significant decoder for the most significant 8-bits.
+
+-----------------------------
+
 ## Resources: 
 - [Electronics Tutorial: Binary Decoders](https://www.electronics-tutorials.ws/combination/comb_5.html)
+- [Digital Electronics: Principles, Devices and Applications by Anil K. Maini](https://www.wiley.com/en-us/Digital+Electronics%3A+Principles%2C+Devices+and+Applications-p-9780470510513)
 - [AVR Microcontroller and Embedded Systems: Using Assembly and C](https://www.pearson.com/store/p/avr-microcontroller-and-embedded-systems-pearson-new-international-edition-pdf-ebook/GPROG_A100061251868_learnerau-availability/9781292054339)
