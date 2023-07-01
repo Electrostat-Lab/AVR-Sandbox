@@ -44,7 +44,7 @@ int* numbers_address = &numbers[0];
 
 This example can be demonstrated using the following scheme: 
 
-<img src="https://github.com/Software-Hardware-Codesign/AVR-Sandbox/blob/master/HelloArrays/.thumbnails/unidimensional-buffer.png" height=550 width=950/>
+<img src="https://software-hardware-codesign.github.io/AVR-Sandbox/HelloArrays/.thumbnails/unidimensional-buffer.png" height=550 width=950/>
 
 ## Multi-dimensional arrays:
 
@@ -78,7 +78,7 @@ for (int i = 0; i < rows; i++) {
 
 Here is the representation in terms of memory:
 
-<img src="https://github.com/Software-Hardware-Codesign/AVR-Sandbox/blob/master/HelloArrays/.thumbnails/memory-chunks-cells.png" height=550 width=950/>
+<img src="https://software-hardware-codesign.github.io/AVR-Sandbox/HelloArrays/.thumbnails/memory-chunks-cells.png" height=550 width=950/>
 
 And this is an equivalent syntax, dealing with the array as a memory buffer in terms of memory:
 ```c
