@@ -1,4 +1,5 @@
 # HelloTIP122
+> Created by [Pavly G.](https://github.com/Scrappers-glitch)
 
 A showcase for the use of TIP122 with the avr gpio.
 
