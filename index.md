@@ -74,7 +74,7 @@
 
 ### Featured Projects: 
 - [MCP3008 ADC Operation](https://software-hardware-codesign.github.io/AVR-Sandbox/HelloSPI)
-- [Basic Operation of TIP122 as a switch](https://github.com/Software-Hardware-Codesign/AVR-Sandbox/tree/master/HelloTIP122)
+- [Basic Operation of TIP122 as a switch](https://software-hardware-codesign.github.io/AVR-Sandbox/HelloTIP122)
 - [SerialMonitor API](https://software-hardware-codesign.github.io/AVR-Sandbox/HelloJSerialComm)
 - [Serial4j API](https://software-hardware-codesign.github.io/AVR-Sandbox/wip-index.html)
 - [Static V.S. Dynamic Libraries](https://software-hardware-codesign.github.io/AVR-Sandbox/wip-index.html)
