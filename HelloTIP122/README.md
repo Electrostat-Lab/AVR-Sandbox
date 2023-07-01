@@ -1,14 +1,16 @@
 # HelloTIP122
 > Created by [Pavly G.](https://github.com/Scrappers-glitch)
 
-A showcase for the use of TIP122 with the avr gpio.
+A showcase for the use of TIP122 with the avr GPIO.
 
 <a name="TOPICS"></a>
 
 ## Topics Covered: 
 1) TIP122 Electrical Characteristics.
+
 2) TIP122~AtMega32A Connection.
-3) Calculating the circuit charachteristics.
+
+3) Calculating the circuit characteristics.
 
 --------------------------------------------------------------
 
@@ -46,8 +48,9 @@ R(L) = (9v - 1v7) / 0.02amps = 365 OHMS.
 2-Calculating the total I(c) Current draw when connecting the circuit at the CE terminal: 
 
 From these findings: 
+
 | `Voltage Drop across the load resistor "RL"` | `Amperage Reading across the CE terminal using the above circuit (I(C))` |
-|---------------------------------------------|------------------|
+|---------------------------------------------|---------------------------------------------|
 | ![PXL_20220721_222209195](https://user-images.githubusercontent.com/60224159/180334062-fa480d60-94f3-4609-8b9a-7245c4e1fbfc.jpg) | ![PXL_20220721_222833706](https://user-images.githubusercontent.com/60224159/180334197-dd721599-d26b-42b7-b81f-b82b2d323712.jpg) |
 
 ```
