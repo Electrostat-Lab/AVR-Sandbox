@@ -1,12 +1,11 @@
 # Hello-Arrays
+> Created by [Pavly G.](https://github.com/Scrappers-glitch)
 
 ## Table of contents:
 1) Uni-dimensional arrays (aka "automatic/direct" buffers) and pointers.
 2) Multi-dimensional arrays.
 3) Character arrays or String literals.
 4) DIY Tasks.
-
----------------
 
 ## Uni-dimensional arrays and pointers:
 
@@ -46,8 +45,6 @@ int* numbers_address = &numbers[0];
 This example can be demonstrated using the following scheme: 
 
 <img src="https://github.com/Software-Hardware-Codesign/AVR-Sandbox/blob/master/HelloArrays/.thumbnails/unidimensional-buffer.png" height=550 width=950/>
-
----------------
 
 ## Multi-dimensional arrays:
 
@@ -100,8 +97,6 @@ for (int cell = 0; cell < cells; cell++) {
 > The multi-dimensional arrays represent a buffer that is internally divided into large chunks (arrays), de-referencing will
 > get you to the inner most value of those chunks as you go.
 > Casting an array to a buffer (pointer) will manipulate it as a linear memory buffer (unidimensional buffer).
-
----------------
 
 ## Character arrays or String literals:
 
