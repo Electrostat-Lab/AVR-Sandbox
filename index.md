@@ -60,13 +60,14 @@
 
 > Disclaimer: this section is for fun and to explore how the memory works under the hood, it's not the best practice by any means.
 
+- [C arrays and Pointers Overview](https://software-hardware-codesign.github.io/AVR-Sandbox/HelloArrays)
 - [Expandable memory using "Dynamic Memory Allocation"]()
 - [Manually partitioning memory]()
 - [Memory Packing]()
 - [Struct hacks]()
 - [Pointers Alternatives]()
 - [Pointers in Java]()
-- [Memory Ownership, shared memory, restricted memory and limited access memory]()
+- [Memory Ownership, shared memory, restricted memory, and limited access memory]()
 
 --------------------------------------------
 
