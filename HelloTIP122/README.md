@@ -22,7 +22,7 @@ This image illustrates the connection between atmega32A GPIO PB2 and TIP122 Base
 
 ![TIP122Avr](https://user-images.githubusercontent.com/60224159/180228253-89838745-b30d-47c8-9952-fdf5be52a777.png)
 
-## 3) Calculating the circuit charachteristics: [--Jump to topics--](TOPICS) 
+## 3) Calculating the circuit characteristics:
 
 ![image](https://user-images.githubusercontent.com/60224159/180249500-363d53cd-7ba7-4782-b400-b1acdfe15f79.png)
 
